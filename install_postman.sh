@@ -1,7 +1,7 @@
 #!/bin/bash
 # https://dl.pstmn.io/download/latest/linux?arch=64
 
-POSTVER=4.8.3
+POSTVER=4.9.0
 echo /home/chadit/Downloads/
 cd /home/chadit/Downloads/
 
