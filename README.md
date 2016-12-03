@@ -74,8 +74,9 @@
 * Remote Setup
   * sudo eopkg it -y remmina
 
-VirtualBox
-https://wiki.solus-project.com/VirtualBox
+* VirtualBox
+* use linux script in repo
+* https://wiki.solus-project.com/VirtualBox
 
 
 Install themes for chrome and plank
