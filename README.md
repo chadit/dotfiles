@@ -64,9 +64,10 @@
   
 * Plank
   * sudo eopkg it -y plank
-  
+
 * Fonts
   * sudo eopkg it -y source-code-pro
+  * https://github.com/adobe-fonts/source-code-pro
   
 * Budgie Applets
   * sudo eopkg it -y budgie-screenshot-applet
