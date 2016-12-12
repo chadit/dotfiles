@@ -12,3 +12,5 @@ sudo eopkg it -y openssh-server
 sudo systemctl enable sshd
 sudo systemctl start sshd
 
+# postgres tools
+sudo eopkg it -y pgadmin3
