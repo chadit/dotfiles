@@ -4,7 +4,7 @@
 
 func ()
 {    
-    local INSTALLVER=0.14.13
+    local INSTALLVER=0.14.14
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
     local SOURCEURL="https://github.com/syncthing/syncthing/releases/download/v${INSTALLVER}/syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
@@ -25,10 +25,6 @@ func ()
 
     sudo tar -xvf ${FILETAR}
 
-#sudo wget https://github.com/syncthing/syncthing/releases/download/v${INSTALLVER}/syncthing-linux-amd64-v${SYNCTHINGVER}.tar.gz
-
-#sudo tar -xvf "syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
-
     # make sure the go folder is created
     sudo mkdir -p /usr/syncthing
 
@@ -36,7 +32,7 @@ func ()
     sudo rsync -av syncthing-linux-amd64-v${INSTALLVER}// /usr/syncthing
 
     sudo chmod +x /usr/syncthing/syncthing
-    sudo chown chadit /usr/syncthing/syncthing
+  #  sudo chown chadit /usr/syncthing/syncthing
 
 local APPSHORTCUT="[Desktop Entry]
 Name=Syncthing
@@ -75,7 +71,7 @@ RestartForceExitStatus=3 4
 WantedBy=multi-user.target"
 
         sudo touch /etc/systemd/system/syncthing.service
-        sudo chown chadit /etc/systemd/system/syncthing.service
+      #  sudo chown chadit /etc/systemd/system/syncthing.service
         sudo echo "${SERVICESETTINGS}" > /etc/systemd/system/syncthing@chadit.service
         sudo chmod +x /etc/systemd/system/syncthing.service
 
