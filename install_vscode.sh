@@ -5,11 +5,11 @@ sudo eopkg rm vscode
 
 cd /home/chadit/Downloads/
 
-VSCODEVER=code-stable-code_1.7.2-1479766213_amd64.tar.gz
+VSCODEVER=code-stable-code_1.8.0-1481651903_amd64.tar.gz
 
 # Download the sources if file does not exist
 if [ ! -f /home/chadit/Downloads/${VSCODEVER} ]; then
-    sudo wget https://az764295.vo.msecnd.net/stable/7ba55c5860b152d999dda59393ca3ebeb1b5c85f/${VSCODEVER}
+    sudo wget https://az764295.vo.msecnd.net/stable/38746938a4ab94f2f57d9e1309c51fd6fb37553d/${VSCODEVER}
 fi
 
 sudo tar -xvf ${VSCODEVER}
