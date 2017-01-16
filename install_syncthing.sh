@@ -4,7 +4,7 @@
 
 func ()
 {    
-    local INSTALLVER=0.14.14
+    local INSTALLVER=0.14.16
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
     local SOURCEURL="https://github.com/syncthing/syncthing/releases/download/v${INSTALLVER}/syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
@@ -27,6 +27,7 @@ func ()
 
     # make sure the go folder is created
     sudo mkdir -p /usr/syncthing
+    sudo chown ${USER} /usr/syncthing
 
     # Install to /usr/
     sudo rsync -av syncthing-linux-amd64-v${INSTALLVER}// /usr/syncthing

@@ -7,7 +7,7 @@ func ()
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="go${INSTALLVER}.linux-amd64.tar.gz"
     local UNTARFOLDERNAME="go"
-    local INSTALLPATH="/usr/go"
+    local INSTALLPATH="/usr/lib64/golang"
     local SOURCEURL="https://storage.googleapis.com/golang/${FILETAR}"
 
     # setup folders

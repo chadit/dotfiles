@@ -4,7 +4,7 @@
 
 func ()
 {
-	local INSTALLVER=4.4.2
+	local INSTALLVER=4.5.1
 	local SCRIPTUSER=${SUDO_USER}
 	local FILETAR="mongochef-linux-x64-dist.tar.gz"
 	local SOURCEURL="https://cdn.3t.io/mongochef-core/linux/$INSTALLVER/mongochef-linux-x64-dist.tar.gz"

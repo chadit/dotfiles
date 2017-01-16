@@ -5,9 +5,9 @@
 func ()
 {
 	# http://download.virtualbox.org/virtualbox/5.1.10/VirtualBox-5.1.10-112026-Linux_amd64.run
-	local INSTALLVER=5.1.10
+	local INSTALLVER=5.1.12
 	local SCRIPTUSER=${SUDO_USER}
-	local FILETAR="VirtualBox-$INSTALLVER-112026-Linux_amd64.run"
+	local FILETAR="VirtualBox-$INSTALLVER-112440-Linux_amd64.run"
 	local SOURCEURL="http://download.virtualbox.org/virtualbox/$INSTALLVER/$FILETAR"
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"

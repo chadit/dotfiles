@@ -14,3 +14,8 @@ sudo systemctl start sshd
 
 # postgres tools
 sudo eopkg it -y pgadmin3
+
+# Trim (SDD support)
+sudo systemctl enable fstrim.timer
+sudo systemctl start fstrim.timer
+
