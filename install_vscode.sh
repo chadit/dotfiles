@@ -9,30 +9,30 @@ if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
     fi
 
 # todo add a check for version
-sudo eopkg rm vscode
+#sudo eopkg rm vscode
 
 cd /home/${SCRIPTUSER}/Downloads/
 
-VSCODEVER=code-stable-code_1.8.0-1481651903_amd64.tar.gz
+VSCODEVER=code-stable-code_1.8.1-1482158209_amd64.tar.gz
 
 # Download the sources if file does not exist
 if [ ! -f /home/${SCRIPTUSER}/Downloads/${VSCODEVER} ]; then
-    sudo wget https://az764295.vo.msecnd.net/stable/38746938a4ab94f2f57d9e1309c51fd6fb37553d/${VSCODEVER}
+    sudo wget https://az764295.vo.msecnd.net/stable/ee428b0eead68bf0fb99ab5fdc4439be227b6281/${VSCODEVER}
 fi
 
 sudo tar -xvf ${VSCODEVER}
 
 # make sure the go folder is created
-sudo mkdir -p /usr/share/code
+sudo mkdir -p /opt/code
 
 # Install to /usr/local/bin
-sudo rsync -av VSCode-linux-x64/ /usr/share/code
+sudo rsync -av VSCode-linux-x64/ /opt/code
 
 VSCODESHORTCUT="[Desktop Entry]
-Name=Visual Studio Code
+Name=Visual Studio Code.
 Comment=Code Editing. Redefined.
 GenericName=Text Editor
-Exec=/usr/share/code/code %U
+Exec=/opt/code/code %U
 Icon=code
 Type=Application
 StartupNotify=true
