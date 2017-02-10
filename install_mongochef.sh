@@ -4,10 +4,11 @@
 
 func ()
 {
-	local INSTALLVER=4.5.1
+	local INSTALLVER=4.5.5
 	local SCRIPTUSER=${SUDO_USER}
-	local FILETAR="mongochef-linux-x64-dist.tar.gz"
-	local SOURCEURL="https://cdn.3t.io/mongochef-core/linux/$INSTALLVER/mongochef-linux-x64-dist.tar.gz"
+	local FILETAR="mongochef-$INSTALLVER-linux-x64-dist.tar.gz"
+	# https://cdn.3t.io/mongochef-core/linux/4.5.5/mongochef-4.5.5-linux-x64-dist.tar.gz
+	local SOURCEURL="https://cdn.3t.io/mongochef-core/linux/$INSTALLVER/mongochef-$INSTALLVER-linux-x64-dist.tar.gz"
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"
 	then
@@ -39,7 +40,7 @@ func ()
    Name=mongochef
    Comment=mongochef
    Exec=/usr/mongochef/bin/mongochef.sh
-   Icon=/home/chadit/Dropbox/Linux/3t-mongochef_icon.png
+   Icon=/home/chadit/Dropbox/Linux/Scripts/3t-mongochef_icon.png
    Terminal=false
    Type=Application
    Encoding=UTF-8
@@ -54,46 +55,3 @@ func ()
 	sudo rm -rf mongochef-*
 }
 func
-
-
-
-
-
-
-
-
-#cd /home/chadit/Downloads/
-
-# Download the sources
-#sudo wget https://cdn.3t.io/mongochef-core/linux/4.4.2/mongochef-linux-x64-dist.tar.gz
-
-#sudo tar -xvf "mongochef-linux-x64-dist.tar.gz"
-
-# make sure the go folder is created
-#sudo mkdir /usr/local/mongochef
-
-# Install to /usr/local/bin
-#sudo rsync -av mongochef-4.4.2-linux-x64-dist/ /usr/local/mongochef
-
-#sudo chmod +x /usr/local/mongochef/bin/mongochef.sh
-#sudo chown chadit /usr/local/mongochef/bin/mongochef.sh
-
-#SYNCSHORTCUT="[Desktop Entry]
-#  Name=mongochef
-#  Comment=mongochef
-#  Exec=/usr/local/mongochef/bin/mongochef.sh
-#  Icon=/home/chadit/Dropbox/Linux/3t-mongochef_icon.png
-#  Terminal=false
-#  Type=Application
-#  Encoding=UTF-8
-#  Categories=Utility"
-
-# sudo touch /usr/share/applications/mongochef.desktop
-# sudo chown chadit /usr/share/applications/mongochef.desktop
-# sudo echo "${SYNCSHORTCUT}" > /usr/share/applications/mongochef.desktop
-
-# sudo chmod +x /usr/share/applications/mongochef.desktop
-
-# remove tar.gz
-#sudo rm -rf mongochef-*
-

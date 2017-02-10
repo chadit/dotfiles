@@ -3,8 +3,8 @@
 # wmail Setup
 func ()
 {
-    local INSTALLVER=2.0.9
-    local INSTALLVER2="2_0_9"
+    local INSTALLVER=2.1.1
+    local INSTALLVER2="2_1_1"
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="WMail_${INSTALLVER2}_prerelease_linux_x86_64.tar.gz"
     local UNTARFOLDERNAME="wmail"
