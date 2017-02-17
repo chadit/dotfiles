@@ -3,7 +3,7 @@
 # Go Setup
 func ()
 {
-    local INSTALLVER=1.7.4
+    local INSTALLVER=1.8
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="go${INSTALLVER}.linux-amd64.tar.gz"
     local UNTARFOLDERNAME="go"
@@ -17,7 +17,7 @@ func ()
         sudo mkdir -p ${INSTALLPATH}/pkg/windows_amd64
         sudo mkdir -p ${INSTALLPATH}/pkg/windows_amd64/runtime
         sudo mkdir -p ${INSTALLPATH}/pkg/windows_amd64/runtime/internal/
-        sudo chown -R chadit /usr/go/pkg/windows_amd64
+        sudo chown -R chadit ${INSTALLPATH}/go/pkg/windows_amd64
     fi
 
     if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
@@ -38,7 +38,7 @@ func ()
     sudo tar -xvf ${FILETAR}
 
     # Install to /usr/local
-    sudo rsync -av ${UNTARFOLDERNAME} /usr
+    sudo rsync -av ${UNTARFOLDERNAME}/ ${INSTALLPATH}/
 
     sudo rm -rf go*
 }
