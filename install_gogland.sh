@@ -1,31 +1,44 @@
 #!/bin/bash
-# https://www.jetbrains.com/go/download/download-thanks.html?type=eap
+# https://www.jetbrains.com/go/download/download-thanks.html?type=eap 
+#     https://www.jetbrains.com/go/download/data.services.jetbrains.com/products/download?code=GO
 
 func ()
 {
-	local INSTALLVER=4.10.2
-    local SCRIPTUSER=${SUDO_USER}
+	 local SCRIPTUSER=${SUDO_USER}
+    local FILETAR="gogland-163.12024.32.tar.gz"
+    local UNTARFOLDERNAME="Gogland-163.12024.32"
+    local INSTALLPATH="/usr/gogland"
+    local SOURCEURL="https://download.jetbrains.com/go/${FILETAR}"
 
-	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
+	 # setup folders
+    if [ ! -f ${INSTALLPATH} ]; then
+    	sudo mkdir -p ${INSTALLPATH}
+    fi
+
+    if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
     	 SCRIPTUSER=${USER}
     fi
 
-	echo /home/${SCRIPTUSER}/Downloads/
-	cd /home/${SCRIPTUSER}/Downloads/
+    echo "user set to $SCRIPTUSER"
 
+    # change directory to tmp
+    cd /tmp/
 
-	sudo tar -xvf "gogland-163.12024.32.tar.gz"
+    # Download the sources if file does not exist
+    if [ ! -f /tmp/${FILETAR} ]; then
+    	sudo wget ${SOURCEURL}
+    fi
 
-	# make sure the go folder is created
-	sudo mkdir -p /usr/gogland
+    # unpack tar
+    sudo tar -xvf ${FILETAR}
 
-	# Install to /usr/bin
-	sudo rsync -av Gogland-163.12024.32/ /usr/gogland
+    # Install to /usr/local
+    sudo rsync -av ${UNTARFOLDERNAME}/ ${INSTALLPATH}/
 
 	sudo chmod +x /usr/gogland/bin/gogland.sh
 
 
-	APPSHORTCUT="[Desktop Entry]
+	local APPSHORTCUT="[Desktop Entry]
 	  Name=gogland
 	  Comment=gogland
 	  Exec=/usr/gogland/bin/gogland.sh
@@ -40,7 +53,8 @@ func ()
 
 	sudo chmod +x /usr/share/applications/gogland.desktop
 
-	#sudo rm -rf Gogland*
+	sudo rm -rf Go*
+	sudo rm -rf go*
 
 }
 func

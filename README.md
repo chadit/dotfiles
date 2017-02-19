@@ -83,4 +83,8 @@
 Install themes for chrome and plank
 https://github.com/horst3180/arc-theme
 
-
+* Update filewatch
+  * sudo vim /usr/lib/sysctl.d/50-default.conf
+  * fs.inotify.max_user_watches = 524288 
+  * reboot
+  * cat /proc/sys/fs/inotify/max_user_watches (verify that it now says 525288)
