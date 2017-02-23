@@ -79,6 +79,13 @@
 * use linux script in repo
 * https://wiki.solus-project.com/VirtualBox
 
+* VPN
+  *  sudo eopkg it -y vpnc
+  *  sudo eopkg it -y networkmanager-vpnc
+
+* Network Tools
+  *   sudo eopkg it -y nmap
+  *   sudo eopkg it -y tcpdump
 
 Install themes for chrome and plank
 https://github.com/horst3180/arc-theme
