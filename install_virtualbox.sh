@@ -5,9 +5,9 @@
 func ()
 {
 	# http://download.virtualbox.org/virtualbox/5.1.10/VirtualBox-5.1.10-112026-Linux_amd64.run
-	local INSTALLVER=5.1.14
+	local INSTALLVER=5.1.18
 	local SCRIPTUSER=${SUDO_USER}
-	local FILETAR="VirtualBox-$INSTALLVER-112924-Linux_amd64.run"
+	local FILETAR="VirtualBox-$INSTALLVER-114002-Linux_amd64.run"
 	local SOURCEURL="http://download.virtualbox.org/virtualbox/$INSTALLVER/$FILETAR"
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"
@@ -29,6 +29,6 @@ func ()
 	sudo sh /tmp/${FILETAR}
 
 	# remove tar.gz
-	#sudo rm -rf /tmp/VirtualBox-*
+	sudo rm -rf /tmp/VirtualBox-*
 }
 func
