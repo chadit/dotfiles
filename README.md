@@ -17,21 +17,16 @@
 * Dropbox
   * sudo eopkg it -y nautilus-dropbox
   
-* Libs needed
-  * sudo eopkg it -y diffutils
-  * sudo eopkg it -y -c system.devel 
-  * sudo eopkg it -y cryptopp-devel qt4-devel libtool sqlite3-devel c-ares-devel python-gtk2-devel nautilus-devel wxPython netcat cabextract icoutils p7zip imagemagick mesalib-32bit
-  * sudo eopkg it -y gcc make autoconf binutils kernel-headers xorg-server-devel
-  * sudo eopkg it -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
-  * sudo eopkg it -y gcc perl-ExtUtils-MakeMaker
-  
 * Rsync (used for script installs and some backups)
   * sudo eopkg it -y rsync
   
 * Tweak-Tools
   * sudo eopkg it -y gnome-tweak-tool
-    * Windows Scale to 2
-    * Workspace 1
+  
+* Syncthing
+  * sudo eopkg it -y syncthing
+  * Use linux script in repo  
+ 
 * Go
   * sudo eopkg it -y golang
   * Use linux script in repo
@@ -40,9 +35,23 @@
   * sudo eopkg it -y git
   * Use linux script in repo
   
-* Syncthing
-  * sudo eopkg it -y syncthing
-  * Use linux script in repo
+  
+  
+  
+ 
+* Libs needed
+  * sudo eopkg it -y diffutils
+  * sudo eopkg it -y -c system.devel 
+  * sudo eopkg it -y cryptopp-devel qt4-devel libtool sqlite3-devel c-ares-devel python-gtk2-devel nautilus-devel wxPython netcat cabextract icoutils p7zip imagemagick mesalib-32bit
+  * sudo eopkg it -y gcc make autoconf binutils kernel-headers xorg-server-devel
+  * sudo eopkg it -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
+  * sudo eopkg it -y gcc perl-ExtUtils-MakeMaker
+  
+
+  
+
+
+
   
 
 * VSCode
