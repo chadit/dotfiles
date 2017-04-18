@@ -8,6 +8,14 @@
 * subo eopkg upgrade -y
 * reboot
 
+* Libs needed (if installing via scripts)
+  * sudo eopkg it -y diffutils
+  * sudo eopkg it -y -c system.devel 
+  * sudo eopkg it -y cryptopp-devel qt4-devel libtool sqlite3-devel c-ares-devel python-gtk2-devel nautilus-devel wxPython netcat cabextract icoutils p7zip imagemagick mesalib-32bit
+  * sudo eopkg it -y gcc make autoconf binutils kernel-headers xorg-server-devel
+  * sudo eopkg it -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
+  * sudo eopkg it -y gcc perl-ExtUtils-MakeMaker
+  
 * Install softwrae from Software Center (third party)
   * Chrome 
   * Opera 
@@ -39,14 +47,7 @@
   
   
  
-* Libs needed
-  * sudo eopkg it -y diffutils
-  * sudo eopkg it -y -c system.devel 
-  * sudo eopkg it -y cryptopp-devel qt4-devel libtool sqlite3-devel c-ares-devel python-gtk2-devel nautilus-devel wxPython netcat cabextract icoutils p7zip imagemagick mesalib-32bit
-  * sudo eopkg it -y gcc make autoconf binutils kernel-headers xorg-server-devel
-  * sudo eopkg it -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
-  * sudo eopkg it -y gcc perl-ExtUtils-MakeMaker
-  
+
 
   
 
