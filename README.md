@@ -80,6 +80,9 @@
 
 * Flatpak
   * sudo eopkg it -y flatpak
+  
+* Snap pak
+  * sudo eopkg it -y snappy
 
 * Network Tools
   *   sudo eopkg it -y nmap
