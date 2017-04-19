@@ -77,6 +77,8 @@
 * VPN
   *  sudo eopkg it -y vpnc
   *  sudo eopkg it -y networkmanager-vpnc
+  *  pi-vpn
+     * https://solus-project.com/forums/viewtopic.php?f=11&t=2894
 
 * Flatpak
   * sudo eopkg it -y flatpak
