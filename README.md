@@ -34,7 +34,14 @@
  
 * Font Manager
   * sudo eopkg it -y font-manager
- 
+  
+* Microsoft Core Fonts
+  * sudo eopkg bi --ignore-safety https://raw.githubusercontent.com/solus-project/3rd-party/master/desktop/font/mscorefonts/pspec.xml
+  
+* Fonts
+  * sudo eopkg it -y source-code-pro
+  * https://github.com/adobe-fonts/source-code-pro
+
 * Go
   * sudo eopkg it -y golang
   * Use linux script in repo
@@ -65,10 +72,6 @@
   
 * Plank
   * sudo eopkg it -y plank
-
-* Fonts
-  * sudo eopkg it -y source-code-pro
-  * https://github.com/adobe-fonts/source-code-pro
   
 * Remote Setup
   * sudo eopkg it -y remmina
