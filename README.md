@@ -67,12 +67,6 @@
   * sudo eopkg it -y docker
   * Use linux script in repo
   
-* Postgres
-  * sudo eopkg it -y postgresql
-  
-* Plank
-  * sudo eopkg it -y plank
-  
 * Remote Setup
   * sudo eopkg it -y remmina
 
@@ -83,6 +77,9 @@
 * VPN
   *  sudo eopkg it -y vpnc
   *  sudo eopkg it -y networkmanager-vpnc
+
+* Flatpak
+  * sudo eopkg it -y flatpak
 
 * Network Tools
   *   sudo eopkg it -y nmap
@@ -104,3 +101,7 @@ https://github.com/horst3180/arc-theme
 ##### Budgie Desktop Items and Settings
 * Budgie Applets
   * sudo eopkg it -y budgie-screenshot-applet
+  
+* Plank
+  * sudo eopkg it -y plank
+  
