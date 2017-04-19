@@ -42,9 +42,9 @@
 * Git
   * sudo eopkg it -y git
   * Use linux script in repo
-  ** sudo eopkg it -y diffutils
-  ** sudo eopkg it -y -c system.devel 
-  
+  * * sudo eopkg it -y diffutils
+  * * sudo eopkg it -y -c system.devel 
+  * * sudo eopkg it -y curl-devel
   
   
   
