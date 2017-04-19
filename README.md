@@ -81,6 +81,8 @@
 * VPN
   *  sudo eopkg it -y vpnc
   *  sudo eopkg it -y networkmanager-vpnc
+  *  sudo eopkg it -y networkmanager-openconnect
+  *  sudo eopkg it -y networkmanager-pptp
   *  pi-vpn
      * https://solus-project.com/forums/viewtopic.php?f=11&t=2894
 
