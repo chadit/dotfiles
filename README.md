@@ -28,9 +28,6 @@
 * Rsync (used for script installs and some backups)
   * sudo eopkg it -y rsync
   
-* Tweak-Tools
-  * sudo eopkg it -y gnome-tweak-tool
-  
 * Syncthing
   * sudo eopkg it -y syncthing
   * Use linux script in repo  
@@ -45,17 +42,6 @@
   * * sudo eopkg it -y diffutils
   * * sudo eopkg it -y -c system.devel 
   * * sudo eopkg it -y curl-devel
-  
-  
-  
- 
-
-
-  
-
-
-
-  
 
 * VSCode
   * sudo eopkg it -y vscode
@@ -81,9 +67,6 @@
   * sudo eopkg it -y source-code-pro
   * https://github.com/adobe-fonts/source-code-pro
   
-* Budgie Applets
-  * sudo eopkg it -y budgie-screenshot-applet
-  
 * Remote Setup
   * sudo eopkg it -y remmina
 
@@ -107,3 +90,11 @@ https://github.com/horst3180/arc-theme
   * fs.inotify.max_user_watches = 524288 
   * reboot
   * cat /proc/sys/fs/inotify/max_user_watches (verify that it now says 525288)
+
+##### Gnome Desktop Items and Settings
+* Tweak-Tools
+  * sudo eopkg it -y gnome-tweak-tool
+
+##### Budgie Desktop Items and Settings
+* Budgie Applets
+  * sudo eopkg it -y budgie-screenshot-applet
