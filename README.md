@@ -32,6 +32,9 @@
   * sudo eopkg it -y syncthing
   * Use linux script in repo  
  
+* Font Manager
+  * sudo eopkg it -y font-manager
+ 
 * Go
   * sudo eopkg it -y golang
   * Use linux script in repo
