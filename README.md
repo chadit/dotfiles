@@ -65,7 +65,9 @@
 
 * Docker
   * sudo eopkg it -y docker
-  * Use linux script in repo
+  * sudo eopkg it -y docker-compose
+  * sudo eopkg it -y docker-machine
+  * sudo eopkg it -y kitematic
   
 * Remote Setup
   * sudo eopkg it -y remmina
