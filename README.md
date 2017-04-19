@@ -68,6 +68,8 @@
   * sudo eopkg it -y docker-compose
   * sudo eopkg it -y docker-machine
   * sudo eopkg it -y kitematic
+  * sudo usermod -aG docker $USER
+  * sudo systemctl enable docker
   
 * Remote Setup
   * sudo eopkg it -y remmina
