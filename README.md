@@ -76,8 +76,8 @@
   * sudo eopkg it -y remmina
 
 * VirtualBox
-* use linux script in repo
-* https://wiki.solus-project.com/VirtualBox
+ * use linux script in repo
+ * https://wiki.solus-project.com/VirtualBox
 
 * VPN
   *  sudo eopkg it -y vpnc
