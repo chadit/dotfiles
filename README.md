@@ -64,6 +64,7 @@
   * sudo eopkg it -y vim
 
 * Docker
+  * sudo eopkg it -y pyyaml python-jsonschema
   * sudo eopkg it -y docker
   * sudo eopkg it -y docker-compose
   * sudo eopkg it -y docker-machine
