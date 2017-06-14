@@ -3,13 +3,13 @@
 # wmail Setup
 func ()
 {
-    local INSTALLVER=2.1.1
-    local INSTALLVER2="2_1_1"
+    local INSTALLVER=3_1_5
+    local INSTALLVER2="3.1.5"
     local SCRIPTUSER=${SUDO_USER}
-    local FILETAR="WMail_${INSTALLVER2}_prerelease_linux_x86_64.tar.gz"
-    local UNTARFOLDERNAME="wmail"
-    local INSTALLPATH="/usr/wmail"
-    local SOURCEURL="https://github.com/Thomas101/wmail/releases/download/v${INSTALLVER}/WMail_${INSTALLVER2}_prerelease_linux_x86_64.tar.gz"
+    local FILETAR="Wavebox_${INSTALLVER}_linux_x86_64.tar.gz"
+    local UNTARFOLDERNAME="wavebox"
+    local INSTALLPATH="/opt/wavebox/"
+    local SOURCEURL="https://github.com/wavebox/waveboxapp/releases/download/v${INSTALLVER2}/Wavebox_${INSTALLVER}_linux_x86_64.tar.gz"
 
     # setup folders
     if [ ! -f ${INSTALLPATH} ]; then
@@ -34,26 +34,26 @@ func ()
     sudo tar -xvf ${FILETAR}
 
     # Install to /usr/bin
-    sudo rsync -av WMail-linux-x64/ ${INSTALLPATH}
+    sudo rsync -av Wavebox-linux-x64/ ${INSTALLPATH}
 
-    sudo chmod +x ${INSTALLPATH}/WMail
+    sudo chmod +x ${INSTALLPATH}/Wavebox
 
     local APPSHORTCUT="[Desktop Entry]
                     Version=1.0
-                    Name=WMail
+                    Name=Wavebox
                     Comment=The missing desktop client for Gmail and Google Inbox
-                    Exec=/usr/wmail/WMail --mailto=%u
-                    Icon=/usr/wmail/icon.png
+                    Exec=/opt/wavebox/Wavebox --mailto=%u
+                    Icon=/opt/wavebox/icon.png
                     MimeType=x-scheme-handler/mailto;
                     Terminal=false
                     Type=Application
                     Categories=Application;Network;Email"
 
-    sudo touch /usr/share/applications/wmail.desktop
-    sudo echo "${APPSHORTCUT}" > /usr/share/applications/wmail.desktop
+    sudo touch /usr/share/applications/wavebox.desktop
+    sudo echo "${APPSHORTCUT}" > /usr/share/applications/wavebox.desktop
 
-    sudo chmod +x /usr/share/applications/wmail.desktop
+    sudo chmod +x /usr/share/applications/wavebox.desktop
 
-    sudo rm -rf WMail*
+    sudo rm -rf Wavebox*
 }
 func

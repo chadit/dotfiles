@@ -47,3 +47,24 @@ if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
 }
 func
 
+
+# To install, run the following commands as root:
+#curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz && tar --strip-components=1 -xvzf docker-17.04.0-ce.tgz -C /usr/bin
+
+# Then start docker in daemon mode:
+#/usr/bin/dockerd
+
+# docker compose
+# curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+
+# curl -L "https://dl.bintray.com/docker-compose/master/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+
+# chmod +x /usr/bin/docker-compose
+
+
+
+wget -O docker.tgz https://experimental.docker.com/builds/Linux/x86_64/docker-latest.tgz
+sudo service docker stop
+sudo rm -rf /usr/bin/docker*
+sudo tar xvf docker.tgz -C /usr/bin/
+sudo service docker start
