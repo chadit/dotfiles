@@ -18,6 +18,7 @@ func ()
     sudo mv winetricks ${INSTALLPATH}
     sudo chmod +x ${INSTALLPATH}/winetricks
     sudo rm -rf winetricks
+    sudo dnf install mono-devel
 
 }
 func
