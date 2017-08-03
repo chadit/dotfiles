@@ -3,7 +3,7 @@
 
 func ()
 {
-	local INSTALLVER=5.1.2
+	local INSTALLVER=5.1.3
     local SCRIPTUSER=${SUDO_USER}
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
