@@ -5,7 +5,7 @@ func ()
 {
 
 	#Get Dependencies
-	local INSTALLVER=2.13.3
+	local INSTALLVER=2.14.1
 	local pplatform=$(python -mplatform)
 	local platform=""
 

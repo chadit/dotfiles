@@ -1,47 +1,32 @@
 #!/bin/bash
 
-# Go Setup
+# Docker Setup from source
 func ()
 {
-	sudo killall docker
-    local SCRIPTUSER=${SUDO_USER}
-    local FILETAR="docker-latest.tgz"
-    local SOURCEURL="https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz"
+    # change directory to tmp
+    cd /tmp/
 
-if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
+    # todo find a way to scrap the version from the web pay so we can check if it needs updated
+    local FILETAR="docker-17.06.0-ce.tgz"
+    curl -O https://download.docker.com/linux/static/edge/x86_64/${FILETAR}
+    sudo tar xzvf ${FILETAR}
+    sudo cp docker/* /usr/bin/
+    curl -O https://gist.githubusercontent.com/chadit/7786b27e0d61b8bb66562da11d7d94b1/raw/c8da092c66a12202347cc76c0b274d4b6125ea9e/docker.service
+    sudo mkdir -p /usr/lib/systemd/system
+    sudo cp docker.service /usr/lib/systemd/system/
+
+
+    local SCRIPTUSER=${SUDO_USER}
+    if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
     	 SCRIPTUSER=${USER}
     fi
 
     echo "user set to $SCRIPTUSER"
 
-    # change directory to tmp
-    cd /tmp/
-
-    # Download the sources if file does not exist
-    if [ ! -f /tmp/${FILETAR} ]; then
-    	sudo wget ${SOURCEURL}
-    fi
-
-    # unpack tar
-    sudo tar -xvzf ${FILETAR}
-
-    sudo mv docker/* /usr/bin/
-
-    # if service file does not exist
-    if [ ! -f "/usr/lib64/systemd/system/docker.service" ]; then
-    	echo "service files do not exist, coping them"
-    	sudo cp /home/chadit/Dropbox/Linux/usr/lib64/systemd/system/docker.service /usr/lib64/systemd/system/
-    	sudo cp /home/chadit/Dropbox/Linux/usr/lib64/systemd/system/docker.socket /usr/lib64/systemd/system/
-    	sudo cp /home/chadit/Dropbox/Linux/etc/systemd/system/multi-user.target.wants/docker.service /etc/systemd/system/multi-user.target.wants/
-		sudo cp /home/chadit/Dropbox/Linux/usr/lib64/systemd/system/sockets.target.wants/docker.socket /usr/lib64/systemd/system/sockets.target.wants/
-
-		sudo systemctl start docker.service
-		sudo systemctl enable docker.service
-		sudo groupadd docker
-		sudo usermod -aG docker chadit
-	else
-		sudo systemctl start docker.service
-	fi
+	sudo systemctl start docker.service
+	sudo systemctl enable docker.service
+	sudo groupadd docker
+	sudo usermod -aG docker ${SCRIPTUSER}
 
 	sudo rm -rf docker*
 }
@@ -62,9 +47,3 @@ func
 # chmod +x /usr/bin/docker-compose
 
 
-
-wget -O docker.tgz https://experimental.docker.com/builds/Linux/x86_64/docker-latest.tgz
-sudo service docker stop
-sudo rm -rf /usr/bin/docker*
-sudo tar xvf docker.tgz -C /usr/bin/
-sudo service docker start

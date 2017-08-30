@@ -55,37 +55,53 @@ func ()
   		cd /home/chadit/Projects/src/sourcegraph.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
- 	# not sure if used
-   	# cd /home/chadit/Projects/src/github.com/josharian/impl && echo `pwd` && reset_branch && git pull && git prune    
-    # cd /home/chadit/Projects/src/github.com/golang/glog && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/golang/protobuf && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/sourcegraph.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/tpng/gopkgs && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/newhook/go-symbols && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/cweill/gotests && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/sourcegraph/go-langserver && echo `pwd` && reset_branch && git pull && git prune
-    
-    # gometalinter
-    # cd /home/chadit/Projects/src/honnef.co/go/lint && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/honnef.co/go/simple && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/honnef.co/go/staticcheck && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/honnef.co/go/tools && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/alecthomas/gocyclo && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/alecthomas/template && echo `pwd` && reset_branch && git pull && git prune
-    # cd /home/chadit/Projects/src/github.com/alecthomas/units && echo `pwd` && reset_branch && git pull && git prune
+	if [ -d "/home/chadit/Projects/src/github.com/tpng/gopkgs" ]; then
+  		cd /home/chadit/Projects/src/github.com/tpng/gopkgs && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/newhook/go-symbols" ]; then
+  		cd /home/chadit/Projects/src/github.com/newhook/go-symbols && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/fatih/gomodifytags" ]; then
+  		cd /home/chadit/Projects/src/github.com/fatih/gomodifytags && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/josharian/impl" ]; then
+  		cd /home/chadit/Projects/src/github.com/josharian/impl && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v2" ]; then
+  		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v2 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v5" ]; then
+  		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/docker/docker-credential-helpers" ]; then
+  		cd /home/chadit/Projects/src/github.com/docker/docker-credential-helpers && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "~/.vim/bundle/vim-go/" ]; then
+  		cd ~/.vim/bundle/vim-go/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
 
 
 	# Get/Update/Install
 	go get -u github.com/derekparker/delve/cmd/dlv
-	go get -u github.com/nsf/gocode && gocode close
+	gocode close && go get -u github.com/nsf/gocode
 
 	go get -u golang.org/x/tools/...
 	go get -u golang.org/x/tools/cmd/gorename
+	go get -u github.com/tpng/gopkgs
+	go get -u github.com/acroca/go-symbols
 	go get -u github.com/golang/lint/golint
+	go get -u github.com/fatih/gomodifytags
+	go get -u github.com/josharian/impl
 	go get -u github.com/redefiance/go-find-references
 	go get -u github.com/jstemmer/gotags
 	go get -u github.com/client9/misspell/cmd/misspell
-	go get -u github.com/redefiance/go-find-references
 	go get -u github.com/adjust/go-wrk
 	go get -u github.com/uber/go-torch
 	go get -u github.com/rogpeppe/godef
@@ -97,7 +113,10 @@ func ()
 	go get -u honnef.co/go/tools/cmd/staticcheck
 	go get -u honnef.co/go/tools/cmd/megacheck
 	go get -u github.com/alecthomas/gometalinter
+	go get -u github.com/docker/docker-credential-helpers
 	gometalinter --install
+
+	# use https://github.com/docker/docker-credential-helpers/releases to install cred
 }
 
 # Reset a branch with Origin
