@@ -37,6 +37,11 @@ func ()
     sudo mkdir -p /usr/lib/systemd/system
     sudo cp docker.service /usr/lib/systemd/system/
 
+    sudo curl -L "https://dl.bintray.com/docker-compose/master/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+
+	sudo chmod +x /usr/bin/docker-compose
+
+
 
     local SCRIPTUSER=${SUDO_USER}
     if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
