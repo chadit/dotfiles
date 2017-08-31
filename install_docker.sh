@@ -6,8 +6,30 @@ func ()
     # change directory to tmp
     cd /tmp/
 
+    #dependancies
+    local pplatform=$(python -mplatform)
+
+    echo $pplatform
+	if [[ $pplatform == *"fedora"* ]]; then
+  		platform="Fedora"
+	fi
+	if [[ $pplatform == *"Ubuntu"* ]]; then
+  		platform="Ubuntu"
+	fi
+
+	case "$platform" in
+	"Fedora")
+		echo "run fedora stuff" 
+		sudo dnf install -y curl		
+		;;
+	"Ubuntu")
+		echo "run ubuntu stuff" 
+		sudo apt install -y curl		
+		;;
+	esac
+
     # todo find a way to scrap the version from the web pay so we can check if it needs updated
-    local FILETAR="docker-17.06.0-ce.tgz"
+    local FILETAR="docker-17.07.0-ce.tgz"
     curl -O https://download.docker.com/linux/static/edge/x86_64/${FILETAR}
     sudo tar xzvf ${FILETAR}
     sudo cp docker/* /usr/bin/

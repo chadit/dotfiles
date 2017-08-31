@@ -31,7 +31,7 @@ func ()
 		;;
 	"Ubuntu")
 		echo "run ubuntu stuff" 
-		sudo apt install -y build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip rsync		
+		sudo apt install -y build-essential libssl-dev openssl libcurl4-gnutls-dev libexpat1-dev gettext unzip rsync		
 		;;
 	esac
 
