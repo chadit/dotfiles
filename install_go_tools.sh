@@ -2,90 +2,89 @@
 
 func ()
 {
+	local GO=go
+	local GIT=git
+	
 	echo "Install/Upgrading go tools ..."
 	# check if folder exist, and reset them (sometimes syncing can cause issues)
 	if [ -d "/home/chadit/Projects/src/cloud.google.com/go" ]; then
   		cd /home/chadit/Projects/src/cloud.google.com/go && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd" ]; then
-  		cd /home/chadit/Projects/src/golang.org/x/tools/cmd && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/gorename" ]; then
-  		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/gorename && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/gorename && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/guru" ]; then
-  		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/guru && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/guru && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/cover" ]; then
-  		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/cover && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/cover && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv" ]; then
-  		cd /home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/nsf/gocode" ]; then
-  		cd /home/chadit/Projects/src/github.com/nsf/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/nsf/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/rogpeppe/godef" ]; then
   		cd /home/chadit/Projects/src/github.com/rogpeppe/godef && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/golang/lint" ]; then
-  		cd /home/chadit/Projects/src/github.com/golang/lint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/golang/lint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/golang/lint/golint" ]; then
-  		cd /home/chadit/Projects/src/github.com/golang/lint/golint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/golang/lint/golint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/lukehoban/go-outline" ]; then
-  		cd /home/chadit/Projects/src/github.com/lukehoban/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/lukehoban/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/cweill/gotests" ]; then
-  		cd /home/chadit/Projects/src/github.com/cweill/gotests && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/cweill/gotests && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/sourcegraph/go-langserver" ]; then
-  		cd /home/chadit/Projects/src/github.com/sourcegraph/go-langserver && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/sourcegraph/go-langserver && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/alecthomas/gometalinter" ]; then
-  		cd /home/chadit/Projects/src/github.com/alecthomas/gometalinter && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/alecthomas/gometalinter && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/ramya-rao-a/go-outline" ]; then
-  		cd /home/chadit/Projects/src/github.com/ramya-rao-a/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/ramya-rao-a/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
 	if [ -d "/home/chadit/Projects/src/sourcegraph.com/sqs/goreturns" ]; then
-  		cd /home/chadit/Projects/src/sourcegraph.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/sourcegraph.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/tpng/gopkgs" ]; then
-  		cd /home/chadit/Projects/src/github.com/tpng/gopkgs && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/tpng/gopkgs && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
-	if [ -d "/home/chadit/Projects/src/github.com/newhook/go-symbols" ]; then
-  		cd /home/chadit/Projects/src/github.com/newhook/go-symbols && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 if [ -d "/home/chadit/Projects/src/github.com/newhook/go-symbols" ]; then
+   		cd /home/chadit/Projects/src/github.com/newhook/go-symbols && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
-	if [ -d "/home/chadit/Projects/src/github.com/fatih/gomodifytags" ]; then
-  		cd /home/chadit/Projects/src/github.com/fatih/gomodifytags && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
+	 if [ -d "/home/chadit/Projects/src/github.com/fatih/gomodifytags" ]; then
+   		cd /home/chadit/Projects/src/github.com/fatih/gomodifytags && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
 
-	if [ -d "/home/chadit/Projects/src/github.com/josharian/impl" ]; then
+	 if [ -d "/home/chadit/Projects/src/github.com/josharian/impl" ]; then
   		cd /home/chadit/Projects/src/github.com/josharian/impl && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
+	 fi
 
-	if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v2" ]; then
-  		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v2 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
+	 if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v2" ]; then
+   		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v2 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
 
-	if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v5" ]; then
-  		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
+	 if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v5" ]; then
+   		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
 
-	if [ -d "/home/chadit/Projects/src/github.com/docker/docker-credential-helpers" ]; then
-  		cd /home/chadit/Projects/src/github.com/docker/docker-credential-helpers && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
-
-	if [ -d "~/.vim/bundle/vim-go/" ]; then
-  		cd ~/.vim/bundle/vim-go/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
+	 if [ -d "~/.vim/bundle/vim-go/" ]; then
+   		cd ~/.vim/bundle/vim-go/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
 
 
 	# Get/Update/Install
@@ -113,7 +112,6 @@ func ()
 	go get -u honnef.co/go/tools/cmd/staticcheck
 	go get -u honnef.co/go/tools/cmd/megacheck
 	go get -u github.com/alecthomas/gometalinter
-	go get -u github.com/docker/docker-credential-helpers
 	gometalinter --install
 
 	# use https://github.com/docker/docker-credential-helpers/releases to install cred
