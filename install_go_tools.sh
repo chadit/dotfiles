@@ -82,6 +82,16 @@ func ()
    		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	 fi
 
+	# Geo location helpers
+	 if [ -d "/home/chadit/Projects/src/github.com/paulmach/go.geo" ]; then
+   		cd /home/chadit/Projects/src/github.com/paulmach/go.geo && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
+
+	 if [ -d "/home/chadit/Projects/src/github.com/paulmach/go.geojson" ]; then
+   		cd /home/chadit/Projects/src/github.com/paulmach/go.geojson && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
+	 # Geo location helpers
+
 	 if [ -d "~/.vim/bundle/vim-go/" ]; then
    		cd ~/.vim/bundle/vim-go/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	 fi
@@ -108,6 +118,10 @@ func ()
 	go get -u github.com/lukehoban/go-outline
 	go get -u github.com/ramya-rao-a/go-outline
 	go get -u sourcegraph.com/sqs/goreturns
+
+	go get -u github.com/paulmach/go.geo
+	go get -u github.com/paulmach/go.geojson
+
 
 	go get -u honnef.co/go/tools/cmd/staticcheck
 	go get -u honnef.co/go/tools/cmd/megacheck
