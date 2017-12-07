@@ -3,7 +3,7 @@
 # Go Setup
 func ()
 {
-    local INSTALLVER=1.9.1
+    local INSTALLVER=1.9.2
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="go${INSTALLVER}.linux-amd64.tar.gz"
     local UNTARFOLDERNAME="go"
@@ -31,6 +31,7 @@ func ()
 
     # Download the sources if file does not exist
     if [ ! -f /tmp/${FILETAR} ]; then
+	echo "downloading file ${SOURCEURL}"
     	sudo wget ${SOURCEURL}
     fi
 

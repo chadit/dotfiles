@@ -3,7 +3,7 @@
 # Python Setup
 func ()
 {
-    local INSTALLVER=3.6.2
+    local INSTALLVER=3.6.3
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="Python-${INSTALLVER}.tar.xz"
     local UNTARFOLDERNAME="go"

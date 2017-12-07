@@ -5,9 +5,10 @@ func ()
 {
 
 	#Get Dependencies
-	local INSTALLVER=2.14.1
-	local pplatform=$(python -mplatform)
+	local INSTALLVER=2.15.0
+	#local pplatform=$(python -mplatform)
 	local platform=""
+	sudo mkdir -p /usr/git/bin/
 
 
 	# check if already installed
@@ -16,22 +17,30 @@ func ()
         return
     fi
 
-	echo $pplatform
-	if [[ $pplatform == *"fedora"* ]]; then
-  		platform="Fedora"
+	if [ -f "/usr/bin/apt" ]; then
+  		platform="ubuntu"
 	fi
-	if [[ $pplatform == *"Ubuntu"* ]]; then
-  		platform="Ubuntu"
+	if [ -f "/usr/bin/dnf" ]; then
+  		platform="fedora"
+	fi
+
+	if [ -f "/usr/bin/eopkg" ]; then
+  		platform="solus"
 	fi
 
 	case "$platform" in
-	"Fedora")
+	"fedora")
 		echo "run fedora stuff" 
 		sudo dnf install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker cmake rsync		
 		;;
-	"Ubuntu")
+	"ubuntu")
 		echo "run ubuntu stuff" 
 		sudo apt install -y build-essential libssl-dev openssl libcurl4-gnutls-dev libexpat1-dev gettext unzip rsync		
+		;;
+	"solus")
+		echo "run solus stuff" 
+		sudo eopkg install -y curl curl-devel asciidoc xmlto docbook2x system.devel make expat expat-devel gettext gettext-devel openssl openssl-devel zlib zlib-devel gcc cmake rsync
+		sudo eopkg it -c system.devel
 		;;
 	esac
 

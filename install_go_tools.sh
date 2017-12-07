@@ -10,6 +10,9 @@ func ()
 	if [ -d "/home/chadit/Projects/src/cloud.google.com/go" ]; then
   		cd /home/chadit/Projects/src/cloud.google.com/go && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
+	if [ -d "/home/chadit/Projects/src/github.com/haya14busa/goplay/cmd/goplay" ]; then
+  		cd /home/chadit/Projects/src/github.com/haya14busa/goplay/cmd/goplay && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
 	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd" ]; then
    		cd /home/chadit/Projects/src/golang.org/x/tools/cmd && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
@@ -36,6 +39,9 @@ func ()
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/golang/lint/golint" ]; then
    		cd /home/chadit/Projects/src/github.com/golang/lint/golint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+	if [ -d "/home/chadit/Projects/src/github.com/golang/dep/cmd/dep" ]; then
+   		cd /home/chadit/Projects/src/github.com/golang/dep/cmd/dep && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/lukehoban/go-outline" ]; then
    		cd /home/chadit/Projects/src/github.com/lukehoban/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
@@ -82,6 +88,11 @@ func ()
    		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	 fi
 
+	 # Dave Cheney Profiler
+	 if [ -d "/home/chadit/Projects/src/github.com/pkg/profile" ]; then
+   		cd /home/chadit/Projects/src/github.com/pkg/profile && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
+
 	# Geo location helpers
 	 if [ -d "/home/chadit/Projects/src/github.com/paulmach/go.geo" ]; then
    		cd /home/chadit/Projects/src/github.com/paulmach/go.geo && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
@@ -103,6 +114,7 @@ func ()
 
 	go get -u golang.org/x/tools/...
 	go get -u golang.org/x/tools/cmd/gorename
+	go get -u github.com/golang/dep/cmd/dep
 	go get -u github.com/tpng/gopkgs
 	go get -u github.com/acroca/go-symbols
 	go get -u github.com/golang/lint/golint
@@ -118,10 +130,11 @@ func ()
 	go get -u github.com/lukehoban/go-outline
 	go get -u github.com/ramya-rao-a/go-outline
 	go get -u sourcegraph.com/sqs/goreturns
+	go get -u github.com/pkg/profile
 
 	go get -u github.com/paulmach/go.geo
 	go get -u github.com/paulmach/go.geojson
-
+	go get -u github.com/haya14busa/goplay/cmd/goplay
 
 	go get -u honnef.co/go/tools/cmd/staticcheck
 	go get -u honnef.co/go/tools/cmd/megacheck

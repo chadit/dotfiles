@@ -13,11 +13,11 @@ if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
 
 cd /home/${SCRIPTUSER}/Downloads/
 
-VSCODEVER=code-stable-code_1.11.2-1492070517_amd64.tar.gz
+VSCODEVER=code-stable-code_1.18.1-1510857349_amd64.tar.gz
 
 # Download the sources if file does not exist
 if [ ! -f /home/${SCRIPTUSER}/Downloads/${VSCODEVER} ]; then
-    sudo wget https://az764295.vo.msecnd.net/stable/6eaebe3b9c70406d67c97779468c324a7a95db0e/code-stable-code_1.11.2-1492070517_amd64.tar.gz
+    sudo wget https://az764295.vo.msecnd.net/stable/929bacba01ef658b873545e26034d1a8067445e9/code-stable-code_1.18.1-1510857349_amd64.tar.gz
 fi
 
 sudo tar -xvf ${VSCODEVER}
