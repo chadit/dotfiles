@@ -61,11 +61,11 @@ func ()
 	fi
 
 	if [ -d "/home/chadit/Projects/src/sourcegraph.com/sqs/goreturns" ]; then
-   		cd /home/chadit/Projects/src/sourcegraph.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/sourcegraph.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
-	if [ -d "/home/chadit/Projects/src/github.com/tpng/gopkgs" ]; then
-   		cd /home/chadit/Projects/src/github.com/tpng/gopkgs && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	if [ -d "/home/chadit/Projects/src/github.com/uudashr/gopkgs/cmd/gopkgs" ]; then
+    		cd /home/chadit/Projects/src/github.com/uudashr/gopkgs/cmd/gopkgs && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
 	 if [ -d "/home/chadit/Projects/src/github.com/newhook/go-symbols" ]; then
@@ -109,13 +109,14 @@ func ()
 
 
 	# Get/Update/Install
+	echo "starting go get -u"
 	go get -u github.com/derekparker/delve/cmd/dlv
 	gocode close && go get -u github.com/nsf/gocode
 
 	go get -u golang.org/x/tools/...
 	go get -u golang.org/x/tools/cmd/gorename
 	go get -u github.com/golang/dep/cmd/dep
-	go get -u github.com/tpng/gopkgs
+	go get -u github.com/uudashr/gopkgs/cmd/gopkgs
 	go get -u github.com/acroca/go-symbols
 	go get -u github.com/golang/lint/golint
 	go get -u github.com/fatih/gomodifytags
@@ -129,15 +130,18 @@ func ()
 	go get -u github.com/cweill/gotests/...
 	go get -u github.com/lukehoban/go-outline
 	go get -u github.com/ramya-rao-a/go-outline
-	go get -u sourcegraph.com/sqs/goreturns
+	# go get -u sourcegraph.com/sqs/goreturns
 	go get -u github.com/pkg/profile
 
 	go get -u github.com/paulmach/go.geo
 	go get -u github.com/paulmach/go.geojson
 	go get -u github.com/haya14busa/goplay/cmd/goplay
 
+	echo "starting staticcheck"
 	go get -u honnef.co/go/tools/cmd/staticcheck
+	echo "starting megacheck"
 	go get -u honnef.co/go/tools/cmd/megacheck
+	echo "starting gometalinter"
 	go get -u github.com/alecthomas/gometalinter
 	gometalinter --install
 
