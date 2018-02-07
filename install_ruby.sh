@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Ruby setup
+# Ruby setup utilizing rbenv so that the ruby versions can be swapped out
 func ()
 {
 	if [ "$EUID" -eq 0 ]; then 

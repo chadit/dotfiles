@@ -13,7 +13,7 @@ if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
 
 cd /home/${SCRIPTUSER}/Downloads/
 
-VSCODEVER=code-stable-code_1.19.2-1515599945_amd64.tar.gz
+VSCODEVER=code-stable-code_1.19.3-1516876437_amd64.tar.gz
 
 # Download the sources if file does not exist
 if [ ! -f /home/${SCRIPTUSER}/Downloads/${VSCODEVER} ]; then

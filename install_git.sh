@@ -3,6 +3,8 @@
 # Git Setup
 func ()
 {
+# https://api.github.com/repos/git/git
+# https://api.github.com/repos/git/git/tags
 
 	#Get Dependencies
 	local INSTALLVER=2.15.0
@@ -47,6 +49,7 @@ func ()
 	# change directory to tmp
 	cd /tmp/
 
+# https://github.com/git/git/archive/v2.16.1.tar.gz
 	sudo wget https://www.kernel.org/pub/software/scm/git/git-${INSTALLVER}.tar.gz
 	sudo tar xzf git-${INSTALLVER}.tar.gz
 
