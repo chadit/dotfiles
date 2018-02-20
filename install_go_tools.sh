@@ -13,18 +13,21 @@ func ()
 	if [ -d "/home/chadit/Projects/src/github.com/haya14busa/goplay/cmd/goplay" ]; then
   		cd /home/chadit/Projects/src/github.com/haya14busa/goplay/cmd/goplay && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
-	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd" ]; then
-   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	if [ -d "/home/chadit/Projects/src/golang.org/x/tools" ]; then
+   		cd /home/chadit/Projects/src/golang.org/x/tools && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
-	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/gorename" ]; then
-   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/gorename && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
-	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/guru" ]; then
-   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/guru && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
-	if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/cover" ]; then
-   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/cover && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	fi
+	# if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd" ]; then
+ #   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	# fi
+	# if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/gorename" ]; then
+ #   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/gorename && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	# fi
+	# if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/guru" ]; then
+ #   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/guru && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	# fi
+	# if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd/cover" ]; then
+ #   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/cover && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	# fi
 	if [ -d "/home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv" ]; then
    		cd /home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
@@ -112,35 +115,41 @@ func ()
 	echo "starting go get -u"
 	go get -u github.com/derekparker/delve/cmd/dlv
 	gocode close && go get -u github.com/nsf/gocode
-
-	go get -u golang.org/x/tools/...
-	go get -u golang.org/x/tools/cmd/gorename
-	go get -u github.com/golang/dep/cmd/dep
 	go get -u github.com/uudashr/gopkgs/cmd/gopkgs
+	go get -u github.com/ramya-rao-a/go-outline
 	go get -u github.com/acroca/go-symbols
-	go get -u github.com/golang/lint/golint
+	#go get -u golang.org/x/tools/...
+	go get -u golang.org/x/tools/cmd/guru
+	go get -u golang.org/x/tools/cmd/gorename
 	go get -u github.com/fatih/gomodifytags
+	go get -u github.com/haya14busa/goplay/cmd/goplay
 	go get -u github.com/josharian/impl
+	go get -u github.com/rogpeppe/godef
+	go get -u golang.org/x/tools/cmd/godoc
+	go get -u sourcegraph.com/sqs/goreturns
+
+	#Debug
+	go get -u github.com/golang/dep/cmd/dep
+	
+	
+	go get -u github.com/golang/lint/golint	
 	go get -u github.com/redefiance/go-find-references
 	go get -u github.com/jstemmer/gotags
 	go get -u github.com/client9/misspell/cmd/misspell
 	go get -u github.com/adjust/go-wrk
-	go get -u github.com/uber/go-torch
-	go get -u github.com/rogpeppe/godef
+	go get -u github.com/uber/go-torch	
 	go get -u github.com/cweill/gotests/...
-	go get -u github.com/lukehoban/go-outline
-	go get -u github.com/ramya-rao-a/go-outline
-	# go get -u sourcegraph.com/sqs/goreturns
+	#go get -u github.com/lukehoban/go-outline
 	go get -u github.com/pkg/profile
-
 	go get -u github.com/paulmach/go.geo
 	go get -u github.com/paulmach/go.geojson
-	go get -u github.com/haya14busa/goplay/cmd/goplay
+	
 
 	echo "starting staticcheck"
 	go get -u honnef.co/go/tools/cmd/staticcheck
 	echo "starting megacheck"
 	go get -u honnef.co/go/tools/cmd/megacheck
+	
 	echo "starting gometalinter"
 	go get -u github.com/alecthomas/gometalinter
 	gometalinter --install

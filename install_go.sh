@@ -10,6 +10,10 @@ func ()
     local INSTALLPATH="/usr/lib64/golang"
     local SOURCEURL="https://storage.googleapis.com/golang/${FILETAR}"
 
+    if [ -d ${INSTALLPATH} ]; then
+        sudo rm -rf ${INSTALLPATH}
+    fi
+
     # setup folders
     if [ ! -f ${INSTALLPATH} ]; then
     	sudo mkdir -p ${INSTALLPATH}
