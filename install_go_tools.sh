@@ -91,6 +91,10 @@ func ()
    		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	 fi
 
+	 if [ -d "/home/chadit/Projects/src/github.com/go-test/deep" ]; then
+   		cd /home/chadit/Projects/src/github.com/go-test/deep && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 fi
+
 	 # Dave Cheney Profiler
 	 if [ -d "/home/chadit/Projects/src/github.com/pkg/profile" ]; then
    		cd /home/chadit/Projects/src/github.com/pkg/profile && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive

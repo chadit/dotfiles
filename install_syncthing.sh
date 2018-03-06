@@ -14,26 +14,26 @@ func ()
     fi
 
     # # stop the service for updating
-    # sudo systemctl stop syncthing@chadit.service
+     sudo systemctl stop syncthing@chadit.service
     
 
-    # cd /tmp/
-    # # Download the sources if file does not exist
-    # if [ ! -f /tmp/${FILETAR} ]; then
-    #     sudo wget ${SOURCEURL}
-    # fi
+     cd /tmp/
+     # Download the sources if file does not exist
+     if [ ! -f /tmp/${FILETAR} ]; then
+         sudo wget ${SOURCEURL}
+     fi
 
-    # sudo tar -xvf ${FILETAR}
+     sudo tar -xvf ${FILETAR}
 
-    # # make sure the go folder is created
-    # sudo mkdir -p /usr/syncthing
-    # sudo chown ${USER} /usr/syncthing
+    # make sure the go folder is created
+     sudo mkdir -p /usr/syncthing
+     sudo chown ${USER} /usr/syncthing
 
-    # # Install to /usr/
-    # sudo rsync -av syncthing-linux-amd64-v${INSTALLVER}// /usr/syncthing
+     # Install to /usr/
+     sudo rsync -av syncthing-linux-amd64-v${INSTALLVER}// /usr/syncthing
 
-    # sudo chmod +x /usr/syncthing/syncthing
-  #  sudo chown chadit /usr/syncthing/syncthing
+     sudo chmod +x /usr/syncthing/syncthing
+    sudo chown chadit /usr/syncthing/syncthing
 
 local APPSHORTCUT="[Desktop Entry]
 Name=Syncthing

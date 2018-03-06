@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# MongoChef Setup
+# robo3t Setup
 
 func ()
 {
-	local INSTALLVER=4.5.5
+	local INSTALLVER=1.2.1
 	local SCRIPTUSER=${SUDO_USER}
-	local FILETAR="mongochef-$INSTALLVER-linux-x64-dist.tar.gz"
-	# https://cdn.3t.io/mongochef-core/linux/4.5.5/mongochef-4.5.5-linux-x64-dist.tar.gz
-	local SOURCEURL="https://cdn.3t.io/mongochef-core/linux/$INSTALLVER/mongochef-$INSTALLVER-linux-x64-dist.tar.gz"
+	local FILETAR="robo3t-$INSTALLVER-linux-x86_64-3e50a65.tar.gz"
+	# https://cdn.3t.io/mongochef-core/linux/4.5.5/mongochef-4.5.5-linux-x64-dist.tar.gz	
+	local SOURCEURL="https://download.robomongo.org/$INSTALLVER/linux/robo3t-$INSTALLVER-linux-x86_64-3e50a65.tar.gz"
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"
 	then
@@ -29,29 +29,28 @@ func ()
 	sudo tar -xvf ${FILETAR}
 
 	# make sure the folder is created
- 	sudo mkdir -p /usr/mongochef
+ 	sudo mkdir -p /usr/robo3t
 
  	# Install to /usr/bin
- 	sudo rsync -av mongochef-${INSTALLVER}-linux-x64-dist/ /usr/mongochef
-
- 	sudo chmod +x /usr/mongochef/bin/mongochef.sh
+ 	sudo rsync -av robo3t-${INSTALLVER}-linux-x86_64-3e50a65/ /usr/robo3t
+	
 
  local SHORTCUT="[Desktop Entry]
-   Name=mongochef
-   Comment=mongochef
-   Exec=/usr/mongochef/bin/mongochef.sh
-   Icon=/home/chadit/Dropbox/Linux/Scripts/3t-mongochef_icon.png
+   Name=robo3t
+   Comment=robo3t
+   Exec=/usr/robo3t/bin/robo3t
+   Icon=/home/chadit/Dropbox/Linux/Scripts/robo3t.png
    Terminal=false
    Type=Application
    Encoding=UTF-8
    Categories=Utility"
 
- 	sudo touch /usr/share/applications/mongochef.desktop
- 	sudo echo "${SHORTCUT}" > /usr/share/applications/mongochef.desktop
+ 	sudo touch /usr/share/applications/robo3t.desktop
+ 	sudo echo "${SHORTCUT}" > /usr/share/applications/robo3t.desktop
 
- 	sudo chmod +x /usr/share/applications/mongochef.desktop
+ 	sudo chmod +x /usr/share/applications/robo3t.desktop
 
 	# remove tar.gz
-	sudo rm -rf mongochef-*
+	sudo rm -rf robo3t-*
 }
 func

@@ -20,7 +20,7 @@ func ()
     # unpack tar
     sudo tar -xvf ${FILETAR}
 
-# make sure the go folder is created
+	# make sure the go folder is created
 	sudo mkdir -p /usr/dbeaver
 
 	# Install to /usr/bin
