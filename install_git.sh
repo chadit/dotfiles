@@ -7,7 +7,7 @@ func ()
 # https://api.github.com/repos/git/git/tags
 
 	#Get Dependencies
-	local INSTALLVER=2.15.0
+	local INSTALLVER=2.17.0
 	#local pplatform=$(python -mplatform)
 	local platform=""
 	sudo mkdir -p /usr/git/bin/
@@ -37,7 +37,7 @@ func ()
 		;;
 	"ubuntu")
 		echo "run ubuntu stuff" 
-		sudo apt install -y build-essential libssl-dev openssl libcurl4-gnutls-dev libexpat1-dev gettext unzip rsync		
+		sudo apt install -y build-essential libssl-dev openssl libcurl4-gnutls-dev libexpat1-dev gettext unzip rsync zlib1g-dev tcl-dev libssl-dev gettext	
 		;;
 	"solus")
 		echo "run solus stuff" 
@@ -49,7 +49,7 @@ func ()
 	# change directory to tmp
 	cd /tmp/
 
-# https://github.com/git/git/archive/v2.16.1.tar.gz
+# https://github.com/git/git/archive/v2.17.0.tar.gz
 	sudo wget https://www.kernel.org/pub/software/scm/git/git-${INSTALLVER}.tar.gz
 	sudo tar xzf git-${INSTALLVER}.tar.gz
 

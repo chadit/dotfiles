@@ -8,13 +8,13 @@ func ()
 	echo "Install/Upgrading go tools ..."
 	# check if folder exist, and reset them (sometimes syncing can cause issues)
 	if [ -d "/home/chadit/Projects/src/cloud.google.com/go" ]; then
-  		cd /home/chadit/Projects/src/cloud.google.com/go && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+  		cd /home/chadit/Projects/src/cloud.google.com/go && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/haya14busa/goplay/cmd/goplay" ]; then
-  		cd /home/chadit/Projects/src/github.com/haya14busa/goplay/cmd/goplay && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+  		cd /home/chadit/Projects/src/github.com/haya14busa/goplay/cmd/goplay && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/golang.org/x/tools" ]; then
-   		cd /home/chadit/Projects/src/golang.org/x/tools && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/golang.org/x/tools && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	# if [ -d "/home/chadit/Projects/src/golang.org/x/tools/cmd" ]; then
  #   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
@@ -29,38 +29,38 @@ func ()
  #   		cd /home/chadit/Projects/src/golang.org/x/tools/cmd/cover && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	# fi
 	if [ -d "/home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv" ]; then
-   		cd /home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/nsf/gocode" ]; then
-   		cd /home/chadit/Projects/src/github.com/nsf/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/nsf/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/rogpeppe/godef" ]; then
-  		cd /home/chadit/Projects/src/github.com/rogpeppe/godef && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+  		cd /home/chadit/Projects/src/github.com/rogpeppe/godef && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/golang/lint" ]; then
-   		cd /home/chadit/Projects/src/github.com/golang/lint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/golang/lint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/golang/lint/golint" ]; then
-   		cd /home/chadit/Projects/src/github.com/golang/lint/golint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/golang/lint/golint && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/golang/dep/cmd/dep" ]; then
-   		cd /home/chadit/Projects/src/github.com/golang/dep/cmd/dep && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/golang/dep/cmd/dep && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/lukehoban/go-outline" ]; then
-   		cd /home/chadit/Projects/src/github.com/lukehoban/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/lukehoban/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/cweill/gotests" ]; then
-   		cd /home/chadit/Projects/src/github.com/cweill/gotests && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/cweill/gotests && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/sourcegraph/go-langserver" ]; then
-   		cd /home/chadit/Projects/src/github.com/sourcegraph/go-langserver && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/sourcegraph/go-langserver && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 	if [ -d "/home/chadit/Projects/src/github.com/alecthomas/gometalinter" ]; then
-   		cd /home/chadit/Projects/src/github.com/alecthomas/gometalinter && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/alecthomas/gometalinter && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/ramya-rao-a/go-outline" ]; then
-   		cd /home/chadit/Projects/src/github.com/ramya-rao-a/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/ramya-rao-a/go-outline && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
 	if [ -d "/home/chadit/Projects/src/sourcegraph.com/sqs/goreturns" ]; then
@@ -68,95 +68,118 @@ func ()
 	fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/uudashr/gopkgs/cmd/gopkgs" ]; then
-    		cd /home/chadit/Projects/src/github.com/uudashr/gopkgs/cmd/gopkgs && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+    		cd /home/chadit/Projects/src/github.com/uudashr/gopkgs/cmd/gopkgs && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
 	 if [ -d "/home/chadit/Projects/src/github.com/newhook/go-symbols" ]; then
-   		cd /home/chadit/Projects/src/github.com/newhook/go-symbols && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/newhook/go-symbols && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
 	 if [ -d "/home/chadit/Projects/src/github.com/fatih/gomodifytags" ]; then
-   		cd /home/chadit/Projects/src/github.com/fatih/gomodifytags && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/fatih/gomodifytags && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
 
 	 if [ -d "/home/chadit/Projects/src/github.com/josharian/impl" ]; then
-  		cd /home/chadit/Projects/src/github.com/josharian/impl && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+  		cd /home/chadit/Projects/src/github.com/josharian/impl && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
 
 	 if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v2" ]; then
-   		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v2 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v2 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
 
 	 if [ -d "/home/chadit/Projects/src/gopkg.in/olivere/elastic.v5" ]; then
-   		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/gopkg.in/olivere/elastic.v5 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
 
 	 if [ -d "/home/chadit/Projects/src/github.com/go-test/deep" ]; then
-   		cd /home/chadit/Projects/src/github.com/go-test/deep && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/go-test/deep && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
 
 	 # Dave Cheney Profiler
 	 if [ -d "/home/chadit/Projects/src/github.com/pkg/profile" ]; then
-   		cd /home/chadit/Projects/src/github.com/pkg/profile && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/pkg/profile && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
 
 	# Geo location helpers
 	 if [ -d "/home/chadit/Projects/src/github.com/paulmach/go.geo" ]; then
-   		cd /home/chadit/Projects/src/github.com/paulmach/go.geo && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/paulmach/go.geo && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
 
 	 if [ -d "/home/chadit/Projects/src/github.com/paulmach/go.geojson" ]; then
-   		cd /home/chadit/Projects/src/github.com/paulmach/go.geojson && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+   		cd /home/chadit/Projects/src/github.com/paulmach/go.geojson && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
+
+	# Vim Helpers
+	if [ -d "/home/chadit/Projects/src/github.com/zmb3/gogetdoc" ]; then
+   		cd /home/chadit/Projects/src/github.com/zmb3/gogetdoc && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/davidrjenni/reftools/cmd/fillstruct" ]; then
+   		cd /home/chadit/Projects/src/github.com/davidrjenni/reftools/cmd/fillstruct && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/fatih/motion" ]; then
+   		cd /home/chadit/Projects/src/github.com/fatih/motion && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/dominikh/go-tools/cmd/keyify" ]; then
+   		cd /home/chadit/Projects/src/github.com/dominikh/go-tools/cmd/keyify && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/klauspost/asmfmt/cmd/asmfmt" ]; then
+   		cd /home/chadit/Projects/src/github.com/klauspost/asmfmt/cmd/asmfmt && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+	fi
+
 	 # Geo location helpers
 
-	 if [ -d "~/.vim/bundle/vim-go/" ]; then
-   		cd ~/.vim/bundle/vim-go/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	 fi
+# install via vim package
+	 # if [ -d "~/.vim/bundle/vim-go/" ]; then
+  #  		cd ~/.vim/bundle/vim-go/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	 # fi
 
 
 	# Get/Update/Install
 	echo "starting go get -u"
-	go get -u github.com/derekparker/delve/cmd/dlv
-	gocode close && go get -u github.com/nsf/gocode
-	go get -u github.com/uudashr/gopkgs/cmd/gopkgs
-	go get -u github.com/ramya-rao-a/go-outline
-	go get -u github.com/acroca/go-symbols
+	#go get -u github.com/derekparker/delve/cmd/dlv
+	#gocode close && go get -u github.com/nsf/gocode
+	#go get -u github.com/uudashr/gopkgs/cmd/gopkgs
+	#go get -u github.com/ramya-rao-a/go-outline
+	#go get -u github.com/acroca/go-symbols
 	#go get -u golang.org/x/tools/...
-	go get -u golang.org/x/tools/cmd/guru
-	go get -u golang.org/x/tools/cmd/gorename
-	go get -u github.com/fatih/gomodifytags
-	go get -u github.com/haya14busa/goplay/cmd/goplay
-	go get -u github.com/josharian/impl
-	go get -u github.com/rogpeppe/godef
-	go get -u golang.org/x/tools/cmd/godoc
-	go get -u sourcegraph.com/sqs/goreturns
+	#go get -u golang.org/x/tools/cmd/guru
+	#go get -u golang.org/x/tools/cmd/gorename
+	#go get -u github.com/fatih/gomodifytags
+	#go get -u github.com/haya14busa/goplay/cmd/goplay
+	#go get -u github.com/josharian/impl
+	#go get -u github.com/rogpeppe/godef
+	#go get -u golang.org/x/tools/cmd/godoc
+	#go get -u sourcegraph.com/sqs/goreturns
 
 	#Debug
-	go get -u github.com/golang/dep/cmd/dep
+	#go get -u github.com/golang/dep/cmd/dep
 	
 	
-	go get -u github.com/golang/lint/golint	
-	go get -u github.com/redefiance/go-find-references
-	go get -u github.com/jstemmer/gotags
-	go get -u github.com/client9/misspell/cmd/misspell
-	go get -u github.com/adjust/go-wrk
-	go get -u github.com/uber/go-torch	
-	go get -u github.com/cweill/gotests/...
-	#go get -u github.com/lukehoban/go-outline
-	go get -u github.com/pkg/profile
-	go get -u github.com/paulmach/go.geo
-	go get -u github.com/paulmach/go.geojson
+	#go get -u github.com/golang/lint/golint	
+	#go get -u github.com/redefiance/go-find-references
+	#go get -u github.com/jstemmer/gotags
+	#go get -u github.com/client9/misspell/cmd/misspell
+	#go get -u github.com/adjust/go-wrk
+	# go get -u github.com/uber/go-torch	
+	# go get -u github.com/cweill/gotests/...
+	# #go get -u github.com/lukehoban/go-outline
+	# go get -u github.com/pkg/profile
+	# go get -u github.com/paulmach/go.geo
+	# go get -u github.com/paulmach/go.geojson
 	
 
-	echo "starting staticcheck"
-	go get -u honnef.co/go/tools/cmd/staticcheck
-	echo "starting megacheck"
-	go get -u honnef.co/go/tools/cmd/megacheck
+	# echo "starting staticcheck"
+	# go get -u honnef.co/go/tools/cmd/staticcheck
+	# echo "starting megacheck"
+	# go get -u honnef.co/go/tools/cmd/megacheck
 	
-	echo "starting gometalinter"
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install
+	# echo "starting gometalinter"
+	# go get -u github.com/alecthomas/gometalinter
+	# gometalinter --install
 
 	# use https://github.com/docker/docker-credential-helpers/releases to install cred
 }

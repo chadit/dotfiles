@@ -4,7 +4,7 @@
 func ()
 {
 	# if already exist stop service
-	sudo systemctl start docker.service
+	sudo systemctl stop docker.service
 
     # change directory to tmp
     cd /tmp/
@@ -38,7 +38,7 @@ func ()
    
 
 	# todo find a way to scrap the version from the web pay so we can check if it needs updated
-	local FILETAR="docker-18.02.0-ce.tgz"
+	local FILETAR="docker-18.04.0-ce.tgz"
 	curl -O https://download.docker.com/linux/static/edge/x86_64/${FILETAR}
 	sudo tar xzvf ${FILETAR}
 	sudo cp docker/* /usr/bin/

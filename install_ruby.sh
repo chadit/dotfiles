@@ -53,5 +53,12 @@ func ()
 		rbenv init -
 		git clone git@github.com:rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 	fi
+
+	# install gems
+	gem install seeing_is_believing
+	gem install solargraph
+	gem install rufo
+	gem install htmlbeautifier
+	gem install rbeautify
 }
 func
