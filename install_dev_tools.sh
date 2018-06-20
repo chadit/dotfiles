@@ -5,6 +5,8 @@
 #sudo chmod 777 /usr/local/lib
 #npm install -g grunt-cli
 
+# needed for python tools,  example YouCompleteMe (vim plugin)
+sudo apt install -y cmake 
 
 
 #Ansible 

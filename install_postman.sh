@@ -1,10 +1,10 @@
 #!/bin/bash
 # https://dl.pstmn.io/download/latest/linux?arch=64
-# https://dl.pstmn.io/download/version/6.0.10/linux64
+# https://dl.pstmn.io/download/version/6.1.3/linux64
 
 func ()
 {
-	local INSTALLVER=6.0.10
+	local INSTALLVER=6.1.3
     local SCRIPTUSER=${SUDO_USER}
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then

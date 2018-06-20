@@ -3,7 +3,7 @@
 #stable release for free evaluation, dev branch only if you have a license key
 func ()
 {
-	local INSTALLVER=3143
+	local INSTALLVER=3170
 	local FILETAR="sublime_text_3_build_${INSTALLVER}_x64.tar.bz2"
 	local SOURCEURL="https://download.sublimetext.com/${FILETAR}"
 	

@@ -26,7 +26,10 @@ func ()
 		;;
 	"ubuntu")
 		echo "run ubuntu stuff" 
-		sudo apt-get install -y libreadline-dev
+		sudo apt-get install -y libreadline-dev libssl-dev autoconf bison build-essential libssl-dev libyaml-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev
+
+		# For Ruby < 2.4
+		sudo apt install -y libssl1.0-dev
 		#sudo apt install -y rbenv ruby-sass
 
 		;;
