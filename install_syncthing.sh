@@ -4,7 +4,7 @@
 
 func ()
 {    
-    local INSTALLVER=0.14.41
+    local INSTALLVER=0.14.48
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
     local SOURCEURL="https://github.com/syncthing/syncthing/releases/download/v0.14.41/syncthing-linux-amd64-v0.14.41.tar.gz"
