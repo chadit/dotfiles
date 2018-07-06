@@ -13,14 +13,15 @@ if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
 
 cd /home/${SCRIPTUSER}/Downloads/
 
-VSCODEVER=code-stable-code_1.24.1-1528912196_amd64.tar.gz
+#VSCODEVER=code-stable-code_1.24.1-1528912196_amd64.tar.gz
 
 # Download the sources if file does not exist
 if [ ! -f /home/${SCRIPTUSER}/Downloads/${VSCODEVER} ]; then
-    sudo wget https://az764295.vo.msecnd.net/stable/24f62626b222e9a8313213fb64b10d741a326288/code-stable-code_1.24.1-1528912196_amd64.tar.gz
+    wget -O code.tar.gz https://go.microsoft.com/fwlink/?LinkID=620884
+    #sudo wget https://az764295.vo.msecnd.net/stable/24f62626b222e9a8313213fb64b10d741a326288/code-stable-code_1.24.1-1528912196_amd64.tar.gz
 fi
 
-sudo tar -xvf ${VSCODEVER}
+sudo tar -xvf code.tar.gz
 
 # make sure the go folder is created
 sudo mkdir -p /opt/code

@@ -57,11 +57,18 @@ func ()
 		git clone git@github.com:rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 	fi
 
+	# this sets gems to user, this will cause rbenv to fail so we need to remove it
+	sudo rm /etc/gemrc 
+
+	# check rbenv setup
+	curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
+
 	# install gems
 	gem install seeing_is_believing
 	gem install solargraph
 	gem install rufo
 	gem install htmlbeautifier
 	gem install rbeautify
+	gem install rubocop
 }
 func
