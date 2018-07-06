@@ -1,33 +1,37 @@
 #!/bin/bash
-# vscode
+
+# this script handles full install and update from script.
+# this can be run over and over without needing to change to update anything
+# Installs the 64 bit version of VSCode for Linux from source.
+# if the script is run after installation, it will download the latest and install that version
+
+# TODO : find a way to check version installed with what is released so the same version is not installed 
+
 func ()
 {
-local SCRIPTUSER=${SUDO_USER}
+	local SCRIPTUSER=${SUDO_USER}
 
-if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
+	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
     	 SCRIPTUSER=${USER}
     fi
 
-# todo add a check for version
-#sudo eopkg rm vscode
+    echo "user set to $SCRIPTUSER"
 
-cd /home/${SCRIPTUSER}/Downloads/
+	cd /home/${SCRIPTUSER}/Downloads/
 
-#VSCODEVER=code-stable-code_1.24.1-1528912196_amd64.tar.gz
 
-# Download the sources if file does not exist
-if [ ! -f /home/${SCRIPTUSER}/Downloads/${VSCODEVER} ]; then
-    wget -O code.tar.gz https://go.microsoft.com/fwlink/?LinkID=620884
-    #sudo wget https://az764295.vo.msecnd.net/stable/24f62626b222e9a8313213fb64b10d741a326288/code-stable-code_1.24.1-1528912196_amd64.tar.gz
-fi
+	# Download the sources if file does not exist
+	if [ ! -f /home/${SCRIPTUSER}/Downloads/${VSCODEVER} ]; then
+    	wget -O code.tar.gz https://go.microsoft.com/fwlink/?LinkID=620884
+	fi
 
-sudo tar -xvf code.tar.gz
+	sudo tar -xvf code.tar.gz
 
-# make sure the go folder is created
-sudo mkdir -p /opt/code
+	# make sure the go folder is created
+	sudo mkdir -p /opt/code
 
-# Install to /usr/local/bin
-sudo rsync -av VSCode-linux-x64/ /opt/code
+	# Install to /opt/code
+	sudo rsync -av VSCode-linux-x64/ /opt/code
 
 VSCODESHORTCUT="[Desktop Entry]
 Name=Visual Studio Code.
@@ -51,6 +55,5 @@ sudo rm -rf vscode*
 sudo rm -rf VSCode*
 sudo rm -rf code-stable*
 }
+
 func
-
-

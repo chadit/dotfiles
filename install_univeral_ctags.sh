@@ -1,11 +1,16 @@
 #!/bin/bash
 
+# this script handles full install and update from script.
+# this can be run over and over without needing to change to update anything
+
+# TODO : find a way to check commit installed with what is released so the same version is not installed 
+
 func ()
 {
 	local CURRENTDIR=`pwd`
 	local SCRIPTUSER=${SUDO_USER}
 
-if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
+	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
     	 SCRIPTUSER=${USER}
     fi
 
