@@ -1,0 +1,6 @@
+Development Flow
+
+* start terminal
+* exec `tmux_default` (starts/attaches the main tmux session)
+* `ctrl + b` then `c` to start two windows  (switch between them with `ctrl +b` then n)
+* rename first tab  `ctrl + b' then ,  gives rename option
