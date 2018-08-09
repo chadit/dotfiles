@@ -1,5 +1,5 @@
 " either copy to $HOME or symlink it via ln -s /path/to/file /path/to/symlink
-" ln -s /home/chadit/Dropbox/envSync/.vimrc /home/chadit/.vimrc
+" ln -sf /home/chadit/Dropbox/envSync/.vimrc /home/chadit/.vimrc
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -43,6 +43,8 @@ Plugin 'junegunn/fzf.vim'					" search tool for vim-go
 Plugin 'Valloric/YouCompleteMe'				" Code-completion for Go/C#/TypeScript/JavaScript/Rust/Java
 Plugin 'vim-airline/vim-airline'			" Status Line plugin
 Plugin 'vim-airline/vim-airline-themes'     " Themes for status
+
+Plugin 'RRethy/vim-illuminate'				" selectively illuminating other uses of current word under the cursor
 
 " ========= GIT ==============
 Plugin 'airblade/vim-gitgutter'				" Git diff in gutter
@@ -102,7 +104,6 @@ set incsearch       						" Find the next match as we type the search
 set hlsearch        						" Highlight searches by default
 set ignorecase      						" Ignore case when searching...
 set smartcase       						" ...unless we type a capital
-
 
 set lbr 									" Don't line wrap mid-word.
 set nowrap									" Don't wrap
@@ -360,9 +361,9 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
-" Prettier install and config
+" Prettier install and config  *.md,
 let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.vue PrettierAsync
 
 
 " close vim if the only window left open is a NERDTree

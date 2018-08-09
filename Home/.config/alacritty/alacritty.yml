@@ -1,5 +1,5 @@
 # either copy to $HOME or symlink it via ln -s /path/to/file /path/to/symlink
-# ln -s /home/chadit/Dropbox/Linux/Scripts/Home/.config/alacritty/alacritty.yml /home/chadit/.config/alacritty/alacritty.yml
+# ln -sf /home/chadit/Dropbox/Linux/Scripts/Home/.config/alacritty/alacritty.yml /home/chadit/.config/alacritty/alacritty.yml
 # https://github.com/jwilm/alacritty
 
 # Configuration for Alacritty, the GPU enhanced terminal emulator
