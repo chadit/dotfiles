@@ -4,7 +4,7 @@
 
 func ()
 {
-	local INSTALLVER=6.1.3
+	local INSTALLVER=6.2.4
     local SCRIPTUSER=${SUDO_USER}
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
@@ -31,7 +31,7 @@ func ()
 	  Name=Postman
 	  Comment=Postman
 	  Exec=/usr/Postman/Postman
-	  Icon=/usr/Postman/resources/app/assets/icon.png
+	  Icon=/usr/Postman/app/resources/app/assets/icon.png
 	  Terminal=true
 	  Type=Application
 	  Encoding=UTF-8
