@@ -4,16 +4,21 @@
 
 func ()
 {
-	local INSTALLVER=6.2.4
+	local INSTALLVER=6.4.2
+	local NAME=Postman-linux-x64-${INSTALLVER}.tar.gz
     local SCRIPTUSER=${SUDO_USER}
 
 	if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
     	 SCRIPTUSER=${USER}
     fi
 
-	echo /home/${SCRIPTUSER}/Downloads/
+    echo /home/${SCRIPTUSER}/Downloads/
 	cd /home/${SCRIPTUSER}/Downloads/
 
+    # Download the sources if file does not exist
+	if [ ! -f /home/${SCRIPTUSER}/Downloads/${NAME} ]; then
+    	wget -O Postman-linux-x64-${INSTALLVER}.tar.gz https://dl.pstmn.io/download/version/${INSTALLVER}/linux64
+	fi
 
 	sudo tar -xvf "Postman-linux-x64-${INSTALLVER}.tar.gz"
 
@@ -32,7 +37,7 @@ func ()
 	  Comment=Postman
 	  Exec=/usr/Postman/Postman
 	  Icon=/usr/Postman/app/resources/app/assets/icon.png
-	  Terminal=true
+	  Terminal=false
 	  Type=Application
 	  Encoding=UTF-8
 	  Categories=Utility"

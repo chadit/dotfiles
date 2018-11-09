@@ -17,12 +17,12 @@ func ()
     echo "user set to $SCRIPTUSER"
 
 
-	local PROJECTHOME="/home/$SCRIPTUSER/Projects/src/github.com/univeral-ctags"
+	local PROJECTHOME="/home/$SCRIPTUSER/Projects/src/github.com/universal-ctags"
 	if [ -d "$PROJECTHOME/ctags" ]; then
-		echo "pulling univeral ctags ..."
+		echo "pulling universal-ctags ..."
   		cd "$PROJECTHOME/ctags" && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
   	else
-  		echo "cloning univeral ctags ..."
+  		echo "cloning universal-ctags ..."
   		mkdir -p "$PROJECTHOME"
   		git clone git@github.com:universal-ctags/ctags.git
 	fi
@@ -33,6 +33,8 @@ func ()
 	./configure --prefix=/usr/local
 	make
 	make install
+
+	sudo chown -R $(whoami) $PROJECTHOME
 	
 	cd $CURRENTDIR
 }

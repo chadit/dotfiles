@@ -21,7 +21,7 @@ func ()
 
 
 	# Download the sources if file does not exist
-	if [ ! -f /home/${SCRIPTUSER}/Downloads/${VSCODEVER} ]; then
+	if [ ! -f /home/${SCRIPTUSER}/Downloads/code.tar.gz ]; then
     	wget -O code.tar.gz https://go.microsoft.com/fwlink/?LinkID=620884
 	fi
 
@@ -54,6 +54,7 @@ sudo echo "${VSCODESHORTCUT}" > /usr/share/applications/code.desktop
 sudo rm -rf vscode*
 sudo rm -rf VSCode*
 sudo rm -rf code-stable*
+sudo rm -rf code.tar.gz
 }
 
 func

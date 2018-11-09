@@ -6,7 +6,7 @@
 #npm install -g grunt-cli
 
 # needed for python tools,  example YouCompleteMe (vim plugin)
-sudo apt install -y cmake 
+#sudo apt install -y cmake 
 
 
 #Ansible 
