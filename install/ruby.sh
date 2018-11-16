@@ -32,6 +32,9 @@ func ()
 		#sudo apt install -y libssl1.0-dev
 		#sudo apt install -y rbenv ruby-sass
 
+		sudo chown -R chadit /usr/share/rubygems-integration/all/
+		gem pristine --all
+
 		;;
 	"solus")
 		echo "solus not setup" 
@@ -64,6 +67,6 @@ func ()
 	curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
 
 	# install gems
-	gem install seeing_is_believing solargraph rufo htmlbeautifier rbeautify rubocop
+	gem install seeing_is_believing solargraph rufo htmlbeautifier rbeautify rubocop bundler
 }
 func
