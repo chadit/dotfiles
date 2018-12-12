@@ -7,9 +7,9 @@ func ()
 	
 	echo "Install/Upgrading go tools ..."
 
-	echo "vim packages"
+	echo "vim packages" 
 
-	#https://github.com/fatih/vim-go/blob/4fdc5901468cb5aea6b89a80cab00d1bf16e101e/plugin/go.vim
+	# https://github.com/fatih/vim-go/blob/c2fa1a1762db5d542bbbb1e5bc752684692bf570/plugin/go.vim
 
 	if [ -d "/home/chadit/Projects/src/github.com/klauspost/asmfmt/cmd/asmfmt" ]; then
    		cd /home/chadit/Projects/src/github.com/klauspost/asmfmt/cmd/asmfmt && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go clean -cache && go install
@@ -32,6 +32,11 @@ func ()
    		cd /home/chadit/Projects/src/github.com/davidrjenni/reftools/cmd/fillstruct && echo `pwd` && go install
    		cd /home/chadit/Projects/src/github.com/davidrjenni/reftools/cmd/fillswitch && echo `pwd` && go install
 	fi
+
+	 if [ -d "/home/chadit/Projects/src/github.com/mdempsky/gocode" ]; then
+	 		gocode close
+    		cd /home/chadit/Projects/src/github.com/mdempsky/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+	 fi
 
 	# if [ -d "/home/chadit/Projects/src/github.com/rogpeppe/godef" ]; then
  #  		cd /home/chadit/Projects/src/github.com/rogpeppe/godef && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
@@ -115,9 +120,9 @@ func ()
    		cd /home/chadit/Projects/src/github.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
-	if [ -d "/home/chadit/Projects/src/github.com/stamblerre/gocode" ]; then
-   		cd /home/chadit/Projects/src/github.com/stamblerre/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
-	fi
+	# if [ -d "/home/chadit/Projects/src/github.com/stamblerre/gocode" ]; then
+ #   		cd /home/chadit/Projects/src/github.com/stamblerre/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+	# fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/ianthehat/godef" ]; then
    		cd /home/chadit/Projects/src/github.com/ianthehat/godef && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
@@ -150,10 +155,6 @@ func ()
    		cd /home/chadit/Projects/src/github.com/securego/gosec && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
    		cd /home/chadit/Projects/src/github.com/securego/gosec/cmd/gosec && echo `pwd` && go install
 	fi
-
-	# if [ -d "/home/chadit/Projects/src/github.com/mdempsky/gocode" ]; then
- #   		cd /home/chadit/Projects/src/github.com/mdempsky/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
-	# fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/mdempsky/unconvert" ]; then
    		cd /home/chadit/Projects/src/github.com/mdempsky/unconvert && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
@@ -199,6 +200,11 @@ func ()
    		cd /home/chadit/Projects/src/github.com/gohugoio/hugo && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
+	# go crypto
+	if [ -d "/home/chadit/Projects/src/golang.org/x/crypto/" ]; then
+   		cd /home/chadit/Projects/src/golang.org/x/crypto/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
 	# The terminal that I use
 	if [ -d "/home/chadit/Projects/src/github.com/jwilm/alacritty" ]; then
    		cd /home/chadit/Projects/src/github.com/jwilm/alacritty && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
@@ -228,6 +234,10 @@ func ()
 
 	if [ -d "/home/chadit/Projects/src/github.com/nats-io/nuid" ]; then
    		cd /home/chadit/Projects/src/github.com/nats-io/nuid && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/nats-io/nkeys" ]; then
+   		cd /home/chadit/Projects/src/github.com/nats-io/nkeys && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/paulmach/go.geojson" ]; then
@@ -294,6 +304,18 @@ func ()
    		cd /home/chadit/Projects/src/github.com/tealeg/xlsx && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
 	fi
 
+	if [ -d "/home/chadit/Projects/src/github.com/tealeg/xlsx" ]; then
+   		cd /home/chadit/Projects/src/github.com/tealeg/xlsx && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/DataDog/zstd" ]; then
+   		cd /home/chadit/Projects/src/github.com/DataDog/zstd && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
+	if [ -d "/home/chadit/Projects/src/github.com/pierrec/lz4" ]; then
+   		cd /home/chadit/Projects/src/github.com/pierrec/lz4 && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
+	fi
+
 	# ---------------------------------------------------------------------- #
 
 	# ******************************************* ZSH Plugins ************************************
@@ -314,31 +336,9 @@ func ()
 
 
 
-	# *********************************************************************************************
-
-	#  # Dave Cheney Profiler
-	#  if [ -d "/home/chadit/Projects/src/github.com/pkg/profile" ]; then
- #   		cd /home/chadit/Projects/src/github.com/pkg/profile && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
-	#  fi
-
-	# # Geo location helpers
-	#  if [ -d "/home/chadit/Projects/src/github.com/paulmach/go.geo" ]; then
- #   		cd /home/chadit/Projects/src/github.com/paulmach/go.geo && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
-	#  fi
-
-
-
-	 # Geo location helpers
-
-# install via vim package
-	 # if [ -d "~/.vim/bundle/vim-go/" ]; then
-  #  		cd ~/.vim/bundle/vim-go/ && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive
-	 # fi
-
+	
 
 	# Get/Update/Install
-	
-	
 	# echo "starting gometalinter"
 	# go get -u github.com/alecthomas/gometalinter
 	# gometalinter --install

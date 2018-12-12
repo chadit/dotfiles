@@ -70,6 +70,9 @@ refresh_vim(){
 
   /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe/install.py --go-completer --cs-completer --rust-completer
   sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
+
+# installs prettier 
+  yarn global add prettier
 }
 
 # removes sync conflicts that can happen from syncthing or pcloud
@@ -101,8 +104,9 @@ update_os(){
   #Ubuntu
   #python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
   #python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo do-release-upgrade && sudo apt autoremove -y && sudo apt autoclean -y
-  python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
- 
+  #python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
+  python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y 
+   
  # python -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y && sudo yaourt -Sy
   #Manjaro
   # python -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y
@@ -130,9 +134,9 @@ update_system_symbolic(){
     sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh/.zsh
   fi
 
-  if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh/.gitconfig ]; then
-    sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh/.gitconfig
-  fi
+  #if [ -f $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig ]; then
+  #  sudo rm $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig
+  #fi
   
   # main zshrc file
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.zshrc /home/chadit/.zshrc
@@ -189,6 +193,16 @@ update_apps(){
 
   # add/update zsh auto complete
   sudo cp -f /home/chadit/Projects/src/github.com/jwilm/alacritty/alacritty-completions.zsh /usr/share/zsh/functions/Completion/X/_alacritty
+}
+
+# (c) 2007 stefan w. GPLv3          
+function up {
+ups=""
+for i in $(seq 1 $1)
+do
+        ups=$ups"../"
+done
+cd $ups
 }
 
 # attach to an existing tmux sessions, if does not exist, cleaning create one

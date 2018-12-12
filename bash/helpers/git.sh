@@ -3,6 +3,32 @@ git_cleanup(){
 	git prune && git gc --aggressive
 }
 
+git_prune(){
+	local CURRENTDIR=`pwd`
+   	local BASEDIR="/home/chadit/Projects/src"
+   	cd $BASEDIR
+	for i in $(find . -name ".git" | cut -c 3-); do
+		cd "$i";
+     	cd ..;
+		echo `pwd`
+		git prune && git gc --aggressive
+		cd $BASEDIR
+	done
+
+
+	#find . -name .git -type d -prune | while read line; do
+    #	echo "Processing file '$line'"
+    #	cd $line
+    #	cd ..;
+    	#up 1
+    	#cd ../
+    #	echo `pwd`
+    	#git prune && git gc --aggressive
+	#done
+
+	cd $CURRENTDIR
+}
+
 
 git_remove_non_master_branch(){
  git branch | grep -v "qa" | grep -v "prod" | grep -v "develop" | grep -v "staging" | grep -v "master" | xargs git branch -D

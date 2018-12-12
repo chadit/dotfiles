@@ -16,6 +16,7 @@ Plugin 'VundleVim/Vundle.vim'				" Let Vundle Manage itself
 
 Plugin 'ctrlpvim/ctrlp.vim'      			" Full path fuzzy file, buffer, mru, tag, ... finder for Vim. Activate with `C-p`
 Plugin 'BufOnly.vim'						" Closes all buffers except the one currently in focus
+Plugin 'jlanzarotta/bufexplorer'			" Buffer explorer window
 Plugin 'scrooloose/nerdtree'    			" files tree
 Plugin 'jistr/vim-nerdtree-tabs'         	" Make NERDTree work better with tabs
 Plugin 'itmammoth/run-rspec.vim'			" Rspec runner
@@ -371,10 +372,10 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
+" ========================================= prettier/vim-prettier =========================================
 " Prettier install and config  *.md,
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.vue PrettierAsync
-
+" let g:prettier#autoformat = 0
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.vue PrettierAsync
 
 " close vim if the only window left open is a NERDTree
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -412,6 +413,11 @@ nmap <F7> mzgg=G`z
 
 " ======================= Copy ===============================================
 vmap <C-c> "+y
+
+" =============================== Buffer =========================================
+map <F2> :BufExplorer<CR>
+map <F3> :bp<CR>
+map <F4> :bn<CR>
 
 " ======================= syntastic ==============================================
 set statusline+=%#warningmsg#

@@ -3,7 +3,7 @@
 # Go Setup
 func ()
 {
-    local INSTALLVER=1.11.1
+    local INSTALLVER=1.11.2
      #local INSTALLVER=1.10.4
     # local INSTALLVER=1.9.4
     local SCRIPTUSER=${SUDO_USER}
