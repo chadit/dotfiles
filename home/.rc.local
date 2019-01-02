@@ -1,0 +1,104 @@
+" ======= Paper Color ========
+set background=dark   						" Type of background being used, Vim will attempt to use colors that look good with that type of background during syntax highlighting
+colorscheme PaperColor
+" ============================
+
+set autoindent								" Copy the indentation from the current line.
+set nowrap									" Don't wrap
+set history=1000                			" Store lots of :cmdline history
+set wildmenu 								" Display completion matches on your status line
+set wildmode=full							" Resets to default
+set showcmd                     			" Show incomplete cmds at the bottom
+set tags=./tags; 							" Set tags directory
+
+" Show trailing whitespace and spaces before a tab:
+:highlight ExtraWhitespace ctermbg=red guibg=red
+:autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\\t/
+
+augroup myfiletypes
+	" Clear old autocmds in group
+	autocmd!
+	" autoindent with two spaces, always expand tabs
+	autocmd FileType eruby,yaml,markdown set ai sw=2 sts=2 et
+augroup END
+
+if has('nvim')
+  let test#strategy = "neovim"
+else
+  let test#strategy = "dispatch"
+endif
+
+"*****************************************************************************
+"" vim-airline/vim-airline
+"*****************************************************************************
+let g:airline_theme = 'papercolor'
+let g:airline#extensions#tabline#buffer_nr_show = 1 " Shows the number next to the buffer, can use :b #
+let g:airline#extensions#tabline#fnamemod = ':t' 	" Show just the filename
+
+
+"*****************************************************************************
+"" airblade/vim-gitgutter
+"*****************************************************************************
+let g:gitgutter_max_signs=9999				" sets gitgutter to max
+
+"*****************************************************************************
+"" Nerd Tree
+"*****************************************************************************
+" For mouse click in NERDTree
+:set mouse=a
+let g:NERDTreeMouseMode=3
+
+" Show hidden files in NERDtree
+let NERDTreeShowHidden=1
+let NERDTreeQuitOnOpen = 0
+nnoremap <Leader>d :let NERDTreeQuitOnOpen = 1<bar>NERDTreeToggle<CR>
+nnoremap <Leader>D :let NERDTreeQuitOnOpen = 0<bar>NERDTreeToggle<CR>
+
+" open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+map <C-n> :NERDTreeToggle<CR>
+
+let g:NERDTreeShowBookmarks=0
+let g:NERDTreeMapOpenInTabSilent = 'T'
+let g:NERDTreeWinSize = 25
+
+"*****************************************************************************
+"" nathanaelkane/vim-indent-guides
+"*****************************************************************************
+let g:indent_guides_enable_on_vim_startup = 1   " Enable indent guides
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=235
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=16
+
+"*****************************************************************************
+"" w0rp/ale
+"*****************************************************************************
+" let g:ale_linters = { 'cs': ['OmniSharp'], 'eruby': ['erubylint'] }
+
+"*****************************************************************************
+"" OmniSharp/omnisharp-vim
+"*****************************************************************************
+let g:OmniSharp_server_path = '/opt/omnisharp-roslyn/OmniSharp.exe'
+let g:OmniSharp_server_type = 'roslyn'
+let g:OmniSharp_server_use_mono = 1
+let g:OmniSharp_prefer_global_sln = 1  
+let g:OmniSharp_timeout = 10
+
+let g:OmniSharp_selector_ui = 'unite'  " Use unite.vim
+let g:OmniSharp_selector_ui = 'ctrlp'  " Use ctrlp.vim
+let g:OmniSharp_selector_ui = 'fzf'    " Use fzf.vim
+let g:OmniSharp_selector_ui = ''       " Use vim - command line, quickfix etc.
+
+" ======================= Markdown Preview Chrome ============================
+" Open markdown files with Chrome. (https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl)
+autocmd BufEnter *.md exe 'noremap <F5> :!/usr/bin/google-chrome-stable %:p<CR>'
+
+" ======================= majutsushi/tagbar ==================================
+nmap <F8> :TagbarToggle<CR>
+
+"*****************************************************************************
+"" plasticboy/vim-markdown
+"*****************************************************************************
+" let g:vim_markdown_folding_disabled = 1

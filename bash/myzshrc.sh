@@ -57,6 +57,12 @@ ZSH_THEME_GIT_PROMPT_CHANGED=" %{$fg[yellow]%}%{✚%G%} "
 # Set the prompt.
 PROMPT='%n@%M%~$(git_super_status) '
 
+
+pathmunge $HOME/.goenv/bin
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+eval "$(goenv init -)"
+
 # initalize helpers and variables
 init_golang
 

@@ -34,45 +34,55 @@ which_shell(){
 }
 
 init_golang(){
-  if [ -d /usr/go/ ]; then
-    export GOPATH=/home/chadit/Projects
-    export GOROOT="/usr/go"
-    export GOCACHE=off # turns off go's test cacheing, can cause test to give unexpected results
-    #export GO111MODULE=on
-    export GO111MODULE=auto
-    pathmunge $GOROOT/bin after
-    pathmunge $GOPATH/bin after
-  fi
+  # GOVERSION=$1
+  # if [ -d /usr/go/ ]; then
+  #   export GOPATH=/home/chadit/Projects
+  #   export GOROOT="/usr/go"
+  #   export GOCACHE=off # turns off go's test cacheing, can cause test to give unexpected results
+  #   #export GO111MODULE=on
+  #   export GO111MODULE=auto
+  #   pathmunge $GOROOT/bin after
+  #   pathmunge $GOPATH/bin after
+  # fi
 
-  if [ -d /usr/lib64/golang/ ]; then
+  # if [ -d /usr/lib64/golang/ ]; then
     export GOPATH=/home/chadit/Projects
     export GOROOT="/usr/lib64/golang"
+    # if [ -n "$GOVERSION" ]; then
+    #   export GOROOT="/usr/lib64/golang$GOVERSION"
+    # fi
+
     export GOCACHE=off
     #export GO111MODULE=on
     export GO111MODULE=auto
     pathmunge $GOROOT/bin after
     pathmunge $GOPATH/bin after
-  fi
+  # fi
+}
+
+list_golang(){
+  find /usr/lib64/ -maxdepth 1 -type d -name 'go*' | sort
 }
 
 refresh_vim(){
   git_update_folder /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/
   sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
 
-  local CURRENTDIR=`pwd`
-  cd /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe/third_party/ycmd
-  git checkout master
-  git pull
-  git submodule update --init --recursive
-  cd $CURRENTDIR
+  #local CURRENTDIR=`pwd`
+  #cd /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe/third_party/ycmd
+  #git checkout master
+  #git pull
+  #cd /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe
+  #git submodule update --init --recursive
+  #cd $CURRENTDIR
 
-  sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
+  #sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
 
-  /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe/install.py --go-completer --cs-completer --rust-completer
-  sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
+  #/home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe/install.py --go-completer --cs-completer --rust-completer
+  #sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
 
 # installs prettier 
-  yarn global add prettier
+ # yarn global add prettier
 }
 
 # removes sync conflicts that can happen from syncthing or pcloud
@@ -148,6 +158,8 @@ update_system_symbolic(){
   fi
 
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc /home/chadit/.vimrc
+  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.rc.local /home/chadit/.rc.local
+  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.rc.local.bundles /home/chadit/.rc.local.bundles
 
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.tmux /home/chadit/.tmux
 
