@@ -1,21 +1,20 @@
-# this evenually will be used to install/update all development tools used
+# this eventually will be used to install/update all development tools used
 
-#sudo apt install -y npm
+# Shougo/deoplete.nvim requirement
+pip3 install --user pynvim
+# or
+pip3 install --user --upgrade pynvim
 
-#sudo chmod 777 /usr/local/lib
-#npm install -g grunt-cli
-
-# needed for python tools,  example YouCompleteMe (vim plugin)
-#sudo apt install -y cmake 
-
-
-#Ansible 
+# Ansible 
 pip install git+https://github.com/ansible/ansible.git@devel --upgrade
 #or 
 sudo -H pip install git+https://github.com/ansible/ansible.git@devel --upgrade
 
-#Ansible python libraries 
-#used for connecting to AWS
+# Ansible python libraries used for connecting to AWS
 pip install boto boto3
-#AWS cli
+# AWS CLI
 pip install awscli --upgrade
+# Rust
+rustup toolchain add nightly
+cargo +nightly install racer
+

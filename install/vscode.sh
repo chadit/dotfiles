@@ -19,7 +19,6 @@ func ()
 
 	cd /home/${SCRIPTUSER}/Downloads/
 
-
 	# Download the sources if file does not exist
 	if [ ! -f /home/${SCRIPTUSER}/Downloads/code.tar.gz ]; then
     	wget -O code.tar.gz https://go.microsoft.com/fwlink/?LinkID=620884

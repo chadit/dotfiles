@@ -4,7 +4,7 @@
 
 func ()
 {
-	local INSTALLVER=6.4.2
+	local INSTALLVER=6.7.3
 	local NAME=Postman-linux-x64-${INSTALLVER}.tar.gz
     local SCRIPTUSER=${SUDO_USER}
 

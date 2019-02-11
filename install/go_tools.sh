@@ -11,12 +11,14 @@ func ()
 
 	# https://github.com/fatih/vim-go/blob/c2fa1a1762db5d542bbbb1e5bc752684692bf570/plugin/go.vim
 
-	if [ -d "/home/chadit/Projects/src/github.com/klauspost/asmfmt/cmd/asmfmt" ]; then
-   		cd /home/chadit/Projects/src/github.com/klauspost/asmfmt/cmd/asmfmt && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go clean -cache && go install
+	if [ -d "/home/chadit/Projects/src/github.com/klauspost/asmfmt" ]; then
+   		cd /home/chadit/Projects/src/github.com/klauspost/asmfmt && echo `pwd` && branch_reset && git pull && git prune && git gc --aggressive && go clean -cache && go install
+   		cd /home/chadit/Projects/src/github.com/klauspost/asmfmt/cmd/asmfmt && go install
 	fi
 
-	if [ -d "/home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv" ]; then
-   		cd /home/chadit/Projects/src/github.com/derekparker/delve/cmd/dlv && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go clean -cache && go install
+	if [ -d "/home/chadit/Projects/src/github.com/go-delve/delve" ]; then
+   		cd /home/chadit/Projects/src/github.com/go-delve/delve && echo `pwd` && branch_reset && git pull && git prune && git gc --aggressive && go clean -cache
+   		cd /home/chadit/Projects/src/github.com/go-delve/delve/cmd/dlv && go install
 	fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/kisielk/errcheck" ]; then
@@ -33,14 +35,10 @@ func ()
    		cd /home/chadit/Projects/src/github.com/davidrjenni/reftools/cmd/fillswitch && echo `pwd` && go install
 	fi
 
-	 if [ -d "/home/chadit/Projects/src/github.com/mdempsky/gocode" ]; then
+	 if [ -d "/home/chadit/Projects/src/github.com/stamblerre/gocode" ]; then
 	 		gocode close
-    		cd /home/chadit/Projects/src/github.com/mdempsky/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
+    		cd /home/chadit/Projects/src/github.com/stamblerre/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	 fi
-
-	# if [ -d "/home/chadit/Projects/src/github.com/rogpeppe/godef" ]; then
- #  		cd /home/chadit/Projects/src/github.com/rogpeppe/godef && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
-	# fi
 
 	if [ -d "/home/chadit/Projects/src/github.com/zmb3/gogetdoc" ]; then
    		cd /home/chadit/Projects/src/github.com/zmb3/gogetdoc && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
@@ -120,10 +118,6 @@ func ()
    		cd /home/chadit/Projects/src/github.com/sqs/goreturns && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
-	# if [ -d "/home/chadit/Projects/src/github.com/stamblerre/gocode" ]; then
- #   		cd /home/chadit/Projects/src/github.com/stamblerre/gocode && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
-	# fi
-
 	if [ -d "/home/chadit/Projects/src/github.com/ianthehat/godef" ]; then
    		cd /home/chadit/Projects/src/github.com/ianthehat/godef && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
@@ -172,11 +166,6 @@ func ()
 	# make done in go
 	if [ -d "/home/chadit/Projects/src/github.com/magefile/mage" ]; then
    		cd /home/chadit/Projects/src/github.com/magefile/mage && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
-	fi
-
-	# go debugging tool
-	if [ -d "/home/chadit/Projects/src/github.com/derekparker/delve" ]; then
-   		cd /home/chadit/Projects/src/github.com/derekparker/delve && echo `pwd` && reset_branch && git pull && git prune && git gc --aggressive && go install
 	fi
 
 	# go vendor tool

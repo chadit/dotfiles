@@ -10,6 +10,10 @@ set wildmenu 								" Display completion matches on your status line
 set wildmode=full							" Resets to default
 set showcmd                     			" Show incomplete cmds at the bottom
 set tags=./tags; 							" Set tags directory
+set completeopt-=preview
+
+" Sets title bar to file name
+autocmd BufEnter * let &titlestring = hostname() . "[" . expand("%:t") . "]"
 
 " Show trailing whitespace and spaces before a tab:
 :highlight ExtraWhitespace ctermbg=red guibg=red
@@ -39,7 +43,8 @@ let g:airline#extensions#tabline#fnamemod = ':t' 	" Show just the filename
 "*****************************************************************************
 "" airblade/vim-gitgutter
 "*****************************************************************************
-let g:gitgutter_max_signs=9999				" sets gitgutter to max
+let g:gitgutter_max_signs=1000				" sets gitgutter to max (9999)
+let g:gitgutter_eager = 0
 
 "*****************************************************************************
 "" Nerd Tree
@@ -102,3 +107,18 @@ nmap <F8> :TagbarToggle<CR>
 "" plasticboy/vim-markdown
 "*****************************************************************************
 " let g:vim_markdown_folding_disabled = 1
+
+"*****************************************************************************
+"" Shougo/deoplete.nvim
+"*****************************************************************************
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_completion_start_length = 1
+
+"*****************************************************************************
+"" racer-rust/vim-racer
+"*****************************************************************************
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
+
