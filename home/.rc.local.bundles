@@ -10,6 +10,7 @@ Plug 'RRethy/vim-illuminate'						" selectively illuminating other uses of curre
 Plug 'vim-ruby/vim-ruby'							" Vim Ruby
 Plug 'janko-m/vim-test'								" For tests
 Plug 'tpope/vim-dispatch'							" Dispatching the test runner to tmux pane
+Plug 'mileszs/ack.vim'								" ACK support inside VIM
 
 " Code Complete
 if has('nvim')

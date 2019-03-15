@@ -129,6 +129,9 @@ update_os(){
 
   # refresh snap packages
   sudo snap refresh
+
+  # cleanup docker
+  docker_cleanup_volumes
 }
 
 update_system_symbolic(){
@@ -187,6 +190,11 @@ set_shutDown(){
 }
 
 update_apps(){
+  # install update rust
+  curl https://sh.rustup.rs -sSf | sh
+
+  source $HOME/.cargo/env
+
   # Alacritty
   cd /home/chadit/Projects/src/github.com/jwilm/alacritty && echo `pwd` && git fetch --prune && git reset --hard @{upstream} && git clean -x -d -f && git prune && git gc --aggressive && git pull
   #cargo install cargo-deb --force
