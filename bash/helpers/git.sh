@@ -116,8 +116,12 @@ branch_delete(){
 
 git_merge_no_commit(){
 	git add -A
-	git commit --amend --no-edit
-	#git commit -ammend --no-edit
+	git commit --amend
+	
+	#`git commit --amend`
+	#vim comes up, you `:q` out of it
+	#`git push -f`
+	#that will update the last commit
 }
 
 git_update_folder(){

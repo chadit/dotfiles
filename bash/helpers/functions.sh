@@ -52,9 +52,12 @@ init_golang(){
     #   export GOROOT="/usr/lib64/golang$GOVERSION"
     # fi
 
-    export GOCACHE=off
+    #export GOCACHE=off <-- required on by default as of 1.12
+    GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
     #export GO111MODULE=on
     export GO111MODULE=auto
+    pathmunge $GOROOT after
+    pathmunge $GOPATH after
     pathmunge $GOROOT/bin after
     pathmunge $GOPATH/bin after
   # fi
