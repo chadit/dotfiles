@@ -34,6 +34,13 @@ git_remove_non_master_branch(){
  git branch | grep -v "qa" | grep -v "prod" | grep -v "develop" | grep -v "staging" | grep -v "master" | xargs git branch -D
 }
 
+git_refresh_upstream(){
+	git fetch upstream
+	git checkout master
+	git merge upstream/master
+	git push
+}
+
 #diff two files with vim
 #vim -d <file1> <file2>
 

@@ -11,6 +11,9 @@ Plug 'vim-ruby/vim-ruby'							" Vim Ruby
 Plug 'janko-m/vim-test'								" For tests
 Plug 'tpope/vim-dispatch'							" Dispatching the test runner to tmux pane
 Plug 'mileszs/ack.vim'								" ACK support inside VIM
+Plug 'luochen1990/rainbow'							" Rainbow Parentheses
+
+" need pynvim (pip3 install pynvim)
 
 " Code Complete
 if has('nvim')

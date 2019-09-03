@@ -164,8 +164,8 @@ update_system_symbolic(){
   fi
 
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc /home/chadit/.vimrc
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.rc.local /home/chadit/.rc.local
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.rc.local.bundles /home/chadit/.rc.local.bundles
+  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local /home/chadit/.vimrc.local
+  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local.bundles /home/chadit/.vimrc.local.bundles
 
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.tmux /home/chadit/.tmux
 

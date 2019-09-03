@@ -221,6 +221,10 @@ func ()
    		cd /home/chadit/Projects/src/github.com/nats-io/nats && echo `pwd` && branch_reset && git pull && git prune && git gc --aggressive
 	fi
 
+	if [ -d "/home/chadit/Projects/src/github.com/nats-io/nats.go" ]; then
+   		cd /home/chadit/Projects/src/github.com/nats-io/nats.go && echo `pwd` && branch_reset && git pull && git prune && git gc --aggressive
+	fi
+
 	if [ -d "/home/chadit/Projects/src/github.com/nats-io/nuid" ]; then
    		cd /home/chadit/Projects/src/github.com/nats-io/nuid && echo `pwd` && branch_reset && git pull && git prune && git gc --aggressive
 	fi
