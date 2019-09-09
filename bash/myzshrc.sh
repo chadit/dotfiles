@@ -49,6 +49,8 @@ bindkey "^[[F"  end-of-line
 source $HOME/.zsh/plugins/zsh-git-prompt/zshrc.sh 
 # https://github.com/zsh-users/zsh-autosuggestions
 source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 
+# https://github.com/1995parham/buffalo.zsh
+source $HOME/.zsh/plugins/buffalo.zsh
 
 # ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[cyan]%}"
 ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{≡%G%} "
