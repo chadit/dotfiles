@@ -13,16 +13,19 @@ Plug 'tpope/vim-dispatch'							" Dispatching the test runner to tmux pane
 Plug 'mileszs/ack.vim'								" ACK support inside VIM
 Plug 'luochen1990/rainbow'							" Rainbow Parentheses
 
+
+Plug 'ycm-core/YouCompleteMe'						" Autocomplete
+
 " need pynvim (pip3 install pynvim)
 
 " Code Complete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+"if has('nvim')
+"  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+"  Plug 'Shougo/deoplete.nvim'
+"  Plug 'roxma/nvim-yarp'
+"  Plug 'roxma/vim-hug-neovim-rpc'
+"endif
 
 Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'racer-rust/vim-racer'

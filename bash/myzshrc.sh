@@ -16,11 +16,23 @@ fpath=(~/.zsh/completion $fpath)
 
 echo "welcome $(whoami) - Loading My zsh Scripts" 
 # Load Helpers
-for f in /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/helpers/*.sh; do
-  echo -n ".."
- # echo $f  
-   . $f
-done
+
+FILE=/home/chadit/Projects/src/github.com/chadit/dotfiles/bash/helpers
+if [ -d "$FILE" ]; then
+    #echo "$FILE is a directory"
+else
+	FILE=/Users/chadengland/Projects/src/github.com/chadit/dotfiles/bash/helpers
+fi
+
+if [ -d "$FILE" ]; then
+    for f in $FILE/*.sh; do
+  		echo -n ".."
+ 		# echo $f  
+   		. $f
+    done
+fi
+
+
 
 setopt completealiases
 setopt HIST_IGNORE_SPACE
@@ -60,30 +72,40 @@ ZSH_THEME_GIT_PROMPT_CHANGED=" %{$fg[yellow]%}%{✚%G%} "
 PROMPT='%n@%M%~$(git_super_status) '
 
 
-pathmunge $HOME/.goenv/bin
-export GOENV_ROOT="$HOME/.goenv"
-export PATH="$GOENV_ROOT/bin:$PATH"
-eval "$(goenv init -)"
+if [ -d "$HOME/.goenv/bin" ]; then
+	pathmunge $HOME/.goenv/bin
+	export GOENV_ROOT="$HOME/.goenv"
+	export PATH="$GOENV_ROOT/bin:$PATH"
+	eval "$(goenv init -)"
+fi
 
 # initalize helpers and variables
 init_golang
 
 # added bin for yarn npm applications
-pathmunge /home/chadit/.yarn/bin after
+pathmunge $HOME/.yarn/bin after
 
 # add pip location to path
-pathmunge /home/chadit/.local.bin after
+pathmunge $HOME/.local.bin after
 
 # Cargo for Rust
 pathmunge $HOME/.cargo/bin after
+
+#python
+pathmunge $HOME/Library/Python/3.7/bin
 
 # Set Vim as default editor
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
 # Ruby Gem
-mkdir -p /home/chadit/gems
-export GEM_HOME=/home/chadit/gems
+if [ -d "/home/chadit/gems" ]; then
+	mkdir -p /home/chadit/gems
+	export GEM_HOME=/home/chadit/gems
+else
+	mkdir -p /Users/chadengland/gems
+	export GEM_HOME=/Users/chadengland/gems
+fi
 
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1

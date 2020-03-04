@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# VSCODE
+
+# Installing github.com/uudashr/gopkgs/cmd/gopkgs SUCCEEDED
+# Installing github.com/ramya-rao-a/go-outline SUCCEEDED
+# Installing github.com/acroca/go-symbols SUCCEEDED
+# Installing golang.org/x/tools/cmd/guru SUCCEEDED
+# Installing golang.org/x/tools/cmd/gorename SUCCEEDED
+# Installing github.com/go-delve/delve/cmd/dlv SUCCEEDED
+# Installing github.com/stamblerre/gocode SUCCEEDED
+# Installing github.com/rogpeppe/godef SUCCEEDED
+# Installing golang.org/x/lint/golint SUCCEEDED
+# Installing github.com/cweill/gotests/... SUCCEEDED
+# Installing github.com/fatih/gomodifytags SUCCEEDED
+# Installing github.com/josharian/impl SUCCEEDED
+# Installing github.com/davidrjenni/reftools/cmd/fillstruct SUCCEEDED
+# Installing github.com/haya14busa/goplay/cmd/goplay SUCCEEDED
+# Installing github.com/godoctor/godoctor SUCCEEDED
+
+# ###############################3
+
+
 func ()
 {
 	local GO=go

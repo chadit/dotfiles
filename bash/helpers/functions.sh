@@ -14,7 +14,7 @@ reset_terminal1(){
 # pathmunge /sbin/             ## Add to the start; default
 # pathmunge /usr/sbin/ after   ## Add to the end
 pathmunge () {
-  if ! echo "$PATH" | /bin/grep -Eq "(^|:)$1($|:)" ; then
+  if ! echo "$PATH" | grep -Eq "(^|:)$1($|:)" ; then
     if [ "$2" = "after" ] ; then
       PATH="$PATH:$1"
     else
@@ -45,12 +45,19 @@ init_golang(){
   #   pathmunge $GOPATH/bin after
   # fi
 
-  # if [ -d /usr/lib64/golang/ ]; then
+  if [ -d /usr/lib64/golang/ ]; then
     export GOPATH=/home/chadit/Projects
     export GOROOT="/usr/lib64/golang"
     # if [ -n "$GOVERSION" ]; then
     #   export GOROOT="/usr/lib64/golang$GOVERSION"
-    # fi
+  fi
+
+  if [ -d /usr/local/go ]; then
+    export GOPATH=/Users/chadengland/Projects
+    export GOROOT="/usr/local/go"
+    # if [ -n "$GOVERSION" ]; then
+    #   export GOROOT="/usr/lib64/golang$GOVERSION"
+  fi
 
     #export GOCACHE=off <-- required on by default as of 1.12
     GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
@@ -60,6 +67,8 @@ init_golang(){
     pathmunge $GOPATH after
     pathmunge $GOROOT/bin after
     pathmunge $GOPATH/bin after
+
+    pathmunge "/home/chadit/Projects/src/github.com/vlang/v" after
   # fi
 }
 
@@ -131,9 +140,11 @@ update_os(){
   # sudo pacman-mirrors -f 5 && sudo pacman -Syy && sudo pacman-optimize && sudo sync && yaourt -Syyua
 
   # refresh snap packages
+  echo "snap refresh"
   sudo snap refresh
 
   # cleanup docker
+  echo "docker cleanup"
   docker_cleanup_volumes
 }
 

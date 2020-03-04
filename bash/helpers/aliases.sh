@@ -1,4 +1,14 @@
 # User specific aliases and functions
-alias gh='cd /home/chadit/Projects/src/github.com/'
-alias is='cd /home/chadit/Projects/src/github.com/chadit/dotfiles/install/'
+if [ -d "/home/chadit/Projects/src/github.com" ]; then
+	alias gh='cd /home/chadit/Projects/src/github.com/'
+else
+	alias gh='cd /Users/chadengland/Projects/src/github.com/'
+fi
+
+if [ -d "/home/chadit/Projects/src/github.com/chadit/dotfiles/install" ]; then
+	alias is='cd /home/chadit/Projects/src/github.com/chadit/dotfiles/install/'
+else
+	alias is='cd /Users/chadengland/Projects/src/github.com/chadit/dotfiles/install/'
+fi
+
 alias cls=reset_terminal1

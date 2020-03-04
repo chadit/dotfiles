@@ -5,7 +5,11 @@ git_cleanup(){
 
 git_prune(){
 	local CURRENTDIR=`pwd`
-   	local BASEDIR="/home/chadit/Projects/src"
+	local BASEDIR="/home/chadit/Projects/src"
+	if [ ! -d $BASEDIR ]; then
+    	BASEDIR="/Users/chadengland/Projects/src"
+	fi
+   	
    	cd $BASEDIR
 	for i in $(find . -name ".git" | cut -c 3-); do
 		cd "$i";
