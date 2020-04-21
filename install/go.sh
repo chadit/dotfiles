@@ -4,6 +4,7 @@
 func ()
 {
     local INSTALLVER=1.14
+    #local INSTALLVER=1.12.7
     # local INSTALLVER=1.12.5
      #local INSTALLVER=1.10.4
     # local INSTALLVER=1.9.4
