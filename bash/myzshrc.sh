@@ -1,15 +1,29 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="robbyrussell"
+#ZSH_THEME="simple"
+
+
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=5000
 SAVEHIST=1000
-bindkey -e
+##bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/chadit/.zshrc'
+##zstyle :compinstall filename '/home/chadit/.zshrc'
 
-autoload -Uz compinit promptinit
-compinit
-promptinit
+##autoload -Uz compinit promptinit
+##compinit
+##promptinit
 # End of lines added by compinstall
 
 fpath=(~/.zsh/completion $fpath)
@@ -17,13 +31,7 @@ fpath=(~/.zsh/completion $fpath)
 echo "welcome $(whoami) - Loading My zsh Scripts" 
 # Load Helpers
 
-FILE=/home/chadit/Projects/src/github.com/chadit/dotfiles/bash/helpers
-if [ -d "$FILE" ]; then
-    #echo "$FILE is a directory"
-else
-	FILE=/Users/chadengland/Projects/src/github.com/chadit/dotfiles/bash/helpers
-fi
-
+FILE=$HOME/Projects/src/github.com/chadit/dotfiles/bash/helpers
 if [ -d "$FILE" ]; then
     for f in $FILE/*.sh; do
   		echo -n ".."
@@ -32,44 +40,76 @@ if [ -d "$FILE" ]; then
     done
 fi
 
+# hoping this removes the history on reload
+unsetopt share_history
+##setopt completealiases
+##setopt HIST_IGNORE_SPACE
+##setopt INC_APPEND_HISTORY
+##setopt EXTENDED_HISTORY 
+##setopt CORRECT_ALL
+##setopt SH_WORD_SPLIT
+##setopt IGNORE_EOF
+##setopt NO_BEEP
+##setopt extended_glob
+##setopt correct
+##setopt MENUCOMPLETE
+##setopt nohup
+##setopt ZLE
+##setopt MULTIBYTE
+##setopt NUMERIC_GLOB_SORT
+##setopt APPEND_HISTORY
+##setopt HIST_REDUCE_BLANKS
 
+##bindkey "^[[3~" delete-char
+##bindkey "^[[H"  beginning-of-line
+##bindkey "^[[F"  end-of-line
 
-setopt completealiases
-setopt HIST_IGNORE_SPACE
-setopt INC_APPEND_HISTORY
-setopt EXTENDED_HISTORY 
-setopt CORRECT_ALL
-setopt SH_WORD_SPLIT
-setopt IGNORE_EOF
-setopt NO_BEEP
-setopt extended_glob
-setopt correct
-setopt MENUCOMPLETE
-setopt nohup
-setopt ZLE
-setopt MULTIBYTE
-setopt NUMERIC_GLOB_SORT
-setopt APPEND_HISTORY
-setopt HIST_REDUCE_BLANKS
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  git-prompt
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
 
-bindkey "^[[3~" delete-char
-bindkey "^[[H"  beginning-of-line
-bindkey "^[[F"  end-of-line
+ZSH_DISABLE_COMPFIX=true
+
+source $ZSH/oh-my-zsh.sh
 
 # Source ZSH modules
 # https://github.com/olivierverdier/zsh-git-prompt
-source $HOME/.zsh/plugins/zsh-git-prompt/zshrc.sh 
+#source $HOME/.zsh/plugins/zsh-git-prompt/zshrc.sh 
 # https://github.com/zsh-users/zsh-autosuggestions
-source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 
+#source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 
 # https://github.com/1995parham/buffalo.zsh
-source $HOME/.zsh/plugins/buffalo.zsh
+#source $HOME/.zsh/plugins/buffalo.zsh
 
 # ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[cyan]%}"
-ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{≡%G%} "
-ZSH_THEME_GIT_PROMPT_CHANGED=" %{$fg[yellow]%}%{✚%G%} "
+##ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{≡%G%} "
+##ZSH_THEME_GIT_PROMPT_CHANGED=" %{$fg[yellow]%}%{✚%G%} "
 
+##GIT_PROMPT_EXECUTABLE="haskell" 
 # Set the prompt.
-PROMPT='%n@%M%~$(git_super_status) '
+#PROMPT='%n@%M%~$(RPROMPT) '
+#PROMPT='%B%m%~%b$(git_super_status) %# '
+# ---PROMPT='%B%m%~%b%# '
+
+ZSH_THEME_GIT_PROMPT_PREFIX="$fg[white]($fg[red]"
+ZSH_THEME_GIT_PROMPT_SUFFIX="$fg[white])"
+ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green] *"
+ZSH_THEME_GIT_PROMPT_DIRTY="$fg[red] *"
+local local_git_prompt='$(git_prompt_info)'
+
+#export PROMPT='%B%m%~%b${git_super_status} %# '
+
+#export RPROMPT="%{$fg[white]%}(%{$fg[green]%}%T%{$fg[white]%})%{$reset_color%}"
+export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]] ${local_git_prompt}%{$reset_color%}
+%B%{$fg[blue]%}--%{$fg[green]%}> %b%{$reset_color%}"
+#PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 
 if [ -d "$HOME/.goenv/bin" ]; then
@@ -94,42 +134,52 @@ pathmunge $HOME/.cargo/bin after
 #python
 pathmunge $HOME/Library/Python/3.7/bin
 
+#pathmunge $HOME/.local/bin
+
+pathmunge $HOME/.zsh/plugins/zsh-git-prompt/src/.bin
+
 # Set Vim as default editor
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
 # Ruby Gem
-if [ -d "/home/chadit/gems" ]; then
-	mkdir -p /home/chadit/gems
-	export GEM_HOME=/home/chadit/gems
-else
-	mkdir -p /Users/chadengland/gems
-	export GEM_HOME=/Users/chadengland/gems
-fi
+  mkdir -p $HOME/gems
+  export GEM_HOME=$HOME/gems
 
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-if [ ! -d $BASHPRIVATE ]; then
-    echo "private repo not set"
+#echo "Loading keychain"
+# keychain fun
+if test -f "$HOME/.ssh/id_rsa"; then
+   eval `keychain --eval --agents ssh id_rsa`
 fi
 
-# Load scripts from private repo, $BASHPRIVATE is a private Variable set in /etc/profile
-for f in $BASHPRIVATE/*.sh; do
-  echo -n ".."
- # echo $f  
-   . $f
-done
+if test -f "$HOME/.ssh/id_rsa_nil"; then
+   eval `keychain --eval --agents ssh id_rsa_nil`
+fi
 
-echo ""
+#cd $HOME
+
+#if [ ! -d $BASHPRIVATE ]; then
+#    echo "private repo not set"
+#fi
+
+# Load scripts from private repo, $BASHPRIVATE is a private Variable set in /etc/profile
+#for f in $BASHPRIVATE/*.sh; do
+#  echo -n ".."
+ # echo $f  
+  # . $f
+#done
+
+#echo ""
 
 # start TMUX
 #tmux_default
 
-
 # Add to .zshrc
 # Source global definitions
-# if [ -f /home/chadit/Projects/helpers/myzshrc.sh ]; then
+# if [ -f /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh ]; then
 #    echo "Loading My Scripts"
-#    . /home/chadit/Projects/helpers/myzshrc.sh
+#    . /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh
 # fi

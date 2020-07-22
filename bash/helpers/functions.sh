@@ -34,6 +34,7 @@ which_shell(){
 }
 
 init_golang(){
+ # echo "init go"
   # GOVERSION=$1
   # if [ -d /usr/go/ ]; then
   #   export GOPATH=/home/chadit/Projects
@@ -45,16 +46,38 @@ init_golang(){
   #   pathmunge $GOPATH/bin after
   # fi
 
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        export GOPATH=/home/chadit/Projects
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+        # Mac OSX
+        export GOPATH=/Users/chadit/Projects
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+        # POSIX compatibility layer and Linux environment emulation for Windows
+elif [[ "$OSTYPE" == "msys" ]]; then
+        # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+elif [[ "$OSTYPE" == "win32" ]]; then
+        # I'm not sure this can happen.
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        # ...
+else
+        # Unknown.
+fi
+
+  
+
   if [ -d /usr/lib64/golang/ ]; then
-    export GOPATH=/home/chadit/Projects
     export GOROOT="/usr/lib64/golang"
     # if [ -n "$GOVERSION" ]; then
     #   export GOROOT="/usr/lib64/golang$GOVERSION"
   fi
 
   if [ -d /usr/local/go ]; then
-    export GOPATH=/Users/chadengland/Projects
     export GOROOT="/usr/local/go"
+    #local BASEDIR="/home/chadit/Projects/src"
+    #if [ -d $BASEDIR ]; then
+    #  export GOPATH=/home/chadit/Projects
+    #fi
+
     # if [ -n "$GOVERSION" ]; then
     #   export GOROOT="/usr/lib64/golang$GOVERSION"
   fi
@@ -76,43 +99,29 @@ list_golang(){
   find /usr/lib64/ -maxdepth 1 -type d -name 'go*' | sort
 }
 
-refresh_vim(){
-  git_update_folder /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/
-  sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
-
-  #local CURRENTDIR=`pwd`
-  #cd /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe/third_party/ycmd
-  #git checkout master
-  #git pull
-  #cd /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe
-  #git submodule update --init --recursive
-  #cd $CURRENTDIR
-
-  #sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
-
-  #/home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim/bundle/YouCompleteMe/install.py --go-completer --cs-completer --rust-completer
-  #sudo chown -R $(whoami) /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim
-
-# installs prettier 
- # yarn global add prettier
-}
-
 # removes sync conflicts that can happen from syncthing or pcloud
 remove_sync_conflicts(){
+  if test -d "/mnt/c/Projects"; then
+    echo "/mnt/c/Projects"
+    find /mnt/c/Projects -name "*.sync-conflict*"
+    find /mnt/c/Projects -name "*.sync-conflict*" -exec rm -rf {} \;
+
+    find /mnt/c/Projects -name "*.syncthing*"
+    find /mnt/c/Projects -name "*.syncthing*" -exec rm -rf {} \;
+
+    find /mnt/c/Projects -name "*conflicted*"
+    find /mnt/c/Projects -name "*conflicted*" -exec rm -rf {} \;
+  fi
+
   find $HOME/Projects -name "*.sync-conflict*"
   find $HOME/Projects -name "*.sync-conflict*" -exec rm -rf {} \;
-  find $HOME/.vim -name "*.sync-conflict*"
-  find $HOME/.vim -name "*.sync-conflict*" -exec rm -rf {} \;
+  #find $HOME/.vim -name "*.sync-conflict*"
+  #find $HOME/.vim -name "*.sync-conflict*" -exec rm -rf {} \;
   find $HOME/Projects -name "*.syncthing*"
   find $HOME/Projects -name "*.syncthing*" -exec rm -rf {} \;
   find $HOME/Projects -name "*conflicted*"
   find $HOME/Projects -name "*conflicted*" -exec rm -rf {} \;
 
-  # find /home/chadit -name "*.sync-conflict*"
-  # find /home/chadit -name "*.sync-conflict*" -exec rm -rf {} \;
-  # find /home/chadit -name "*conflicted*"
-  # find /home/chadit -name "*conflicted*" -exec rm -rf {} \;
-  # find /home/chadit -name "*conflicted copy*"
 }
 
 update_os(){
@@ -121,18 +130,20 @@ update_os(){
     sudo eopkg upgrade -y 
   fi
 
+#sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
+
   #Fedora
-  python -mplatform | grep -qi Fedora && sudo dnf clean all && sudo dnf upgrade -y && sudo dnf update -y 
+  python3 -mplatform | grep -qi Fedora && sudo dnf clean all && sudo dnf upgrade -y && sudo dnf update -y 
   #Ubuntu
-  #python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
-  #python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo do-release-upgrade && sudo apt autoremove -y && sudo apt autoclean -y
-  #python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
-  python -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y 
+  #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
+  #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo do-release-upgrade && sudo apt autoremove -y && sudo apt autoclean -y
+  #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
+  python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y 
    
- # python -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y && sudo yaourt -Sy
+ # python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y && sudo yaourt -Sy
   #Manjaro
-  # python -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y
-  python -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman -Syyu #&& yay -Syyu
+  # python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y
+  python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman -Syyu #&& yay -Syyu
 
   #pacman -S -f firefox  (force a package)
   #pacman -Ss firefox | grep installed returns how it was installed

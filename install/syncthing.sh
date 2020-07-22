@@ -4,10 +4,11 @@
 
 func ()
 {    
-    local INSTALLVER=0.14.52
+    local INSTALLVER=1.7.0
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
-    local SOURCEURL="https://github.com/syncthing/syncthing/releases/download/v0.14.52/syncthing-linux-amd64-v0.14.52.tar.gz"
+    local SOURCEURL="https://github.com/syncthing/syncthing/releases/download/v${INSTALLVER}/syncthing-linux-amd64-v${INSTALLVER}.tar.gz"
+    #https://github.com/syncthing/syncthing/releases/download/v1.7.0/syncthing-linux-amd64-v1.7.0.tar.gz
 
     if test "$SCRIPTUSER" = "" || test "$SCRIPTUSER" = "root"; then
         SCRIPTUSER=${USER}
