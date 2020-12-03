@@ -11,7 +11,7 @@ docker_cleanup(){
 }
 
 docker_cleanup_volumes(){
-  		docker volume rm $(docker volume ls -f dangling=true -q) 
+  	docker volume rm $(docker volume ls -f dangling=true -q) 
 }
 
 # docker images to pull and start

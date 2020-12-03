@@ -11,6 +11,7 @@ set wildmode=full							" Resets to default
 set showcmd                     			" Show incomplete cmds at the bottom
 set tags=./tags; 							" Set tags directory
 set completeopt-=preview
+set mouse=a
 
 " Sets title bar to file name
 autocmd BufEnter * let &titlestring = hostname() . "[" . expand("%:t") . "]"

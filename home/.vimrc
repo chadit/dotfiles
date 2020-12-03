@@ -95,8 +95,8 @@ Plug 'jelera/vim-javascript-syntax'
 
 " lua
 "" Lua Bundle
-Plug 'xolox/vim-lua-ftplugin'
-Plug 'xolox/vim-lua-inspect'
+"Plug 'xolox/vim-lua-ftplugin'
+"Plug 'xolox/vim-lua-inspect'
 
 
 " python

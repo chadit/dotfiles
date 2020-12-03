@@ -138,6 +138,10 @@ pathmunge $HOME/Library/Python/3.7/bin
 
 pathmunge $HOME/.zsh/plugins/zsh-git-prompt/src/.bin
 
+pathmunge "/usr/local/bin" after
+
+pathmunge "/home/chadit/Projects/src/github.com/vlang/v" after
+
 # Set Vim as default editor
 export VISUAL=vim
 export EDITOR="$VISUAL"
@@ -157,6 +161,10 @@ fi
 
 if test -f "$HOME/.ssh/id_rsa_nil"; then
    eval `keychain --eval --agents ssh id_rsa_nil`
+fi
+
+if test -f "$HOME/.ssh/ids_id_rsa"; then
+   eval `keychain --eval --agents ssh ids_id_rsa`
 fi
 
 #cd $HOME

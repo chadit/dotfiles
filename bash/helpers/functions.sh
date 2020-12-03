@@ -3,7 +3,7 @@
 reset_terminal1(){
   tmux clear-history;
   reset
-  clear;  
+  clear;
 
   # if [ -f "$HOME/Projects/helpers/myzshrc.sh" ]; then
   #   source $HOME/Projects/helpers/myzshrc.sh
@@ -63,41 +63,33 @@ else
         # Unknown.
 fi
 
-  
-
   if [ -d /usr/lib64/golang/ ]; then
     export GOROOT="/usr/lib64/golang"
-    # if [ -n "$GOVERSION" ]; then
-    #   export GOROOT="/usr/lib64/golang$GOVERSION"
   fi
 
   if [ -d /usr/local/go ]; then
     export GOROOT="/usr/local/go"
-    #local BASEDIR="/home/chadit/Projects/src"
-    #if [ -d $BASEDIR ]; then
-    #  export GOPATH=/home/chadit/Projects
-    #fi
-
-    # if [ -n "$GOVERSION" ]; then
-    #   export GOROOT="/usr/lib64/golang$GOVERSION"
   fi
 
     #export GOCACHE=off <-- required on by default as of 1.12
     GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
-    #export GO111MODULE=on
-    export GO111MODULE=auto
+    export GO111MODULE=on
+    #export GO111MODULE=auto
     pathmunge $GOROOT after
     pathmunge $GOPATH after
     pathmunge $GOROOT/bin after
     pathmunge $GOPATH/bin after
-
-    pathmunge "/home/chadit/Projects/src/github.com/vlang/v" after
   # fi
 }
 
 list_golang(){
   find /usr/lib64/ -maxdepth 1 -type d -name 'go*' | sort
 }
+
+# lua
+pathmunge "/home/chadit/luarocks-3.3.1/lua_modules/bin" after
+pathmunge "/home/chadit/.luarocks/lib/luarocks/rocks-5.3" after
+
 
 # removes sync conflicts that can happen from syncthing or pcloud
 remove_sync_conflicts(){
@@ -125,25 +117,25 @@ remove_sync_conflicts(){
 }
 
 update_os(){
-  #Solus
-  if [ -f /etc/solus-release ]; then
-    sudo eopkg upgrade -y 
-  fi
+  # #Solus
+  # if [ -f /etc/solus-release ]; then
+  #   sudo eopkg upgrade -y
+  # fi
 
 #sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
 
   #Fedora
-  python3 -mplatform | grep -qi Fedora && sudo dnf clean all && sudo dnf upgrade -y && sudo dnf update -y 
+ # python3 -mplatform | grep -qi Fedora && sudo dnf clean all && sudo dnf upgrade -y && sudo dnf update -y
   #Ubuntu
   #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
   #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo do-release-upgrade && sudo apt autoremove -y && sudo apt autoclean -y
   #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
-  python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y 
-   
+  lsb_release -i | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y
+
  # python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y && sudo yaourt -Sy
   #Manjaro
   # python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y
-  python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman -Syyu #&& yay -Syyu
+  #python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman -Syyu #&& yay -Syyu
 
   #pacman -S -f firefox  (force a package)
   #pacman -Ss firefox | grep installed returns how it was installed
@@ -175,7 +167,7 @@ update_system_symbolic(){
   #if [ -f $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig ]; then
   #  sudo rm $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig
   #fi
-  
+
   # main zshrc file
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.zshrc /home/chadit/.zshrc
 
@@ -240,14 +232,12 @@ update_apps(){
   sudo cp -f /home/chadit/Projects/src/github.com/jwilm/alacritty/alacritty-completions.zsh /usr/share/zsh/functions/Completion/X/_alacritty
 }
 
-# (c) 2007 stefan w. GPLv3          
-function up {
-ups=""
-for i in $(seq 1 $1)
-do
-        ups=$ups"../"
-done
-cd $ups
+build_nilcore(){
+  local CURRENTDIR=`pwd`
+  local BASEDIR="/mnt/c/Projects/src/github.com/chadit/NilsCoreAPI/"
+  cd $BASEDIR
+  zip "/mnt/c/Projects/src/github.com/chadit/build/NilsReactionCore_$1.zip" module.def *.lua
+  cd $CURRENTDIR
 }
 
 # attach to an existing tmux sessions, if does not exist, cleaning create one
