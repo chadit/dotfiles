@@ -135,6 +135,16 @@ git_merge_no_commit(){
 	#that will update the last commit
 }
 
+git_clone_sso(){
+  GIT_SSH_COMMAND="ssh -i $HOME/.ssh/id_cfa_sso" git clone $1
+}
+
+git_pull_sso(){
+  GIT_SSH_COMMAND="ssh -i $HOME/.ssh/id_cfa_sso" git pull && git prune && git gc --aggressive
+}
+
+
+
 git_update_folder(){
    local CURRENTDIR=`pwd`
    local FOLDER=$1

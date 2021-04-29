@@ -8,9 +8,16 @@
 "" Vim-PLug core
 "*****************************************************************************
 let vimplug_exists=expand('~/.vim/autoload/plug.vim')
+if has('win32')&&!has('win64')
+  let curl_exists=expand('C:\Windows\Sysnative\curl.exe')
+else
+  let curl_exists=expand('curl')
+endif
 
-let g:vim_bootstrap_langs = "go,html,javascript,lua,python,ruby,rust,typescript"
+let g:vim_bootstrap_langs = "go,haskell,html,javascript,lua,python,ruby,rust,typescript"
 let g:vim_bootstrap_editor = "vim"        " nvim or vim
+let g:vim_bootstrap_theme = "molokai"
+let g:vim_bootstrap_frams = "vuejs"
 
 if !filereadable(vimplug_exists)
   if !executable("curl")
@@ -19,7 +26,7 @@ if !filereadable(vimplug_exists)
   endif
   echo "Installing Vim-Plug..."
   echo ""
-  silent exec "!\curl -fLo " . vimplug_exists . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  silent exec "!"curl_exists" -fLo " . shellescape(vimplug_exists) . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
   let g:not_finish_vimplug = "yes"
 
   autocmd VimEnter * PlugInstall
@@ -42,11 +49,12 @@ Plug 'vim-scripts/grep.vim'
 Plug 'vim-scripts/CSApprox'
 Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'Yggdroot/indentLine'
-Plug 'avelino/vim-bootstrap-updater'
+Plug 'editor-bootstrap/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-rhubarb' " required by fugitive to :Gbrowse
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -79,11 +87,16 @@ Plug 'tomasr/molokai'
 "" Go Lang Bundle
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
 
+" haskell
+"" Haskell Bundle
+Plug 'eagletmt/neco-ghc'
+Plug 'dag/vim2hs'
+Plug 'pbrisbin/vim-syntax-shakespeare'
 
 " html
 "" HTML Bundle
 Plug 'hail2u/vim-css3-syntax'
-Plug 'gorodinskiy/vim-coloresque'
+Plug 'gko/vim-coloresque'
 Plug 'tpope/vim-haml'
 Plug 'mattn/emmet-vim'
 
@@ -110,7 +123,7 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-rake'
 Plug 'tpope/vim-projectionist'
 Plug 'thoughtbot/vim-rspec'
-Plug 'ecomba/vim-ruby-refactoring'
+Plug 'ecomba/vim-ruby-refactoring', { 'branch': 'main' }
 
 
 " rust
@@ -120,16 +133,25 @@ Plug 'racer-rust/vim-racer'
 " Rust.vim
 Plug 'rust-lang/rust.vim'
 
+" Async.vim
+Plug 'prabirshrestha/async.vim'
+
+" Vim lsp
+Plug 'prabirshrestha/vim-lsp'
+
+" Asyncomplete.vim
+Plug 'prabirshrestha/asyncomplete.vim'
+
+" Asyncomplete lsp.vim
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 " typescript
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 
-
 " vuejs
 Plug 'posva/vim-vue'
 Plug 'leafOfTree/vim-vue-plugin'
-
 
 
 "*****************************************************************************
@@ -198,7 +220,8 @@ set ruler
 set number
 
 let no_buffers_menu=1
-silent! colorscheme molokai
+"colorscheme dracula
+colorscheme molokai
 
 set mousemodel=popup
 set t_Co=256
@@ -550,6 +573,11 @@ augroup END
 :call extend(g:ale_linters, {
     \"go": ['golint', 'go vet'], })
 
+" haskell
+let g:haskell_conceal_wide = 1
+let g:haskell_multiline_strings = 1
+let g:necoghc_enable_detailed_browse = 1
+autocmd Filetype haskell setlocal omnifunc=necoghc#omnifunc
 
 " html
 " for html files, 2 spaces

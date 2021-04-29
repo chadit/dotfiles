@@ -28,7 +28,7 @@ SAVEHIST=1000
 
 fpath=(~/.zsh/completion $fpath)
 
-echo "welcome $(whoami) - Loading My zsh Scripts" 
+echo "g-welcome $(whoami) - Loading My zsh Scripts" 
 # Load Helpers
 
 FILE=$HOME/Projects/src/github.com/chadit/dotfiles/bash/helpers
@@ -74,6 +74,8 @@ plugins=(
   git-prompt
   zsh-autosuggestions
   zsh-syntax-highlighting
+  docker
+  docker-compose
 )
 
 ZSH_DISABLE_COMPFIX=true
@@ -98,17 +100,47 @@ source $ZSH/oh-my-zsh.sh
 #PROMPT='%B%m%~%b$(git_super_status) %# '
 # ---PROMPT='%B%m%~%b%# '
 
-ZSH_THEME_GIT_PROMPT_PREFIX="$fg[white]($fg[red]"
-ZSH_THEME_GIT_PROMPT_SUFFIX="$fg[white])"
-ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green] *"
-ZSH_THEME_GIT_PROMPT_DIRTY="$fg[red] *"
-local local_git_prompt='$(git_prompt_info)'
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
+ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}?"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
+
+#alias vim=nvim
+
+#ZSH_THEME_GIT_PROMPT_PREFIX="$fg[white]($fg[red]"
+#ZSH_THEME_GIT_PROMPT_SUFFIX="$fg[white])"
+#ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green] *"
+#ZSH_THEME_GIT_PROMPT_DIRTY="$fg[red] *"
+
+#function git_prompt_info() {
+#ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+#echo $(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX
+#}
+
+
+#local local_git_prompt='$(git_prompt_info)'
 
 #export PROMPT='%B%m%~%b${git_super_status} %# '
 
 #export RPROMPT="%{$fg[white]%}(%{$fg[green]%}%T%{$fg[white]%})%{$reset_color%}"
-export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]] ${local_git_prompt}%{$reset_color%}
-%B%{$fg[blue]%}--%{$fg[green]%}> %b%{$reset_color%}"
+#export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]] ${local_git_prompt}%{$reset_color%}
+#%B%{$fg[blue]%}--%{$fg[green]%}> %b%{$reset_color%}"
+
+
+#export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]]$(git_prompt_info)%{$reset_color%}%B%{$fg[blue]%}:%{$fg[green]%}%b%{$reset_color%}"
+
+function prompt_char {
+    git branch >/dev/null 2>/dev/null && echo '±' && return
+    hg root >/dev/null 2>/dev/null && echo '☿' && return
+    echo '○'
+}
+
+export PROMPT='%n@%m[%~]:$(git_prompt_info)$(prompt_char)%{$reset_color%} '
+
+RPROMPT=""
+
+
 #PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 
@@ -119,8 +151,19 @@ if [ -d "$HOME/.goenv/bin" ]; then
 	eval "$(goenv init -)"
 fi
 
+
+if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin" ]; then
+  pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin
+fi
+
+
+
+
 # initalize helpers and variables
 init_golang
+
+export GOPRIVATE=github.com/cfacorp
+export GITHUB_TOKEN=ad13cc0ddbd2a33a8a6e9d1c64c20261c0c3fd31
 
 # added bin for yarn npm applications
 pathmunge $HOME/.yarn/bin after
@@ -140,6 +183,10 @@ pathmunge $HOME/.zsh/plugins/zsh-git-prompt/src/.bin
 
 pathmunge "/usr/local/bin" after
 
+pathmunge $HOME/.npm-global after
+
+pathmunge $HOME/.local/bin after
+
 pathmunge "/home/chadit/Projects/src/github.com/vlang/v" after
 
 # Set Vim as default editor
@@ -153,19 +200,30 @@ export EDITOR="$VISUAL"
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-#echo "Loading keychain"
+echo "Loading keychain"
+keychain --clear
 # keychain fun
 if test -f "$HOME/.ssh/id_rsa"; then
-   eval `keychain --eval --agents ssh id_rsa`
+  eval `keychain --eval --agents ssh id_rsa`
 fi
 
 if test -f "$HOME/.ssh/id_rsa_nil"; then
-   eval `keychain --eval --agents ssh id_rsa_nil`
+  eval `keychain --eval --agents ssh id_rsa_nil`
 fi
 
 if test -f "$HOME/.ssh/ids_id_rsa"; then
-   eval `keychain --eval --agents ssh ids_id_rsa`
+  eval `keychain --eval --agents ssh ids_id_rsa`
 fi
+
+if test -f "$HOME/.ssh/id_cfa_sso"; then
+   eval `keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso`
+fi
+
+if test -f "$HOME/.ssh/id_ed25519"; then
+   eval `keychain --eval --agents ssh $HOME/.ssh/id_ed25519.pub`
+fi
+
+
 
 #cd $HOME
 

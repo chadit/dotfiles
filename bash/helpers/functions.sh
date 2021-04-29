@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # reset_terminal will clear the screens and rest the terminal
 reset_terminal1(){
@@ -173,9 +174,9 @@ update_system_symbolic(){
 
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim /home/chadit/.vim
 
-  if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim ]; then
-    sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim
-  fi
+  # if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim ]; then
+  #   sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim
+  # fi
 
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc /home/chadit/.vimrc
   ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local /home/chadit/.vimrc.local
@@ -194,6 +195,29 @@ update_system_symbolic(){
   if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh/.ssh ]; then
     sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh/.ssh
   fi
+}
+
+## using vim plugin addon handler
+setup_youcompleteme(){
+  local CURRENTDIR=`pwd`
+  
+  if [ -d "$HOME/.vim/plugged/YouCompleteMe" ]; then
+    cd $HOME/.vim/plugged/YouCompleteMe
+    git reset --hard
+    git pull && git prune && git gc --aggressive
+    python3 install.py --all
+  fi
+
+  if [ -d "$HOME/.config/nvim/plugged/YouCompleteMe" ]; then
+    cd $HOME/.config/nvim/plugged/YouCompleteMe
+    git reset --hard
+    git pull && git prune && git gc --aggressive
+    python3 install.py --all
+  fi
+  #cd ~/.config/nvim/plugged/YouCompleteMe
+
+  
+  cd $CURRENTDIR
 }
 
 update_system_exec(){
@@ -232,11 +256,40 @@ update_apps(){
   sudo cp -f /home/chadit/Projects/src/github.com/jwilm/alacritty/alacritty-completions.zsh /usr/share/zsh/functions/Completion/X/_alacritty
 }
 
+generate_lua_table(){
+  local  tableName=$1
+  local filePath=$2
+  local fileNames=("$3")
+
+  i=1
+  echo "    $tableName = {" >> $filePath
+
+  for eachfile in $fileNames
+  do
+    file_name="${eachfile##*/}"
+    echo "        [$i] = \"$file_name\"," >> $filePath
+    ((i++))
+  done
+  echo "    }," >> $filePath
+}
+
 build_nilcore(){
+  echo "NilsReactionCore.data.MadaoProfiles = {" > $HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua
+
+  # Crafting
+  local FILES=$HOME/Projects/src/github.com/nil2share/madaoprofiles/CraftProfiles/Nil-*.lua
+  generate_lua_table "Crafting" $HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua "${FILES[@]}"
+
+  # Gathering
+  local FILES=$HOME/Projects/src/github.com/nil2share/madaoprofiles/GatherScheduleProfiles/Nil-*.lua
+  generate_lua_table "Gathering" $HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua "${FILES[@]}"
+
+  echo "}" >> $HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua
+  
   local CURRENTDIR=`pwd`
-  local BASEDIR="/mnt/c/Projects/src/github.com/chadit/NilsCoreAPI/"
+  local BASEDIR="$HOME/Projects/src/github.com/chadit/NilsCoreAPI/"
   cd $BASEDIR
-  zip "/mnt/c/Projects/src/github.com/chadit/build/NilsReactionCore_$1.zip" module.def *.lua
+  zip "$HOME/Projects/src/github.com/chadit/build/NilsReactionCore_$1.zip" module.def *.lua
   cd $CURRENTDIR
 }
 
