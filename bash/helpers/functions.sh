@@ -35,33 +35,22 @@ which_shell(){
 }
 
 init_golang(){
- # echo "init go"
-  # GOVERSION=$1
-  # if [ -d /usr/go/ ]; then
-  #   export GOPATH=/home/chadit/Projects
-  #   export GOROOT="/usr/go"
-  #   export GOCACHE=off # turns off go's test cacheing, can cause test to give unexpected results
-  #   #export GO111MODULE=on
-  #   export GO111MODULE=auto
-  #   pathmunge $GOROOT/bin after
-  #   pathmunge $GOPATH/bin after
-  # fi
-
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        export GOPATH=/home/chadit/Projects
+        export GOPATH=$HOME/Projects
 elif [[ "$OSTYPE" == "darwin"* ]]; then
         # Mac OSX
-        export GOPATH=/Users/chadit/Projects
-elif [[ "$OSTYPE" == "cygwin" ]]; then
+        export GOPATH=$HOME/Projects
+#elif [[ "$OSTYPE" == "cygwin" ]]; then
         # POSIX compatibility layer and Linux environment emulation for Windows
-elif [[ "$OSTYPE" == "msys" ]]; then
+#elif [[ "$OSTYPE" == "msys" ]]; then
         # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
-elif [[ "$OSTYPE" == "win32" ]]; then
+#elif [[ "$OSTYPE" == "win32" ]]; then
         # I'm not sure this can happen.
-elif [[ "$OSTYPE" == "freebsd"* ]]; then
+#elif [[ "$OSTYPE" == "freebsd"* ]]; then
         # ...
-else
+#else
         # Unknown.
+ #       echo "not supported"
 fi
 
   if [ -d /usr/lib64/golang/ ]; then
@@ -75,6 +64,7 @@ fi
     #export GOCACHE=off <-- required on by default as of 1.12
     GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
     export GO111MODULE=on
+  export GOBIN=$GOPATH/bin
     #export GO111MODULE=auto
     pathmunge $GOROOT after
     pathmunge $GOPATH after
@@ -91,6 +81,10 @@ list_golang(){
 pathmunge "/home/chadit/luarocks-3.3.1/lua_modules/bin" after
 pathmunge "/home/chadit/.luarocks/lib/luarocks/rocks-5.3" after
 
+reset_touchpad(){
+  sudo rmmod psmouse
+  sudo modprobe psmouse
+}
 
 # removes sync conflicts that can happen from syncthing or pcloud
 remove_sync_conflicts(){
@@ -143,6 +137,9 @@ update_os(){
 
   # sudo pacman-mirrors -f 5 && sudo pacman -Syy && sudo pacman-optimize && sudo sync && yaourt -Syyua
 
+  go clean --modcache
+  sudo npm cache clean -f
+
   # refresh snap packages
   echo "snap refresh"
   sudo snap refresh
@@ -150,6 +147,9 @@ update_os(){
   # cleanup docker
   echo "docker cleanup"
   docker_cleanup_volumes
+
+  # terminal built in go
+ # go get -u github.com/liamg/aminal
 }
 
 update_system_symbolic(){
@@ -221,9 +221,9 @@ setup_youcompleteme(){
 }
 
 update_system_exec(){
-  find /home/chadit/Projects/helpers -type f -name "*.sh" -exec sudo chmod +x {} \;
-  find /home/chadit/Projects/helpers -type f -name "*.zsh" -exec sudo chmod +x {} \;
-  find /home/chadit/Projects/bin -type f -exec sudo chmod +x {} \;
+  find $HOME/Projects/helpers -type f -name "*.sh" -exec sudo chmod +x {} \;
+  find $HOME/Projects/helpers -type f -name "*.zsh" -exec sudo chmod +x {} \;
+  find $HOME/Projects/bin -type f -exec sudo chmod +x {} \;
 }
 
 set_shutDown(){
@@ -237,7 +237,7 @@ update_apps(){
   source $HOME/.cargo/env
 
   # Alacritty
-  cd /home/chadit/Projects/src/github.com/jwilm/alacritty && echo `pwd` && git fetch --prune && git reset --hard @{upstream} && git clean -x -d -f && git prune && git gc --aggressive && git pull
+  cd $HOME/Projects/src/github.com/jwilm/alacritty && echo `pwd` && git fetch --prune && git reset --hard @{upstream} && git clean -x -d -f && git prune && git gc --aggressive && git pull
   #cargo install cargo-deb --force
   #cargo deb --install
 
@@ -253,7 +253,7 @@ update_apps(){
   # ssh-add
 
   # add/update zsh auto complete
-  sudo cp -f /home/chadit/Projects/src/github.com/jwilm/alacritty/alacritty-completions.zsh /usr/share/zsh/functions/Completion/X/_alacritty
+  sudo cp -f $HOME/Projects/src/github.com/jwilm/alacritty/alacritty-completions.zsh /usr/share/zsh/functions/Completion/X/_alacritty
 }
 
 generate_lua_table(){

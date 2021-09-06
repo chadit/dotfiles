@@ -183,9 +183,11 @@ pathmunge $HOME/.zsh/plugins/zsh-git-prompt/src/.bin
 
 pathmunge "/usr/local/bin" after
 
-pathmunge $HOME/.npm-global after
+pathmunge $HOME/.npm-global/bin after
 
 pathmunge $HOME/.local/bin after
+
+pathmunge $HOME/.local/share/nvim/site/pack/packer/start after
 
 pathmunge "/home/chadit/Projects/src/github.com/vlang/v" after
 
