@@ -19,7 +19,13 @@ if has_mappings then
     return wk_mappings
 else
     if has_notify then
-        notify(table.concat(wk_mappings, "\n"), "error",
-               {title = "Error with the keymaps"})
+        local message = ".."
+        if type(wk_mappings) == "string" then
+            message = {wk_mappings}
+        else
+            message = table.concat(wk_mappings, "\n")
+        end
+
+        notify(message, "error", {title = "Error with the keymaps"})
     end
 end

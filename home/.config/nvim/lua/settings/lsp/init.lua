@@ -1,6 +1,7 @@
 local has_lspconfig, nvim_lsp = pcall(require, "lspconfig")
 local on_attach = require("settings.lsp.on_attach")
 local capabilities = require("settings.lsp.capabilities")
+local has_notify, notify = pcall(require, "notify")
 local config = {
     on_attach = on_attach,
     capabilities = capabilities,
@@ -12,6 +13,26 @@ local servers = {lua = require("lua-dev").setup(config)}
 local M = {}
 
 local function setup_servers()
+    nvim_lsp.gopls.setup {on_attach = on_attach}
+
+    local serversc = {
+        'ansiblels', 'bashls', 'omnisharp', 'clangd', 'cmake', 'cssls',
+        'diagnosticls', 'dockerls', 'gopls', 'graphql', 'hls', "bashls",
+        "cssls", "pyright", 'solargraph', 'rescriptls', "rust_analyzer",
+        'sumneko_lua', 'sqlls', 'terraformls', 'vimls', "yamlls"
+    }
+    for _, lsp in ipairs(serversc) do
+        if type(nvim_lsp[lsp]) == "nil" then
+            if has_notify then
+                local messages = {"missing language server " .. tostring(lsp)}
+                notify(table.concat(messages, "\n"), "error",
+                       {title = "Error with loading lsp"})
+            end
+        else
+            nvim_lsp[lsp].setup {on_attach = on_attach}
+        end
+    end
+
     require("lspinstall").setup()
     local installed = require("lspinstall").installed_servers()
     for _, server in pairs(installed) do
