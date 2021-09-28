@@ -256,17 +256,6 @@ M.load_plugins = function()
   -- navigation
   use 'easymotion/vim-easymotion'
 
-  -- Dashboard,
-  -- use({
-  --     "glepnir/dashboard-nvim", -- vim dashboard
-  --     config = require("plugins.dashboard").config()
-  -- })
-  -- use {
-  --     'glepnir/galaxyline.nvim',
-  --     branch = 'main',
-  --     config = function() require 'statusline' end,
-  --     requires = {'kyazdani42/nvim-web-devicons', opt = true}
-  -- }
   use 'rbgrouleff/bclose.vim'
 
   -- undo
@@ -287,6 +276,7 @@ M.load_plugins = function()
     requires = {"kyazdani42/nvim-web-devicons", opt = true},
     config = require("plugins.lualine").config()
   })
+  use({'sindrets/winshift.nvim'})
 
   -- other
   use({
