@@ -90,6 +90,18 @@ function M.compeSnippetCapabilities()
 end
 
 function M.on_attach(client, bufnr)
+    -- local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+    -- buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- if client.resolved_capabilities.document_formatting then
+    --     vim.cmd [[augroup Format]]
+    --     vim.cmd [[autocmd! * <buffer>]]
+    --     vim.cmd [[autocmd BufWritePre <buffer> lua formatting()]]
+    --     vim.cmd [[augroup END]]
+    -- end
+
+    -- TODO: do I need this
     set_omnifunc(bufnr)
     set_mappings(client, bufnr)
     set_highlights(client)
@@ -108,6 +120,7 @@ function M.on_attach(client, bufnr)
             update_in_insert = false,
             virtual_text = false
         })
+    -- end TODO
 
     require"lsp_signature".on_attach()
 end

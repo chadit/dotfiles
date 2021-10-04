@@ -189,7 +189,6 @@ pathmunge $HOME/.local/bin after
 
 pathmunge $HOME/.local/share/nvim/site/pack/packer/start after
 
-pathmunge "/home/chadit/Projects/src/github.com/vlang/v" after
 
 # Set Vim as default editor
 export VISUAL=vim

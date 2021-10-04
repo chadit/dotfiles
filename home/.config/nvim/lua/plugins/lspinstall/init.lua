@@ -12,7 +12,8 @@ local lsServers = {
   [[cmake-language-server]],
   [[diagnostic-languageserver]],
   [[dockerfile-language-server-nodejs]],
-  [[yaml-language-server]]
+  [[yaml-language-server]],
+  [[efm-langserver]]
 }
 
 for _, lsp in ipairs(lsServers) do
@@ -29,9 +30,11 @@ for _, lsp in ipairs(lsServers) do
   if lsp == [[diagnostic-languageserver]] or lsp == [[yaml-language-server]] then isyarn = true end
   local isAnsible = false
   if lsp == [[ansible-language-server]] then isAnsible = true end
+  local isGoInstallemf = false
+  if lsp == [[efm-langserver]] then isGoInstallemf = true end
 
   if not executable(name) then
-    if ispip == false and isyarn == false and isAnsible == false then
+    if ispip == false and isyarn == false and isAnsible == false and isGoInstallemf == false then
       cmd(string.format([[:!npm install -g %s]], lsp))
     elseif ispip == true then
       cmd(string.format([[:!pip3 install %s]], lsp))
@@ -42,12 +45,24 @@ for _, lsp in ipairs(lsServers) do
       cmd([[:!pip3 install "ansible-lint[community,yamllint]"]])
       cmd([[:!yarn global add ansible-language-server]])
       cmd([[:!yarn add yaml-language-server]])
+    elseif isGoInstallemf == true then
+    --  cmd([[:!go install github.com/mattn/efm-langserver@latest]])
     end
   end
 end
 
-require("plugins.lsp.sumneko")
-require("plugins.lsp.tsserver")
+require("plugins.lsp.bash-ls")
+require("plugins.lsp.css-ls")
+require("plugins.lsp.docker-ls")
+require("plugins.lsp.general-ls")
 require("plugins.lsp.go")
 require("plugins.lsp.gopls")
-require("plugins.lsp.bashls")
+require("plugins.lsp.graphql-ls")
+require("plugins.lsp.html-ls")
+require("plugins.lsp.javascript-ls")
+require("plugins.lsp.json-ls")
+require("plugins.lsp.lua-ls")
+-- require("plugins.lsp.python-ls")
+ require("plugins.lsp.sumneko")
+require("plugins.lsp.tsserver")
+require("plugins.lsp.yaml-ls")

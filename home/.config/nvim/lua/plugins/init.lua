@@ -52,6 +52,10 @@ M.load_plugins = function()
     requires = "neovim/nvim-lspconfig"
   })
   use 'folke/lsp-colors.nvim'
+
+  -- auto comomplete AI
+  use {'aca/completion-tabnine', opt = true, run = './install.sh'}
+
   use({
     "folke/trouble.nvim", -- A pretty diagnostics, references, telescope results, quickfix and location list to help you solve all the trouble your code is causing.
     requires = "kyazdani42/nvim-web-devicons",
@@ -98,7 +102,6 @@ M.load_plugins = function()
   use({"romgrk/nvim-treesitter-context"}) -- Show code context
   use({"windwp/nvim-ts-autotag"}) -- Use treesitter to auto close and auto rename html tag
   use({"JoosepAlviste/nvim-ts-context-commentstring"}) -- Neovim treesitter plugin for setting the commentstring based on the cursor location in a file.
-  use({"tpope/vim-commentary"}) -- commentary.vim: comment stuff out
 
   -- DAP
   -- https://github.com/mfussenegger/nvim-dap
@@ -188,11 +191,10 @@ M.load_plugins = function()
   use {'puremourning/vimspector', requires = {{'mfussenegger/nvim-dap'}}, fn = "vimspector#Launch"}
   use {'nvim-telescope/telescope-vimspector.nvim'}
   use 'sebdah/vim-delve' -- Go debugger: delve.
-
   use({"jose-elias-alvarez/nvim-lsp-ts-utils"}) -- Utilities to improve the TypeScript development experience for Neovim's built-in LSP client.
   use 'ludovicchabant/vim-gutentags'
   use {"folke/todo-comments.nvim", requires = "nvim-lua/plenary.nvim"}
-  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
+  
   use 'numtostr/FTerm.nvim'
   use 'cespare/vim-toml' -- Vim syntax for TOML: https://github.com/cespare/vim-toml
 
@@ -201,6 +203,10 @@ M.load_plugins = function()
   use 'dart-lang/dart-vim-plugin' -- Flutter / Dart: https://github.com/dart-lang/dart-vim-plugin
 
   use 'hashivim/vim-terraform' -- Terraform: https://github.com/hashivim/vim-terraform
+
+-- Latex
+use 'lervag/vimtex'
+use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
 
   -- Ruby
   use 'thoughtbot/vim-rspec' -- RSpec support for Vim
@@ -214,6 +220,9 @@ M.load_plugins = function()
   use 'andymass/vim-matchup'
   use 'windwp/nvim-autopairs'
   use 'tpope/vim-surround'
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-commentary'
+  use 'tpope/vim-scriptease'
 
   -- Comments
   use "terrortylor/nvim-comment"
@@ -304,7 +313,6 @@ M.load_plugins = function()
 
   -- use 'lambdalisue/suda.vim'
   -- use 'jremmen/vim-ripgrep'
-  -- use 'tpope/vim-fugitive'
   -- use 'leafgarland/typescript-vim'
 
   -- use 'honza/vim-snippets'
