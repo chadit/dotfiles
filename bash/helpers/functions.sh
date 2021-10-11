@@ -5,10 +5,6 @@ reset_terminal1() {
   tmux clear-history
   reset
   clear
-
-  # if [ -f "$HOME/Projects/helpers/myzshrc.sh" ]; then
-  #   source $HOME/Projects/helpers/myzshrc.sh
-  # fi
 }
 
 # pathmunge adds items to the path, verifies if it exist on the path first.
@@ -81,6 +77,7 @@ list_golang() {
 pathmunge "/home/chadit/luarocks-3.3.1/lua_modules/bin" after
 pathmunge "/home/chadit/.luarocks/lib/luarocks/rocks-5.3" after
 
+# stupid ubuntu bug after hibernate
 reset_touchpad() {
   sudo rmmod psmouse
   sudo modprobe psmouse
@@ -309,3 +306,13 @@ tmux_default() {
     fi
   fi
 }
+
+# Load private functions
+FILE=$HOME/Projects/helpers/mydotfiles/bash
+if [ -d "$FILE" ]; then
+  for f in $FILE/*.sh; do
+    echo -n ".."
+    # echo $f
+    . $f
+  done
+fi

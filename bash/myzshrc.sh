@@ -11,7 +11,6 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 #ZSH_THEME="simple"
 
-
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=5000
@@ -28,16 +27,24 @@ SAVEHIST=1000
 
 fpath=(~/.zsh/completion $fpath)
 
-echo "g-welcome $(whoami) - Loading My zsh Scripts" 
-# Load Helpers
+echo "g-welcome $(whoami) - Loading My zsh Scripts"
 
+# if ! command -v rbenv &>/dev/null; then
+#   echo rbenv -v
+# fi
+
+if rbenv -v >/dev/null; then
+  rbenv -v
+fi
+
+# Load Helpers
 FILE=$HOME/Projects/src/github.com/chadit/dotfiles/bash/helpers
 if [ -d "$FILE" ]; then
-    for f in $FILE/*.sh; do
-  		echo -n ".."
- 		# echo $f  
-   		. $f
-    done
+  for f in $FILE/*.sh; do
+    echo -n ".."
+    # echo $f
+    . $f
+  done
 fi
 
 # hoping this removes the history on reload
@@ -45,7 +52,7 @@ unsetopt share_history
 ##setopt completealiases
 ##setopt HIST_IGNORE_SPACE
 ##setopt INC_APPEND_HISTORY
-##setopt EXTENDED_HISTORY 
+##setopt EXTENDED_HISTORY
 ##setopt CORRECT_ALL
 ##setopt SH_WORD_SPLIT
 ##setopt IGNORE_EOF
@@ -84,9 +91,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Source ZSH modules
 # https://github.com/olivierverdier/zsh-git-prompt
-#source $HOME/.zsh/plugins/zsh-git-prompt/zshrc.sh 
+#source $HOME/.zsh/plugins/zsh-git-prompt/zshrc.sh
 # https://github.com/zsh-users/zsh-autosuggestions
-#source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 
+#source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # https://github.com/1995parham/buffalo.zsh
 #source $HOME/.zsh/plugins/buffalo.zsh
 
@@ -94,7 +101,7 @@ source $ZSH/oh-my-zsh.sh
 ##ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{≡%G%} "
 ##ZSH_THEME_GIT_PROMPT_CHANGED=" %{$fg[yellow]%}%{✚%G%} "
 
-##GIT_PROMPT_EXECUTABLE="haskell" 
+##GIT_PROMPT_EXECUTABLE="haskell"
 # Set the prompt.
 #PROMPT='%n@%M%~$(RPROMPT) '
 #PROMPT='%B%m%~%b$(git_super_status) %# '
@@ -118,7 +125,6 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
 #echo $(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX
 #}
 
-
 #local local_git_prompt='$(git_prompt_info)'
 
 #export PROMPT='%B%m%~%b${git_super_status} %# '
@@ -127,37 +133,30 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
 #export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]] ${local_git_prompt}%{$reset_color%}
 #%B%{$fg[blue]%}--%{$fg[green]%}> %b%{$reset_color%}"
 
-
 #export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]]$(git_prompt_info)%{$reset_color%}%B%{$fg[blue]%}:%{$fg[green]%}%b%{$reset_color%}"
 
 function prompt_char {
-    git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
-    echo '○'
+  git branch >/dev/null 2>/dev/null && echo '±' && return
+  hg root >/dev/null 2>/dev/null && echo '☿' && return
+  echo '○'
 }
 
 export PROMPT='%n@%m[%~]:$(git_prompt_info)$(prompt_char)%{$reset_color%} '
 
 RPROMPT=""
 
-
 #PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
-
 if [ -d "$HOME/.goenv/bin" ]; then
-	pathmunge $HOME/.goenv/bin
-	export GOENV_ROOT="$HOME/.goenv"
-	export PATH="$GOENV_ROOT/bin:$PATH"
-	eval "$(goenv init -)"
+  pathmunge $HOME/.goenv/bin
+  export GOENV_ROOT="$HOME/.goenv"
+  export PATH="$GOENV_ROOT/bin:$PATH"
+  eval "$(goenv init -)"
 fi
-
 
 if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin" ]; then
   pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin
 fi
-
-
-
 
 # initalize helpers and variables
 init_golang
@@ -189,14 +188,13 @@ pathmunge $HOME/.local/bin after
 
 pathmunge $HOME/.local/share/nvim/site/pack/packer/start after
 
-
 # Set Vim as default editor
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
 # Ruby Gem
-  mkdir -p $HOME/gems
-  export GEM_HOME=$HOME/gems
+mkdir -p $HOME/gems
+export GEM_HOME=$HOME/gems
 
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -205,26 +203,24 @@ echo "Loading keychain"
 keychain --clear
 # keychain fun
 if test -f "$HOME/.ssh/id_rsa"; then
-  eval `keychain --eval --agents ssh id_rsa`
+  eval $(keychain --eval --agents ssh id_rsa)
 fi
 
 if test -f "$HOME/.ssh/id_rsa_nil"; then
-  eval `keychain --eval --agents ssh id_rsa_nil`
+  eval $(keychain --eval --agents ssh id_rsa_nil)
 fi
 
 if test -f "$HOME/.ssh/ids_id_rsa"; then
-  eval `keychain --eval --agents ssh ids_id_rsa`
+  eval $(keychain --eval --agents ssh ids_id_rsa)
 fi
 
 if test -f "$HOME/.ssh/id_cfa_sso"; then
-   eval `keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso`
+  eval $(keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso)
 fi
 
 if test -f "$HOME/.ssh/id_ed25519"; then
-   eval `keychain --eval --agents ssh $HOME/.ssh/id_ed25519.pub`
+  eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519.pub)
 fi
-
-
 
 #cd $HOME
 
@@ -235,8 +231,8 @@ fi
 # Load scripts from private repo, $BASHPRIVATE is a private Variable set in /etc/profile
 #for f in $BASHPRIVATE/*.sh; do
 #  echo -n ".."
- # echo $f  
-  # . $f
+# echo $f
+# . $f
 #done
 
 #echo ""
