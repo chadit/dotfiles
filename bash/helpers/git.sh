@@ -5,10 +5,10 @@ git_cleanup(){
 
 git_prune(){
 	local CURRENTDIR=`pwd`
-	local BASEDIR="/home/chadit/Projects/src"
-	if [ ! -d $BASEDIR ]; then
-    	BASEDIR="/Users/chadengland/Projects/src"
-	fi
+	local BASEDIR="$HOME/Projects/src"
+	# if [ ! -d $BASEDIR ]; then
+  #   	BASEDIR="/Users/chadengland/Projects/src"
+	# fi
    	
    	cd $BASEDIR
 	for i in $(find . -name ".git" | cut -c 3-); do
@@ -34,14 +34,14 @@ git_prune(){
 }
 
 
-git_remove_non_master_branch(){
- git branch | grep -v "qa" | grep -v "prod" | grep -v "develop" | grep -v "staging" | grep -v "master" | xargs git branch -D
+git_remove_non_main_branch(){
+ git branch | grep -v "qa" | grep -v "prod" | grep -v "develop" | grep -v "staging" | grep -v "master" | grep -v "main" | xargs git branch -D
 }
 
 git_refresh_upstream(){
 	git fetch upstream
-	git checkout master
-	git merge upstream/master
+	git checkout main
+	git merge upstream/main
 	git push
 }
 
@@ -73,7 +73,7 @@ branch_rebase(){
 	then
     	git checkout develop
 	else
-		git checkout master
+		git checkout main
 	fi
 
 	git pull
@@ -83,7 +83,7 @@ branch_rebase(){
 	then
     	git rebase -i origin/develop
 	else
-		git rebase -i origin/master
+		git rebase -i origin/main
 	fi
 }
 
@@ -118,7 +118,12 @@ branch_delete(){
 	then
     	git checkout develop
 	else
-		git checkout master
+    if [ "`git branch --list `" ]
+		then
+        git checkout main
+		else
+        git checkout master
+		fi
 	fi
 
 	git push origin --delete $name
@@ -134,16 +139,6 @@ git_merge_no_commit(){
 	#`git push -f`
 	#that will update the last commit
 }
-
-git_clone_sso(){
-  GIT_SSH_COMMAND="ssh -i $HOME/.ssh/id_cfa_sso" git clone $1
-}
-
-git_pull_sso(){
-  GIT_SSH_COMMAND="ssh -i $HOME/.ssh/id_cfa_sso" git pull && git prune && git gc --aggressive
-}
-
-
 
 git_update_folder(){
    local CURRENTDIR=`pwd`

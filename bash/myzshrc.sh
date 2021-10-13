@@ -161,7 +161,6 @@ fi
 # initalize helpers and variables
 init_golang
 
-export GOPRIVATE=github.com/cfacorp
 export GITHUB_TOKEN=ad13cc0ddbd2a33a8a6e9d1c64c20261c0c3fd31
 
 # added bin for yarn npm applications
@@ -242,7 +241,7 @@ fi
 
 # Add to .zshrc
 # Source global definitions
-# if [ -f /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh ]; then
+# if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh ]; then
 #    echo "Loading My Scripts"
-#    . /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh
+#    . $HOME/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh
 # fi
