@@ -39,7 +39,7 @@ func ()
    Name=robo3t
    Comment=robo3t
    Exec=/usr/robo3t/bin/robo3t
-   Icon=/home/chadit/Projects/helpers/Scripts/images/robo3t.png
+   Icon=$HOME/Projects/helpers/Scripts/images/robo3t.png
    Terminal=false
    Type=Application
    Encoding=UTF-8

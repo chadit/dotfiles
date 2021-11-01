@@ -1,8 +1,8 @@
 # /etc/bashrc
 
 # https://github.com/lyze/posh-git-sh
-if [ -f "/home/chadit/Projects/src/github.com/lyze/posh-git-sh/git-prompt.sh" ]; then
-  source /home/chadit/Projects/src/github.com/lyze/posh-git-sh/git-prompt.sh
+if [ -f "$HOME/Projects/src/github.com/lyze/posh-git-sh/git-prompt.sh" ]; then
+  source $HOME/Projects/src/github.com/lyze/posh-git-sh/git-prompt.sh
 
   #PoshGit
   PROMPT_COMMAND='__posh_git_ps1 "\u@\h:\w" "\\\$ ";'$PROMPT_COMMAND
@@ -11,7 +11,7 @@ fi
 
 echo "welcome $(whoami) - Loading My $SHELL Scripts" 
 # Load Helpers
-for f in /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/helpers/*.sh; do
+for f in $HOME/Projects/src/github.com/chadit/dotfiles/bash/helpers/*.sh; do
   echo -n ".."
  # echo $f  
    . $f
@@ -26,11 +26,11 @@ eval "$(goenv init -)"
 init_golang
 
 # added bin for yarn npm applications
-pathmunge /home/chadit/.yarn/bin after
+pathmunge $HOME/.yarn/bin after
 # added bin for yarn npm applications
-pathmunge /home/chadit/.yarn/bin after
+pathmunge $HOME/.yarn/bin after
 # add pip location to path
-pathmunge /home/chadit/.local.bin after
+pathmunge $HOME/.local.bin after
 # Cargo for Rust
 pathmunge $HOME/.cargo/bin after
 # Ruby
@@ -42,8 +42,8 @@ export VISUAL=vim
 export EDITOR="$VISUAL"
 
 # Ruby Gem
-mkdir -p /home/chadit/gems
-export GEM_HOME=/home/chadit/gems
+mkdir -p $HOME/gems
+export GEM_HOME=$HOME/gems
 
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -87,7 +87,7 @@ fi
 
 
 # Source global definitions
-#if [ -f /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/mybashrc.sh ]; then
+#if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/bash/mybashrc.sh ]; then
 #    echo "Loading My Scripts"
-#    . /home/chadit/Projects/src/github.com/chadit/dotfiles/bash/mybashrc.sh
+#    . $HOME/Projects/src/github.com/chadit/dotfiles/bash/mybashrc.sh
 #fi

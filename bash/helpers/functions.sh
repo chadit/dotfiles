@@ -74,8 +74,8 @@ list_golang() {
 }
 
 # lua
-pathmunge "/home/chadit/luarocks-3.3.1/lua_modules/bin" after
-pathmunge "/home/chadit/.luarocks/lib/luarocks/rocks-5.3" after
+pathmunge "$HOME/luarocks-3.3.1/lua_modules/bin" after
+pathmunge "$HOME/.luarocks/lib/luarocks/rocks-5.3" after
 
 # stupid ubuntu bug after hibernate
 reset_touchpad() {
@@ -134,8 +134,13 @@ update_os() {
 
   # sudo pacman-mirrors -f 5 && sudo pacman -Syy && sudo pacman-optimize && sudo sync && yaourt -Syyua
 
-  go clean --modcache
-  sudo npm cache clean -f
+  # echo "clean cache"
+ # go clean --modcache
+  
+
+  echo "update pip"
+  pip3 install --upgrade pip --user
+  # pip3 install --upgrade setuptools --user
 
   # refresh snap packages
   echo "snap refresh"
@@ -144,6 +149,11 @@ update_os() {
   # cleanup docker
   echo "docker cleanup"
   docker_cleanup_volumes
+
+  echo "update npm"
+  sudo npm cache clean -f
+  sudo npm install -g n
+  sudo n latest
 
   # terminal built in go
   # go get -u github.com/liamg/aminal
@@ -156,7 +166,7 @@ update_system_symbolic() {
   mkdir -p $HOME/.config/alacritty
   ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.config/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh /home/chadit/.zsh
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh $HOME/.zsh
 
   if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh/.zsh ]; then
     sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh/.zsh
@@ -167,27 +177,27 @@ update_system_symbolic() {
   #fi
 
   # main zshrc file
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.zshrc /home/chadit/.zshrc
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.zshrc $HOME/.zshrc
 
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vim /home/chadit/.vim
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim $HOME/.vim
 
   # if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim ]; then
   #   sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim
   # fi
 
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc /home/chadit/.vimrc
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local /home/chadit/.vimrc.local
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local.bundles /home/chadit/.vimrc.local.bundles
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vimrc $HOME/.vimrc
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local $HOME/.vimrc.local
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local.bundles $HOME/.vimrc.local.bundles
 
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.tmux /home/chadit/.tmux
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux $HOME/.tmux
 
   if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux/.tmux ]; then
     sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux/.tmux
   fi
 
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.tmux.conf /home/chadit/.tmux.conf
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux.conf $HOME/.tmux.conf
 
-  ln -sf /home/chadit/Projects/src/github.com/chadit/dotfiles/home/.ssh /home/chadit/.ssh
+  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh $HOME/.ssh
 
   if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh/.ssh ]; then
     sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh/.ssh

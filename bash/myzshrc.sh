@@ -18,7 +18,7 @@ SAVEHIST=1000
 ##bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-##zstyle :compinstall filename '/home/chadit/.zshrc'
+##zstyle :compinstall filename '$HOME/.zshrc'
 
 ##autoload -Uz compinit promptinit
 ##compinit
@@ -71,6 +71,15 @@ unsetopt share_history
 ##bindkey "^[[H"  beginning-of-line
 ##bindkey "^[[F"  end-of-line
 
+# added check for macos and homebrew.
+if test -f "/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"; then
+  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+if test -f "/usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh"; then
+  source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -83,6 +92,8 @@ plugins=(
   zsh-syntax-highlighting
   docker
   docker-compose
+  kubectl
+  encode64
 )
 
 ZSH_DISABLE_COMPFIX=true
@@ -154,6 +165,12 @@ if [ -d "$HOME/.goenv/bin" ]; then
   eval "$(goenv init -)"
 fi
 
+if [ -d "$HOME/.rbenv/bin" ]; then
+  pathmunge $HOME/.rbenv/bin
+ #pathmunge $HOME/.rbenv/shims
+  eval "$(rbenv init -)"
+fi
+
 if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin" ]; then
   pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin
 fi
@@ -161,7 +178,7 @@ fi
 # initalize helpers and variables
 init_golang
 
-export GITHUB_TOKEN=ad13cc0ddbd2a33a8a6e9d1c64c20261c0c3fd31
+#export GITHUB_TOKEN=ad13cc0ddbd2a33a8a6e9d1c64c20261c0c3fd31
 
 # added bin for yarn npm applications
 pathmunge $HOME/.yarn/bin after
@@ -173,7 +190,13 @@ pathmunge $HOME/.local.bin after
 pathmunge $HOME/.cargo/bin after
 
 #python
-pathmunge $HOME/Library/Python/3.7/bin
+if [ -d "$HOME/Library/Python/3.7/bin" ]; then
+  pathmunge $HOME/Library/Python/3.7/bin
+fi
+
+if [ -d "$HOME/Library/Python/3.8/bin" ]; then
+  pathmunge $HOME/Library/Python/3.8/bin
+fi
 
 #pathmunge $HOME/.local/bin
 
@@ -198,26 +221,46 @@ export GEM_HOME=$HOME/gems
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
+# AWS-Okta
+# TODO: might be needed for linux
+#export AWS_OKTA_BACKEND=secret-service
+#export AWS_OKTA_BACKEND=pass
+
 echo "Loading keychain"
+
+if [ -d "$HOME/.ssh"  ]; then
+  chmod 700 ~/.ssh
+fi
+
 keychain --clear
 # keychain fun
 if test -f "$HOME/.ssh/id_rsa"; then
+  chmod 600 ~/.ssh/id_rsa
+  chmod 644 ~/.ssh/id_rsa.pub
   eval $(keychain --eval --agents ssh id_rsa)
 fi
 
 if test -f "$HOME/.ssh/id_rsa_nil"; then
+  chmod 600 ~/.ssh/id_rsa_nil
+  chmod 644 ~/.ssh/id_rsa_nil.pub
   eval $(keychain --eval --agents ssh id_rsa_nil)
 fi
 
 if test -f "$HOME/.ssh/ids_id_rsa"; then
+  chmod 600 ~/.ssh/ids_id_rsa
+  chmod 644 ~/.ssh/ids_id_rsa.pub
   eval $(keychain --eval --agents ssh ids_id_rsa)
 fi
 
 if test -f "$HOME/.ssh/id_cfa_sso"; then
+  chmod 600 ~/.ssh/id_cfa_sso
+  chmod 644 ~/.ssh/id_cfa_sso.pub
   eval $(keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso)
 fi
 
 if test -f "$HOME/.ssh/id_ed25519"; then
+  chmod 600 ~/.ssh/id_ed25519
+  chmod 644 ~/.ssh/id_ed25519.pub
   eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519.pub)
 fi
 

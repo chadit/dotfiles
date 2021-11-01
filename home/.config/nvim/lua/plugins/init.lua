@@ -46,11 +46,13 @@ M.load_plugins = function()
   use {"kosayoda/nvim-lightbulb"} -- Lightbulb for LSP
   use 'nvim-lua/lsp_extensions.nvim' -- LSP extensions for nvim
   use 'glepnir/lspsaga.nvim' -- A light-weight lsp plugin based on neovim built-in lsp with highly a performant UI.
-  use({
-    -- "williamboman/nvim-lsp-installer", -- TODO: need a config
-    "kabouzeid/nvim-lspinstall", -- Install LSP Servers
-    requires = "neovim/nvim-lspconfig"
-  })
+  use {'williamboman/nvim-lsp-installer', requires = "neovim/nvim-lspconfig"}
+
+  -- use({
+  --   -- "williamboman/nvim-lsp-installer", -- TODO: need a config
+  --   "kabouzeid/nvim-lspinstall", -- Install LSP Servers
+  --   requires = "neovim/nvim-lspconfig"
+  -- })
   use 'folke/lsp-colors.nvim'
 
   -- auto comomplete AI
@@ -194,7 +196,7 @@ M.load_plugins = function()
   use({"jose-elias-alvarez/nvim-lsp-ts-utils"}) -- Utilities to improve the TypeScript development experience for Neovim's built-in LSP client.
   use 'ludovicchabant/vim-gutentags'
   use {"folke/todo-comments.nvim", requires = "nvim-lua/plenary.nvim"}
-  
+
   use 'numtostr/FTerm.nvim'
   use 'cespare/vim-toml' -- Vim syntax for TOML: https://github.com/cespare/vim-toml
 
@@ -204,9 +206,9 @@ M.load_plugins = function()
 
   use 'hashivim/vim-terraform' -- Terraform: https://github.com/hashivim/vim-terraform
 
--- Latex
-use 'lervag/vimtex'
-use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
+  -- Latex
+  use 'lervag/vimtex'
+  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
 
   -- Ruby
   use 'thoughtbot/vim-rspec' -- RSpec support for Vim
@@ -256,7 +258,8 @@ use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
 
   -- Explorer
   use({
-    "kyazdani42/nvim-tree.lua", -- A file explorer tree for neovim written in lua
+    "kyazdani42/nvim-tree.lua",
+    branch = 'master', -- A file explorer tree for neovim written in lua
     config = require("plugins.nvimtree").config(),
     requires = "kyazdani42/nvim-web-devicons"
   })
@@ -303,42 +306,13 @@ use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
   })
 
   --  themes
-  use({'shaunsingh/nord.nvim', config = require("plugins.nord").config()})
+  -- use({'shaunsingh/nord.nvim', config = require("plugins.nord").config()})
+  -- use({'shaunsingh/doom-vibrant.nvim', config = require("plugins.doom").config()})
+  -- use({'marko-cerovac/material.nvim', config = require("plugins.material").config()})
+  use({'bluz71/vim-moonfly-colors', config = require("plugins.moonfly").config()})
 
   -- Keep things up to date
   execute("PackerSync")
-
-  -- --------------------------
-  -- use 'sheerun/vim-polyglot'
-
-  -- use 'lambdalisue/suda.vim'
-  -- use 'jremmen/vim-ripgrep'
-  -- use 'leafgarland/typescript-vim'
-
-  -- use 'honza/vim-snippets'
-  -- use 'pangloss/vim-javascript'
-  -- use 'jiangmiao/auto-pairs'
-  -- use 'prettier/vim-prettier'
-  -- use 'godlygeek/tabular'
-  -- use 'turbio/bracey.vim'
-  -- use 'mattn/emmet-vim'
-  -- use 'junegunn/fzf.vim'
-  -- use 'junegunn/fzf'
-
-  -- use 'ap/vim-css-color'
-
-  -- use 'peitalin/vim-jsx-typescript'
-  -- use {'styled-components/vim-styled-components', branch = 'main'}
-  -- use 'jparise/vim-graphql'
-  -- use {'dracula/vim', as = 'dracula'}
-  -- use 'ghifarit53/tokyonight-vim'
-  -- use 'tomasiser/vim-code-dark'
-  -- use 'dunstontc/vim-vscode-theme'
-  -- use 'kevinhwang91/rnvimr'
-  -- use 'akinsho/nvim-toggleterm.lua'
-  -- use 'mfussenegger/nvim-jdtls'
-
-  -- use 'andrejlevkovitch/vim-lua-format'
 end
 
 return M
