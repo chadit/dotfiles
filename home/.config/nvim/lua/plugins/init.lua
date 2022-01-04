@@ -17,6 +17,9 @@ M.load_plugins = function()
   local has_packer, packer = pcall(require, "packer")
   if not has_packer then M.install_packer() end
 
+  local TSInstallPlug = ":TSInstall c bash haskell lua json tsx vue javascript html css typescript rust regex cpp cmake yaml toml dockerfile"
+  local LSPInstallPlug = ":LpsInstall tsserver vimls vuels eslint rust_analyzer hls bashls html jsonls sumneko_lua pyright sqls lemminx cssls zls diagnosticls clangd cmake dockerls emmet_ls gopls"
+
   local has_notify = pcall(require, "notify")
   if has_notify then
     local config = {display = {non_interactive = true}}
@@ -35,7 +38,18 @@ M.load_plugins = function()
 
   use("rcarriga/nvim-notify") -- A fancy, configurable, notification manager for NeoVim
 
-  -- LSP
+  -- auto comomplete AI
+  use {'github/copilot.vim'} -- github copilot
+  -- use {'aca/completion-tabnine', opt = true, run = './install.sh'}
+
+  -- LSP --------------------------------------------------------------------------
+  use({
+    "williamboman/nvim-lsp-installer",
+    -- "kabouzeid/nvim-lspinstall", -- Install LSP Servers
+    requires = "neovim/nvim-lspconfig",
+    run = LSPInstallPlug
+  })
+
   use {'neovim/nvim-lspconfig'} -- Quickstart configurations for the Nvim LSP client
   use {"nvim-lua/lsp-status.nvim"} -- A statusline component for the LSP client
   use {"folke/lsp-trouble.nvim", requires = {"kyazdani42/nvim-web-devicons"}}
@@ -46,17 +60,9 @@ M.load_plugins = function()
   use {"kosayoda/nvim-lightbulb"} -- Lightbulb for LSP
   use 'nvim-lua/lsp_extensions.nvim' -- LSP extensions for nvim
   use 'glepnir/lspsaga.nvim' -- A light-weight lsp plugin based on neovim built-in lsp with highly a performant UI.
-  use {'williamboman/nvim-lsp-installer', requires = "neovim/nvim-lspconfig"}
-
-  -- use({
-  --   -- "williamboman/nvim-lsp-installer", -- TODO: need a config
-  --   "kabouzeid/nvim-lspinstall", -- Install LSP Servers
-  --   requires = "neovim/nvim-lspconfig"
-  -- })
   use 'folke/lsp-colors.nvim'
 
-  -- auto comomplete AI
-  use {'aca/completion-tabnine', opt = true, run = './install.sh'}
+  -- ------------------------------------------------------------------------------
 
   use({
     "folke/trouble.nvim", -- A pretty diagnostics, references, telescope results, quickfix and location list to help you solve all the trouble your code is causing.
@@ -118,21 +124,20 @@ M.load_plugins = function()
 
   -- Autocomplete, Snippets, Format
   -- Install nvim-cmp, and buffer source as a dependency
-  use {
-    "hrsh7th/nvim-cmp", -- Autocompletion plugin
-    requires = {
-      "hrsh7th/vim-vsnip",
-      "hrsh7th/cmp-buffer" -- nvim-cmp source for buffer words
-    }
-  }
-  use("hrsh7th/cmp-path") -- nvim-cmp source for path
-  use("hrsh7th/cmp-nvim-lua") -- nvim-cmp source for nvim lua
-  use({
-    "hrsh7th/cmp-nvim-lsp" -- LSP source for nvim-cmp
-  })
-  use({
-    "saadparwaiz1/cmp_luasnip" -- Snippets source for nvim-cmp
-  })
+  -- use {
+  --   "hrsh7th/nvim-cmp", -- Autocompletion plugin
+  --   requires = {
+  --     "hrsh7th/vim-vsnip",
+  --     "hrsh7th/cmp-buffer" -- nvim-cmp source for buffer words
+  --   }
+  -- }
+  -- use("hrsh7th/cmp-path") -- nvim-cmp source for path
+  -- use("hrsh7th/cmp-nvim-lua") -- nvim-cmp source for nvim lua
+  -- use({
+  --   "hrsh7th/cmp-nvim-lsp" -- LSP source for nvim-cmp
+  -- })
+
+  -- use({"saadparwaiz1/cmp_luasnip"}) -- Snippets source for nvim-cmp
   use("L3MON4D3/LuaSnip") -- Snippets Plugin
   use 'sbdchd/neoformat' -- plugin for formatting code
   use 'christoomey/vim-system-copy' -- copy to system clipboard
@@ -190,7 +195,7 @@ M.load_plugins = function()
   }
 
   -- Debugging
-  use {'puremourning/vimspector', requires = {{'mfussenegger/nvim-dap'}}, fn = "vimspector#Launch"}
+  -- use {'puremourning/vimspector', requires = {{'mfussenegger/nvim-dap'}}, fn = "vimspector#Launch"}
   use {'nvim-telescope/telescope-vimspector.nvim'}
   use 'sebdah/vim-delve' -- Go debugger: delve.
   use({"jose-elias-alvarez/nvim-lsp-ts-utils"}) -- Utilities to improve the TypeScript development experience for Neovim's built-in LSP client.
@@ -235,9 +240,9 @@ M.load_plugins = function()
     requires = {"nvim-lua/plenary"},
     config = require("plugins.gitsigns").config()
   })
-  use 'f-person/git-blame.nvim'
+  -- use 'f-person/git-blame.nvim'
   use 'sindrets/diffview.nvim'
-  use 'pwntester/octo.nvim'
+  -- use 'pwntester/octo.nvim'
 
   -- Productivity
   use 'jbyuki/nabla.nvim'

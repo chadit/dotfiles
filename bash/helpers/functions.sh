@@ -73,6 +73,21 @@ list_golang() {
   find /usr/lib64/ -maxdepth 1 -type d -name 'go*' | sort
 }
 
+set_java_home() {
+  if test -f "/usr/libexec/java_home"; then
+   # echo "test"
+    export JAVA_HOME=$(/usr/libexec/java_home)
+    pathmunge $JAVA_HOME/bin after
+  fi
+
+  if test -d "/usr/lib/jvm/java-16-openjdk-amd64"; then
+   # echo "test"
+    export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
+    pathmunge $JAVA_HOME/bin after
+  fi
+
+}
+
 # lua
 pathmunge "$HOME/luarocks-3.3.1/lua_modules/bin" after
 pathmunge "$HOME/.luarocks/lib/luarocks/rocks-5.3" after

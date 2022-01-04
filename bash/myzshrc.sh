@@ -29,9 +29,14 @@ fpath=(~/.zsh/completion $fpath)
 
 echo "g-welcome $(whoami) - Loading My zsh Scripts"
 
-# if ! command -v rbenv &>/dev/null; then
-#   echo rbenv -v
-# fi
+# Set GPG
+export GPG_TTY=$(tty)
+
+if [[ `uname` == "Darwin" ]]; then
+    alias gpg='gpg'
+else
+    alias gpg='gpg2'
+fi
 
 if rbenv -v >/dev/null; then
   rbenv -v
@@ -165,9 +170,12 @@ if [ -d "$HOME/.goenv/bin" ]; then
   eval "$(goenv init -)"
 fi
 
+if [ -d "$HOME/.rbenv/shims" ]; then
+  pathmunge $HOME/.rbenv/shims
+fi
+
 if [ -d "$HOME/.rbenv/bin" ]; then
   pathmunge $HOME/.rbenv/bin
- #pathmunge $HOME/.rbenv/shims
   eval "$(rbenv init -)"
 fi
 
@@ -177,6 +185,7 @@ fi
 
 # initalize helpers and variables
 init_golang
+set_java_home
 
 #export GITHUB_TOKEN=ad13cc0ddbd2a33a8a6e9d1c64c20261c0c3fd31
 
@@ -230,6 +239,10 @@ echo "Loading keychain"
 
 if [ -d "$HOME/.ssh"  ]; then
   chmod 700 ~/.ssh
+fi
+
+if test -f "$HOME/.ssh/authorized_keys"; then
+  chmod 644 ~/.ssh/authorized_keys
 fi
 
 keychain --clear

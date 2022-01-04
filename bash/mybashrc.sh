@@ -35,6 +35,7 @@ pathmunge $HOME/.local.bin after
 pathmunge $HOME/.cargo/bin after
 # Ruby
 pathmunge $HOME/gems/bin/ after
+pathmunge /usr/local/lib/ruby/gems/3.0.0/bin after
 
 
 # Set Vim as default editor
