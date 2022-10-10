@@ -1,25 +1,24 @@
 -- telescope-dap
-require('telescope').load_extension('dap')
+local has_telescope, telescope = pcall(require, "telescope")
+if has_telescope then telescope.load_extension('dap') end
 
--- nvim-dap-virtual-text. Show virtual text for current frame
--- vim.g.dap_virtual_text = true
-require("nvim-dap-virtual-text").setup {
-  enabled = true, -- enable this plugin (the default)
-  enabled_commands = true, -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
-  highlight_changed_variables = true, -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
-  highlight_new_as_changed = false, -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
-  show_stop_reason = true, -- show stop reason when stopped for exceptions
-  commented = false, -- prefix virtual text with comment string
-  -- experimental features:
-  virt_text_pos = 'eol', -- position of virtual text, see `:h nvim_buf_set_extmark()`
-  all_frames = false, -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
-  virt_lines = false, -- show virtual lines instead of virtual text (will flicker!)
-  virt_text_win_col = nil -- position the virtual text at a fixed window column (starting from the first text column) ,
-  -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
-}
-
--- nvim-dap-ui
-require("dapui").setup({})
+local has_nvimdapvirtualtext, nvimdapvirtualtext = pcall(require, "nvim-dap-virtual-text")
+if has_nvimdapvirtualtext then
+  nvimdapvirtualtext.setup {
+    enabled = true, -- enable this plugin (the default)
+    enabled_commands = true, -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
+    highlight_changed_variables = true, -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
+    highlight_new_as_changed = false, -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
+    show_stop_reason = true, -- show stop reason when stopped for exceptions
+    commented = false, -- prefix virtual text with comment string
+    -- experimental features:
+    virt_text_pos = 'eol', -- position of virtual text, see `:h nvim_buf_set_extmark()`
+    all_frames = false, -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+    virt_lines = false, -- show virtual lines instead of virtual text (will flicker!)
+    virt_text_win_col = nil -- position the virtual text at a fixed window column (starting from the first text column) ,
+    -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
+  }
+end
 
 -- languages
 -- require('dbg.python')
@@ -54,11 +53,13 @@ utils.map('n', '<leader>dro', '<cmd>lua require"dap".repl.open()<CR>')
 utils.map('n', '<leader>drl', '<cmd>lua require"dap".repl.run_last()<CR>')
 
 -- telescope-dap
-utils.map('n', '<leader>dcc', '<cmd>lua require"telescope".extensions.dap.commands{}<CR>')
-utils.map('n', '<leader>dco', '<cmd>lua require"telescope".extensions.dap.configurations{}<CR>')
-utils.map('n', '<leader>dlb', '<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>')
-utils.map('n', '<leader>dv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>')
-utils.map('n', '<leader>df', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>')
+if has_telescope then
+  utils.map('n', '<leader>dcc', '<cmd>lua require"telescope".extensions.dap.commands{}<CR>')
+  utils.map('n', '<leader>dco', '<cmd>lua require"telescope".extensions.dap.configurations{}<CR>')
+  utils.map('n', '<leader>dlb', '<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>')
+  utils.map('n', '<leader>dv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>')
+  utils.map('n', '<leader>df', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>')
+end
 
 -- nvim-dap-ui
 utils.map('n', '<leader>dui', '<cmd>lua require"dapui".toggle()<CR>')

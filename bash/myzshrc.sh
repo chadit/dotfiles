@@ -1,6 +1,19 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# loading dependancies if not exist
+if test -d "$HOME/.oh-my-zsh"; then
+else
+  echo "oh my zsh not found, fetching"
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+if test -d "$HOME/.nvm"; then
+else
+  echo "nvm not found, fetching"
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+fi
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -32,25 +45,27 @@ echo "g-welcome $(whoami) - Loading My zsh Scripts"
 # Set GPG
 export GPG_TTY=$(tty)
 
-if [[ `uname` == "Darwin" ]]; then
-    alias gpg='gpg'
+if [[ $(uname) == "Darwin" ]]; then
+  alias gpg='gpg'
 else
-    alias gpg='gpg2'
+  alias gpg='gpg2'
 fi
 
-if rbenv -v >/dev/null; then
-  rbenv -v
-fi
+## set git cache to store password for ssh
+git config --global credential.helper 'cache --timeout=9999999999999999999'
 
 # Load Helpers
 FILE=$HOME/Projects/src/github.com/chadit/dotfiles/bash/helpers
 if [ -d "$FILE" ]; then
   for f in $FILE/*.sh; do
-    echo -n ".."
+    #  echo -n ".."
     # echo $f
     . $f
   done
+
 fi
+
+#echo -n "..........................."
 
 # hoping this removes the history on reload
 unsetopt share_history
@@ -76,13 +91,24 @@ unsetopt share_history
 ##bindkey "^[[H"  beginning-of-line
 ##bindkey "^[[F"  end-of-line
 
-# added check for macos and homebrew.
-if test -f "/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"; then
-  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]]; then
+  # source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+  # zsh-syntax-highlighting
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+  # if test -f "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"; then
+  #   source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  # fi
 fi
 
-if test -f "/usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh"; then
-  source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]]; then
+  # source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+else
+  # zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  #if test -f "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"; then
+  #  source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  #fi
 fi
 
 # Which plugins would you like to load?
@@ -98,20 +124,14 @@ plugins=(
   docker
   docker-compose
   kubectl
-  encode64
 )
 
 ZSH_DISABLE_COMPFIX=true
 
 source $ZSH/oh-my-zsh.sh
+source <(kubectl completion zsh)
 
-# Source ZSH modules
-# https://github.com/olivierverdier/zsh-git-prompt
-#source $HOME/.zsh/plugins/zsh-git-prompt/zshrc.sh
-# https://github.com/zsh-users/zsh-autosuggestions
-#source $HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-# https://github.com/1995parham/buffalo.zsh
-#source $HOME/.zsh/plugins/buffalo.zsh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
 
 # ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[cyan]%}"
 ##ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{≡%G%} "
@@ -129,38 +149,6 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}?"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
 
-#alias vim=nvim
-
-#ZSH_THEME_GIT_PROMPT_PREFIX="$fg[white]($fg[red]"
-#ZSH_THEME_GIT_PROMPT_SUFFIX="$fg[white])"
-#ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green] *"
-#ZSH_THEME_GIT_PROMPT_DIRTY="$fg[red] *"
-
-#function git_prompt_info() {
-#ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-#echo $(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX
-#}
-
-#local local_git_prompt='$(git_prompt_info)'
-
-#export PROMPT='%B%m%~%b${git_super_status} %# '
-
-#export RPROMPT="%{$fg[white]%}(%{$fg[green]%}%T%{$fg[white]%})%{$reset_color%}"
-#export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]] ${local_git_prompt}%{$reset_color%}
-#%B%{$fg[blue]%}--%{$fg[green]%}> %b%{$reset_color%}"
-
-#export PROMPT=" %{$terminfo[bold]$fg[green]%}%n$fg[white]@$fg[white]%m%{$reset_color%}%{$terminfo[bold]$fg[blue]%} $fg[white][$fg[blue]%~$fg[white]]$(git_prompt_info)%{$reset_color%}%B%{$fg[blue]%}:%{$fg[green]%}%b%{$reset_color%}"
-
-function prompt_char {
-  git branch >/dev/null 2>/dev/null && echo '±' && return
-  hg root >/dev/null 2>/dev/null && echo '☿' && return
-  echo '○'
-}
-
-export PROMPT='%n@%m[%~]:$(git_prompt_info)$(prompt_char)%{$reset_color%} '
-
-RPROMPT=""
-
 #PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 if [ -d "$HOME/.goenv/bin" ]; then
@@ -177,6 +165,11 @@ fi
 if [ -d "$HOME/.rbenv/bin" ]; then
   pathmunge $HOME/.rbenv/bin
   eval "$(rbenv init -)"
+
+  if rbenv -v >/dev/null; then
+    rbenv -v
+    ruby -v
+  fi
 fi
 
 if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin" ]; then
@@ -186,17 +179,19 @@ fi
 # initalize helpers and variables
 init_golang
 set_java_home
+set_flugger_bin
+set_dart_bin
+set_lua_bin
+set_nvm
+init_rust
 
 #export GITHUB_TOKEN=ad13cc0ddbd2a33a8a6e9d1c64c20261c0c3fd31
 
 # added bin for yarn npm applications
-pathmunge $HOME/.yarn/bin after
+pathmunge $HOME/.yarn/bin
 
 # add pip location to path
-pathmunge $HOME/.local.bin after
-
-# Cargo for Rust
-pathmunge $HOME/.cargo/bin after
+pathmunge $HOME/.local.bin
 
 #python
 if [ -d "$HOME/Library/Python/3.7/bin" ]; then
@@ -207,17 +202,28 @@ if [ -d "$HOME/Library/Python/3.8/bin" ]; then
   pathmunge $HOME/Library/Python/3.8/bin
 fi
 
+if [ -d "$HOME/Library/Python/3.9/bin" ]; then
+  echo "Python 3.9 bin found"
+  pathmunge $HOME/Library/Python/3.9/bin
+fi
+
+#dotnet core
+# installed via https://docs.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
+if [ -d "$HOME/.dotnet" ]; then
+  pathmunge $HOME/.dotnet
+fi
+
 #pathmunge $HOME/.local/bin
 
 pathmunge $HOME/.zsh/plugins/zsh-git-prompt/src/.bin
 
-pathmunge "/usr/local/bin" after
+pathmunge "/usr/local/bin"
 
-pathmunge $HOME/.npm-global/bin after
+pathmunge $HOME/.npm-global/bin
 
-pathmunge $HOME/.local/bin after
+pathmunge $HOME/.local/bin
 
-pathmunge $HOME/.local/share/nvim/site/pack/packer/start after
+pathmunge $HOME/.local/share/nvim/site/pack/packer/start
 
 # Set Vim as default editor
 export VISUAL=vim
@@ -235,9 +241,13 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 #export AWS_OKTA_BACKEND=secret-service
 #export AWS_OKTA_BACKEND=pass
 
-echo "Loading keychain"
+export APPLE_SSH_ADD_BEHAVIOR=true
 
-if [ -d "$HOME/.ssh"  ]; then
+echo -e "\nLoading keychain"
+eval $(ssh-agent -s)
+ssh-add
+
+if [ -d "$HOME/.ssh" ]; then
   chmod 700 ~/.ssh
 fi
 
@@ -245,36 +255,55 @@ if test -f "$HOME/.ssh/authorized_keys"; then
   chmod 644 ~/.ssh/authorized_keys
 fi
 
-keychain --clear
+# keychain --clear # only if we want to rest the keys
 # keychain fun
 if test -f "$HOME/.ssh/id_rsa"; then
   chmod 600 ~/.ssh/id_rsa
   chmod 644 ~/.ssh/id_rsa.pub
-  eval $(keychain --eval --agents ssh id_rsa)
+  ssh-add ~/.ssh/id_rsa
+  #eval $(keychain --eval --agents ssh id_rsa)
 fi
 
 if test -f "$HOME/.ssh/id_rsa_nil"; then
   chmod 600 ~/.ssh/id_rsa_nil
   chmod 644 ~/.ssh/id_rsa_nil.pub
-  eval $(keychain --eval --agents ssh id_rsa_nil)
+  ssh-add ~/.ssh/id_rsa_nil
+  #eval $(keychain --eval --agents ssh id_rsa_nil)
 fi
 
-if test -f "$HOME/.ssh/ids_id_rsa"; then
-  chmod 600 ~/.ssh/ids_id_rsa
-  chmod 644 ~/.ssh/ids_id_rsa.pub
-  eval $(keychain --eval --agents ssh ids_id_rsa)
+# if test -f "$HOME/.ssh/ids_id_rsa"; then
+#   chmod 600 ~/.ssh/ids_id_rsa
+#   chmod 644 ~/.ssh/ids_id_rsa.pub
+#   ssh-add -K ~/.ssh/ids_id_rsa
+#   #eval $(keychain --eval --agents ssh ids_id_rsa)
+# fi
+
+# if test -f "$HOME/.ssh/id_cfa_sso"; then
+#   chmod 600 ~/.ssh/id_cfa_sso
+#   chmod 644 ~/.ssh/id_cfa_sso.pub
+#   ssh-add -K ~/.ssh/id_cfa_sso
+#   #eval $(keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso)
+# fi
+
+# if test -f "$HOME/.ssh/id_ed25519"; then
+#   chmod 600 ~/.ssh/id_ed25519
+#   chmod 644 ~/.ssh/id_ed25519.pub
+#   ssh-add -K ~/.ssh/id_ed25519
+#   #eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519)
+# fi
+
+if test -f "$HOME/.ssh/ssh_iv_ed25519"; then
+  chmod 600 ~/.ssh/ssh_iv_ed25519
+  chmod 644 ~/.ssh/ssh_iv_ed25519.pub
+  ssh-add ~/.ssh/ssh_iv_ed25519 2>/dev/null
+  #eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519)
 fi
 
-if test -f "$HOME/.ssh/id_cfa_sso"; then
-  chmod 600 ~/.ssh/id_cfa_sso
-  chmod 644 ~/.ssh/id_cfa_sso.pub
-  eval $(keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso)
-fi
-
-if test -f "$HOME/.ssh/id_ed25519"; then
-  chmod 600 ~/.ssh/id_ed25519
-  chmod 644 ~/.ssh/id_ed25519.pub
-  eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519.pub)
+if test -f "$HOME/.ssh/id_gitlab_ed25519"; then
+  chmod 600 ~/.ssh/id_gitlab_ed25519
+  chmod 644 ~/.ssh/id_gitlab_ed25519.pub
+  ssh-add ~/.ssh/id_gitlab_ed25519
+  #eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519)
 fi
 
 #cd $HOME
@@ -301,3 +330,23 @@ fi
 #    echo "Loading My Scripts"
 #    . $HOME/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh
 # fi
+
+#echo "---<"
+# Powerline configuration
+if [ -f /usr/share/powerline/bindings/zsh/powerline.zsh ]; then
+  # echo "powerline found"
+  # powerline-daemon -q
+  # POWERLINE_BASH_CONTINUATION=1
+  # POWERLINE_BASH_SELECT=1
+  source /usr/share/powerline/bindings/zsh/powerline.zsh
+else
+  function prompt_char {
+    git branch >/dev/null 2>/dev/null && echo '±' && return
+    hg root >/dev/null 2>/dev/null && echo '☿' && return
+    echo '○'
+  }
+
+  export PROMPT='%n@%m[%~]:$(git_prompt_info)$(prompt_char)%{$reset_color%} '
+
+  RPROMPT=""
+fi

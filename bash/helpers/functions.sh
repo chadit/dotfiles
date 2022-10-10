@@ -30,24 +30,22 @@ which_shell() {
   fi
 }
 
-init_golang() {
-  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    export GOPATH=$HOME/Projects
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
-    # Mac OSX
-    export GOPATH=$HOME/Projects
-    #elif [[ "$OSTYPE" == "cygwin" ]]; then
-    # POSIX compatibility layer and Linux environment emulation for Windows
-    #elif [[ "$OSTYPE" == "msys" ]]; then
-    # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
-    #elif [[ "$OSTYPE" == "win32" ]]; then
-    # I'm not sure this can happen.
-    #elif [[ "$OSTYPE" == "freebsd"* ]]; then
-    # ...
-    #else
-    # Unknown.
-    #       echo "not supported"
+init_rust() {
+  # Cargo for Rust
+  if [ -d $HOME/.cargo/bin ]; then
+    pathmunge $HOME/.cargo/bin
+    echo $(rustc -V)
+    export RUST_BACKTRACE=1
   fi
+}
+
+init_golang() {
+  # if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  export GOPATH=$HOME/Projects
+  # elif [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  #export GOPATH=$HOME/Projects
+  # fi
 
   if [ -d /usr/lib64/golang/ ]; then
     export GOROOT="/usr/lib64/golang"
@@ -62,10 +60,12 @@ init_golang() {
   export GO111MODULE=on
   export GOBIN=$GOPATH/bin
   #export GO111MODULE=auto
-  pathmunge $GOROOT after
-  pathmunge $GOPATH after
-  pathmunge $GOROOT/bin after
-  pathmunge $GOPATH/bin after
+  pathmunge $GOROOT
+  pathmunge $GOPATH
+  pathmunge $GOROOT/bin
+  pathmunge $GOPATH/bin
+
+  echo $(go version)
   # fi
 }
 
@@ -75,22 +75,67 @@ list_golang() {
 
 set_java_home() {
   if test -f "/usr/libexec/java_home"; then
-   # echo "test"
+    # echo "test"
     export JAVA_HOME=$(/usr/libexec/java_home)
-    pathmunge $JAVA_HOME/bin after
+    pathmunge $JAVA_HOME/bin
   fi
 
   if test -d "/usr/lib/jvm/java-16-openjdk-amd64"; then
-   # echo "test"
+    # echo "test"
     export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
-    pathmunge $JAVA_HOME/bin after
+    pathmunge $JAVA_HOME/bin
   fi
+}
+
+set_flugger_bin() {
+  if test -d "$HOME/Development/flutter/bin"; then
+    echo "flutter bin found"
+    pathmunge $HOME/Development/flutter/bin
+  fi
+}
+
+set_dart_bin() {
+  if test -d "$HOME/.pub-cache/bin"; then
+    echo "dart bin found"
+    pathmunge $HOME/.pub-cache/bin
+  fi
+}
+
+set_lua_bin() {
+  if test -d "$HOME/.luaver"; then
+    echo "luaver"
+    . ~/.luaver/luaver
+  fi
+
+  if test -d "$HOME/luarocks-3.3.1/lua_modules/bin"; then
+    echo "lua rocks 3.3.1 bin found"
+    pathmunge $HOME/luarocks-3.3.1/lua_modules/bin
+  fi
+
+  if test -d "$HOME/.luarocks/lib/luarocks/rocks-5.3"; then
+    echo "lua rocks 5.3 bin found"
+    pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3
+  fi
+
+  # lua
+  # pathmunge "$HOME/luarocks-3.3.1/lua_modules/bin"
+  # pathmunge "$HOME/.luarocks/lib/luarocks/rocks-5.3"
 
 }
 
-# lua
-pathmunge "$HOME/luarocks-3.3.1/lua_modules/bin" after
-pathmunge "$HOME/.luarocks/lib/luarocks/rocks-5.3" after
+set_nvm() {
+  if test -d "$HOME/.nvm"; then
+    echo "nvm found"
+    export NVM_DIR=$HOME/.nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+  fi
+}
+
+set_wsl_links() {
+  ln -s /mnt/c/Projects $HOME/Projects
+
+}
 
 # stupid ubuntu bug after hibernate
 reset_touchpad() {
@@ -100,7 +145,7 @@ reset_touchpad() {
 
 # removes sync conflicts that can happen from syncthing or pcloud
 remove_sync_conflicts() {
-  if test -d "/mnt/c/Projects"; then
+  if [[ -d /mnt/c/Projects ]]; then
     echo "/mnt/c/Projects"
     find /mnt/c/Projects -name "*.sync-conflict*"
     find /mnt/c/Projects -name "*.sync-conflict*" -exec rm -rf {} \;
@@ -124,42 +169,9 @@ remove_sync_conflicts() {
 }
 
 update_os() {
-  # #Solus
-  # if [ -f /etc/solus-release ]; then
-  #   sudo eopkg upgrade -y
-  # fi
+  local CURRENTDIR=$(pwd)
 
-  #sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
-
-  #Fedora
-  # python3 -mplatform | grep -qi Fedora && sudo dnf clean all && sudo dnf upgrade -y && sudo dnf update -y
-  #Ubuntu
-  #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
-  #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo do-release-upgrade && sudo apt autoremove -y && sudo apt autoclean -y
-  #python3 -mplatform | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
-  lsb_release -i | grep -qi Ubuntu && sudo apt update -y && sudo apt upgrade -y
-
-  # python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y && sudo yaourt -Sy
-  #Manjaro
-  # python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman-optimize && sync && sudo pacman -Syyu -y
-  #python3 -mplatform | grep -qi Manjaro && sudo pacman-db-upgrade && sudo pacman -Syyu #&& yay -Syyu
-
-  #pacman -S -f firefox  (force a package)
-  #pacman -Ss firefox | grep installed returns how it was installed
-
-  # sudo pacman-mirrors -f 5 && sudo pacman -Syy && sudo pacman-optimize && sudo sync && yaourt -Syyua
-
-  # echo "clean cache"
- # go clean --modcache
-  
-
-  echo "update pip"
-  pip3 install --upgrade pip --user
-  # pip3 install --upgrade setuptools --user
-
-  # refresh snap packages
-  echo "snap refresh"
-  sudo snap refresh
+  update_repos
 
   # cleanup docker
   echo "docker cleanup"
@@ -167,11 +179,34 @@ update_os() {
 
   echo "update npm"
   sudo npm cache clean -f
-  sudo npm install -g n
+  sudo npm install --location=global n
   sudo n latest
 
-  # terminal built in go
-  # go get -u github.com/liamg/aminal
+  #go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+  cd $HOME/Projects/src/github.com/chadit/Environment/workstation
+  ansible-playbook playbook.yml
+
+  cd $CURRENTDIR
+}
+
+update_alacritty() {
+  local CURRENTDIR=$(pwd)
+
+  if test -d "$HOME/Projects/src/github.com/alacitty/alacritty"; then
+    echo "github.com/alacitty/alacritty"
+    cd $HOME/Projects/src/github.com/alacitty/alacritty
+    git reset --hard && git pull -f && git prune && git gc --aggressive
+
+    cargo build --release
+    infocmp alacritty
+    sudo cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH
+    sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+    sudo desktop-file-install extra/linux/Alacritty.desktop
+    sudo update-desktop-database
+  fi
+
+  cd $CURRENTDIR
 }
 
 update_system_symbolic() {
@@ -211,12 +246,6 @@ update_system_symbolic() {
   fi
 
   ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux.conf $HOME/.tmux.conf
-
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh $HOME/.ssh
-
-  if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh/.ssh ]; then
-    sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.ssh/.ssh
-  fi
 }
 
 ## using vim plugin addon handler
@@ -251,30 +280,17 @@ set_shutDown() {
   sudo shutdown -P 01:00
 }
 
-update_apps() {
-  # install update rust
-  curl https://sh.rustup.rs -sSf | sh
+fetch_protoc() {
+  local CURRENTDIR=$(pwd)
+  export PROTOC_VERSION="3.17.3"
+  export PROTOC_GITHUB_ROOT="https://github.com/protocolbuffers/protobuf/releases"
 
-  source $HOME/.cargo/env
+  cd $HOME/Downloads
+  curl -LO $PROTOC_GITHUB_ROOT/download/v$PROTOC_VERSION/protoc-$PROTOC_VERSION-linux-x86_64.zip
+  mkdir -p $HOME/.local
+  unzip protoc-$PROTOC_VERSION-linux-x86_64.zip -d $HOME/.local
 
-  # Alacritty
-  cd $HOME/Projects/src/github.com/jwilm/alacritty && echo $(pwd) && git fetch --prune && git reset --hard @{upstream} && git clean -x -d -f && git prune && git gc --aggressive && git pull
-  #cargo install cargo-deb --force
-  #cargo deb --install
-
-  # none dep
-  cargo build --release
-  sudo cp -f target/release/alacritty /usr/local/bin
-  cp -f alacritty.desktop ~/.local/share/applications
-  sudo desktop-file-install alacritty.desktop
-  sudo update-desktop-database
-
-  # if error caused by ssh authentication
-  # eval `ssh-agent -s`
-  # ssh-add
-
-  # add/update zsh auto complete
-  sudo cp -f $HOME/Projects/src/github.com/jwilm/alacritty/alacritty-completions.zsh /usr/share/zsh/functions/Completion/X/_alacritty
+  cd $CURRENTDIR
 }
 
 generate_lua_table() {
@@ -291,26 +307,6 @@ generate_lua_table() {
     ((i++))
   done
   echo "    }," >>$filePath
-}
-
-build_nilcore() {
-  echo "NilsReactionCore.data.MadaoProfiles = {" >$HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua
-
-  # Crafting
-  local FILES=$HOME/Projects/src/github.com/nil2share/madaoprofiles/CraftProfiles/Nil-*.lua
-  generate_lua_table "Crafting" $HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua "${FILES[@]}"
-
-  # Gathering
-  local FILES=$HOME/Projects/src/github.com/nil2share/madaoprofiles/GatherScheduleProfiles/Nil-*.lua
-  generate_lua_table "Gathering" $HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua "${FILES[@]}"
-
-  echo "}" >>$HOME/Projects/src/github.com/chadit/NilsCoreAPI/data_madao.lua
-
-  local CURRENTDIR=$(pwd)
-  local BASEDIR="$HOME/Projects/src/github.com/chadit/NilsCoreAPI/"
-  cd $BASEDIR
-  zip "$HOME/Projects/src/github.com/chadit/build/NilsReactionCore_$1.zip" module.def *.lua
-  cd $CURRENTDIR
 }
 
 # attach to an existing tmux sessions, if does not exist, cleaning create one
@@ -336,8 +332,10 @@ tmux_default() {
 FILE=$HOME/Projects/helpers/mydotfiles/bash
 if [ -d "$FILE" ]; then
   for f in $FILE/*.sh; do
-    echo -n ".."
+    # echo -n ".."
     # echo $f
     . $f
   done
+
+  # echo -n "..........................."
 fi

@@ -17,8 +17,8 @@ M.defaults = function()
   opt.cursorline = true
   opt.encoding = "UTF-8"
   opt.expandtab = true
-  opt.foldlevelstart = 1
-  opt.foldmethod = "syntax"
+  -- opt.foldlevelstart = 1
+  -- opt.foldmethod = "syntax"
   opt.history = 10000
   opt.lazyredraw = true
   opt.mouse = "a"
@@ -41,8 +41,7 @@ M.defaults = function()
   opt.visualbell = true
   opt.wildmenu = true
   opt.writebackup = true
-  local has_lsp, lsp = pcall(require, "settings.lsp")
-  if has_lsp then lsp.load_config() end
+
   --  Return to the same position in the file when reopening
   cmd([[autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif ]])
 end

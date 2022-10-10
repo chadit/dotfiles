@@ -17,9 +17,6 @@ M.load_plugins = function()
   local has_packer, packer = pcall(require, "packer")
   if not has_packer then M.install_packer() end
 
-  local TSInstallPlug = ":TSInstall c bash haskell lua json tsx vue javascript html css typescript rust regex cpp cmake yaml toml dockerfile"
-  local LSPInstallPlug = ":LpsInstall tsserver vimls vuels eslint rust_analyzer hls bashls html jsonls sumneko_lua pyright sqls lemminx cssls zls diagnosticls clangd cmake dockerls emmet_ls gopls"
-
   local has_notify = pcall(require, "notify")
   if has_notify then
     local config = {display = {non_interactive = true}}
@@ -34,42 +31,121 @@ M.load_plugins = function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim' -- A use-package inspired plugin manager for Neovim.
 
-  use 'tpope/vim-sensible' -- Sensible defaults for Vim.
+  -- colorschemes
+  use "EdenEast/nightfox.nvim"
+  use "fenetikm/falcon"
+  use "sainnhe/gruvbox-material"
+  --  themes
+  -- use({'bluz71/vim-moonfly-colors', config = require("plugins.configs.moonfly").config()})
 
-  use("rcarriga/nvim-notify") -- A fancy, configurable, notification manager for NeoVim
+  -- tpope stuff
+  use 'tpope/vim-sensible'
+  use 'tpope/vim-markdown'
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-dispatch'
+  use 'tpope/vim-rvm'
 
-  -- auto comomplete AI
-  use {'github/copilot.vim'} -- github copilot
-  -- use {'aca/completion-tabnine', opt = true, run = './install.sh'}
-
-  -- LSP --------------------------------------------------------------------------
   use({
-    "williamboman/nvim-lsp-installer",
-    -- "kabouzeid/nvim-lspinstall", -- Install LSP Servers
-    requires = "neovim/nvim-lspconfig",
-    run = LSPInstallPlug
+    "rcarriga/nvim-notify",
+    opt = false,
+    config = function()
+      local notify = require("notify")
+      notify.setup({background_colour = "#000000"})
+      vim.notify = notify
+    end
   })
 
-  use {'neovim/nvim-lspconfig'} -- Quickstart configurations for the Nvim LSP client
-  use {"nvim-lua/lsp-status.nvim"} -- A statusline component for the LSP client
-  use {"folke/lsp-trouble.nvim", requires = {"kyazdani42/nvim-web-devicons"}}
-  use 'nvim-lua/completion-nvim' -- Completion for the LSP client
-  -- TODO: need to work on this more, keeps erroring on selene
-  -- use("jose-elias-alvarez/null-ls.nvim") -- inject LSP diagnostics, code actions, and more via Lua
-  use("ray-x/lsp_signature.nvim") -- lsp signature hint when you type
-  use {"kosayoda/nvim-lightbulb"} -- Lightbulb for LSP
-  use 'nvim-lua/lsp_extensions.nvim' -- LSP extensions for nvim
-  use 'glepnir/lspsaga.nvim' -- A light-weight lsp plugin based on neovim built-in lsp with highly a performant UI.
-  use 'folke/lsp-colors.nvim'
+  -- auto complete AI
+  use {'github/copilot.vim'} -- github copilot
+
+  -- autocomplete
+  use "hrsh7th/nvim-cmp"
+  use "hrsh7th/cmp-buffer"
+  use "hrsh7th/cmp-cmdline"
+  use "hrsh7th/cmp-nvim-lua"
+  use "hrsh7th/cmp-nvim-lsp"
+  use "hrsh7th/cmp-nvim-lsp-signature-help"
+  use "hrsh7th/cmp-path"
+  use {"L3MON4D3/LuaSnip", requires = {"saadparwaiz1/cmp_luasnip"}, config = function() require("luasnip.loaders.from_lua").load({paths = "~/.snippets"}) end}
+
+  -- lsp
+  use "williamboman/mason.nvim"
+  use "williamboman/nvim-lsp-installer"
+  use "neovim/nvim-lspconfig"
+  use {
+    "williamboman/mason-lspconfig.nvim",
+    config = function() ---
+      local has_mason, mason = pcall(require, "mason")
+      if not has_mason then return end
+
+      mason.setup()
+
+      local has_masonlspconfig, mason_lspconfig = pcall(require, "mason-lspconfig")
+      if not has_masonlspconfig then return end
+
+      mason_lspconfig.setup({
+        ensure_installed = { --
+          "eslint-lsp",
+          "gopls",
+          "lua-language-server",
+          "marksman",
+          "terraform-ls",
+          "tflint",
+          "rust-analyzer",
+          "typescript-language-server",
+          "yaml-language-server",
+          "yamllint"
+        }
+      })
+
+      mason_lspconfig.setup_handlers({
+        function(server_name)
+          require("lspconfig")[server_name].setup({
+            on_attach = function(client, bufnr)
+              require("settings/shared").on_attach(client, bufnr)
+              require("illuminate").on_attach(client)
+
+              if server_name == "terraformls" then
+                -- https://github.com/Afourcat/treesitter-terraform-doc.nvim/issues/1
+                -- doesn't support providers outside of the hashicorp namespace 🤦
+                require("treesitter-terraform-doc").setup()
+              end
+            end
+          })
+        end
+      })
+
+    end
+  }
+
+  use "Afourcat/treesitter-terraform-doc.nvim" -- opens Terraform resource docs
+
+  use {"j-hui/fidget.nvim", config = function() require("fidget").setup() end}
+  use {"folke/trouble.nvim", config = function() require("trouble").setup() end}
+  use({
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim", -- See also: https://github.com/Maan2003/lsp_lines.nvim
+    config = function()
+      require("lsp_lines").setup()
+
+      -- disable virtual_text since it's redundant due to lsp_lines.
+      vim.diagnostic.config({virtual_text = false})
+    end
+  })
+  use {"simrat39/symbols-outline.nvim", config = function() require("symbols-outline").setup({auto_close = true}) end}
+  use {"kosayoda/nvim-lightbulb", requires = {"antoinemadec/FixCursorHold.nvim"}}
+  use "folke/lsp-colors.nvim"
+  use "mfussenegger/nvim-lint"
+  use "weilbith/nvim-code-action-menu"
+  use {"simrat39/rust-tools.nvim", requires = {"nvim-lua/popup.nvim", "nvim-lua/plenary.nvim"}}
+  use "lvimuser/lsp-inlayhints.nvim" -- rust-tools already provides this feature, but gopls doesn't
+
+  -- use {"nvim-lua/lsp-status.nvim"} -- A statusline component for the LSP client
+  -- use("ray-x/lsp_signature.nvim") -- lsp signature hint when you type
+  -- use 'nvim-lua/lsp_extensions.nvim' -- LSP extensions for nvim
+  -- use 'glepnir/lspsaga.nvim' -- A light-weight lsp plugin based on neovim built-in lsp with highly a performant UI.
 
   -- ------------------------------------------------------------------------------
 
-  use({
-    "folke/trouble.nvim", -- A pretty diagnostics, references, telescope results, quickfix and location list to help you solve all the trouble your code is causing.
-    requires = "kyazdani42/nvim-web-devicons",
-    config = require("plugins.trouble").config()
-  })
-  use {"simrat39/rust-tools.nvim", requires = {"nvim-lua/popup.nvim", "nvim-lua/plenary.nvim"}}
   use 'rust-lang/rust.vim' -- Rust language support for Vim/Neovim
   use 'onsails/lspkind-nvim' -- vscode-like pictograms for neovim lsp completion items
 
@@ -80,182 +156,196 @@ M.load_plugins = function()
   use 'kevinhwang91/nvim-bqf'
 
   -- Telescope
-  use 'nvim-lua/popup.nvim' -- An implementation of the Popup API from vim in Neovim. Hope to upstream when complete
-  use 'nvim-lua/plenary.nvim' -- plenary: full; complete; entire; absolute; unqualified.
-  use({
-    "nvim-telescope/telescope.nvim", -- Find, Filter, Preview, Pick. All lua, all the time.
-    config = require("plugins.telescope").config()
-  })
-
-  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'} -- fzf-native is a c port of fzf. It only covers the algorithm and implements few functions to support calculating the score.
-  use({
-    "nvim-telescope/telescope-fzy-native.nvim" -- FZY style sorter that is compiled_loader
-  })
-  use({
-    "nvim-telescope/telescope-media-files.nvim" -- Telescope extension to preview media files using Ueberzug.
-  })
-  use({
-    "jvgrootveld/telescope-zoxide" -- An extension for telescope.nvim that allows you operate zoxide within Neovim.
-  })
+  use 'nvim-lua/popup.nvim'
+  use({"nvim-telescope/telescope.nvim", requires = {{'nvim-lua/plenary.nvim'}}})
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'}
+  use({"nvim-telescope/telescope-fzy-native.nvim"})
+  use({"nvim-telescope/telescope-media-files.nvim"})
+  use({"jvgrootveld/telescope-zoxide"})
+  use {"nvim-telescope/telescope-ui-select.nvim", config = function() require("telescope").setup({}) end}
+  use "kyoh86/telescope-windows.nvim"
+  use "crispgm/telescope-heading.nvim"
+  use "xiyaowong/telescope-emoji.nvim"
+  use "axkirillov/telescope-changed-files"
 
   -- Treesitter
   use({
     "nvim-treesitter/nvim-treesitter", -- Nvim Treesitter configurations and abstraction layer
-    branch = "0.5-compat",
     run = ":TSUpdate",
-    config = require("plugins.treesitter").config()
+    config = require("plugins.configs.treesitter").config()
   })
   use({"nvim-treesitter/nvim-treesitter-refactor"}) -- Refactor module for nvim-treesitter
   use({"nvim-treesitter/nvim-treesitter-textobjects", branch = "0.5-compat"}) -- Create your own textobjects using tree-sitter queries!
-  use({"romgrk/nvim-treesitter-context"}) -- Show code context
+  -- buffer scroll context
+  use {"nvim-treesitter/nvim-treesitter-context", requires = "nvim-treesitter/nvim-treesitter", config = function() require("treesitter-context").setup({separator = "-"}) end}
   use({"windwp/nvim-ts-autotag"}) -- Use treesitter to auto close and auto rename html tag
   use({"JoosepAlviste/nvim-ts-context-commentstring"}) -- Neovim treesitter plugin for setting the commentstring based on the cursor location in a file.
+  use {"m-demare/hlargs.nvim", requires = {"nvim-treesitter/nvim-treesitter"}, config = function() require("hlargs").setup() end}
 
+  -- pattern searching
+  use "mileszs/ack.vim"
+
+  -- search indexer
+  use "kevinhwang91/nvim-hlslens"
+  use {
+    "haya14busa/vim-asterisk",
+    config = function()
+      vim.api.nvim_set_keymap('n', '*', [[<Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>]], {})
+      vim.api.nvim_set_keymap('n', '#', [[<Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>]], {})
+      vim.api.nvim_set_keymap('n', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], {})
+      vim.api.nvim_set_keymap('n', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
+
+      vim.api.nvim_set_keymap('x', '*', [[<Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>]], {})
+      vim.api.nvim_set_keymap('x', '#', [[<Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>]], {})
+      vim.api.nvim_set_keymap('x', 'g*', [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], {})
+      vim.api.nvim_set_keymap('x', 'g#', [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], {})
+    end
+  }
+
+  -- search and replace
+  use {"nvim-pack/nvim-spectre", requires = {"nvim-lua/plenary.nvim"}}
+
+  -- debugging
   -- DAP
-  -- https://github.com/mfussenegger/nvim-dap
-  -- https://github.com/rcarriga/nvim-dap-ui
   use 'mfussenegger/nvim-dap'
-  use 'rcarriga/nvim-dap-ui'
-  use 'theHamsta/nvim-dap-virtual-text'
+  use {
+    "rcarriga/nvim-dap-ui",
+    requires = {"mfussenegger/nvim-dap"},
+    config = function() --
+      require("dapui").setup({
+        icons = {expanded = "▾", collapsed = "▸", current_frame = "▸"},
+        mappings = {
+          -- Use a table to apply multiple mappings
+          expand = {"<CR>", "<2-LeftMouse>"},
+          open = "o",
+          remove = "d",
+          edit = "e",
+          repl = "r",
+          toggle = "t"
+        },
+        expand_lines = vim.fn.has("nvim-0.7"),
+        layouts = {
+          { -- 
+            open_on_start = true,
+            elements = {
+              { --
+                id = "scopes",
+                size = 0.25
+              },
+              "breakpoints",
+              "stacks",
+              "watches"
+            },
+            width = 40,
+            position = "left"
+          },
+          {
+            elements = { --
+              elements = {"repl", "console"}
+            },
+            size = 0.25,
+            position = "bottom"
+          }
+        },
+        controls = {
+          -- Requires Neovim nightly (or 0.8 when released)
+          enabled = true,
+          -- Display controls in this element
+          element = "repl",
+          icons = {pause = "", play = "", step_into = "", step_over = "", step_out = "", step_back = "", run_last = "↻", terminate = "□"}
+        },
+        floating = {
+          max_height = nil, -- These can be integers or a float between 0 and 1.
+          max_width = nil, -- Floats will be treated as percentage of your screen.
+          border = "single", -- Border style. Can be "single", "double" or "rounded"
+          mappings = {close = {"q", "<Esc>"}}
+        },
+        windows = {indent = 1},
+        render = {
+          max_type_length = nil, -- Can be integer or nil.
+          max_value_lines = 100 -- Can be integer or nil.
+        }
+      })
+    end
+  }
+  use {"leoluz/nvim-dap-go", requires = {"mfussenegger/nvim-dap"}, run = "go install github.com/go-delve/delve/cmd/dlv@latest", config = function() require("dap-go").setup() end}
+  use {"theHamsta/nvim-dap-virtual-text", requires = {"mfussenegger/nvim-dap"}, config = function() require("nvim-dap-virtual-text").setup() end}
   use {'nvim-telescope/telescope-dap.nvim'}
   use {'mfussenegger/nvim-dap-python'} -- Python
   use {'Pocco81/DAPInstall.nvim'}
   use {'jbyuki/one-small-step-for-vimkind'}
 
-  -- Autocomplete, Snippets, Format
-  -- Install nvim-cmp, and buffer source as a dependency
-  -- use {
-  --   "hrsh7th/nvim-cmp", -- Autocompletion plugin
-  --   requires = {
-  --     "hrsh7th/vim-vsnip",
-  --     "hrsh7th/cmp-buffer" -- nvim-cmp source for buffer words
-  --   }
-  -- }
-  -- use("hrsh7th/cmp-path") -- nvim-cmp source for path
-  -- use("hrsh7th/cmp-nvim-lua") -- nvim-cmp source for nvim lua
-  -- use({
-  --   "hrsh7th/cmp-nvim-lsp" -- LSP source for nvim-cmp
-  -- })
-
-  -- use({"saadparwaiz1/cmp_luasnip"}) -- Snippets source for nvim-cmp
-  use("L3MON4D3/LuaSnip") -- Snippets Plugin
-  use 'sbdchd/neoformat' -- plugin for formatting code
-  use 'christoomey/vim-system-copy' -- copy to system clipboard
-
   -- Coding
   --- nvim-go
   use {'crispgm/nvim-go'}
   -- vim-go
-  use {
-    'fatih/vim-go',
-    run = ':GoUpdateBinaries',
-    ft = {'go', 'gomod'}
-    -- config = function()
-    --   local g = vim.g
-    --   g.go_gopls_enabled = 1
-    --   g.go_fmt_autosave = 1
-    --   g.go_fmt_command = [[gopls]]
-    --   g.go_gopls_gofumpt = 1
-    --   g.go_imports_mode = [[gopls]]
-    --   g.go_fillstruct_mode = [[gopls]]
-    --   g.go_rename_command = [[gopls]]
-    --   g.go_metalinter_command = [[golangci-lint]]
-    --   -- g.go_metalinter_enabled = {'vet', 'errcheck', 'staticcheck', 'gosimple'}
-    --   -- g.go_metalinter_enabled = {'deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck'}
-    --   g.go_metalinter_autosave_enabled = {[[vet]], [[errcheck]], [[staticcheck]], [[gosimple]]}
-    --   g.go_metalinter_autosave = 1
-    --   g.go_test_show_name = 1
-    --   g.go_imports_autosave = 1
-    --   g.go_term_mode = [[split]]
-    --   g.go_term_enabled = 1
-    --   g.go_term_reuse = 1
-    --   g.go_auto_type_info = 1
-
-    --   g.go_highlight_fields = 0
-    --   g.go_highlight_operators = 1
-    --   g.go_highlight_functions = 1
-    --   g.go_highlight_function_arguments = 1
-    --   g.go_highlight_functions_calls = 1
-    --   g.go_highlight_types = 1
-    --   g.go_highlight_build_constraints = 1
-    --   g.go_highlight_variable_declarations = 1
-
-    --   g.go_gopls_staticcheck = 1
-    --   g.go_diagnostics_level = 2
-    --   g.go_gopls_matcher = [[fuzzy]]
-    --   -- g.go_gopls_local = [[do]]
-
-    --   g.go_code_completion_enabled = 0
-    --   g.go_doc_keywordprg_enabled = 0
-    --   g.go_def_mapping_enabled = 0
-    --   g.go_echo_go_info = 0
-
-    --   g.go_fold_enable = {}
-    -- end
-  }
+  use {'fatih/vim-go', run = ':GoUpdateBinaries', ft = {'go', 'gomod'}}
 
   -- Debugging
-  -- use {'puremourning/vimspector', requires = {{'mfussenegger/nvim-dap'}}, fn = "vimspector#Launch"}
   use {'nvim-telescope/telescope-vimspector.nvim'}
   use 'sebdah/vim-delve' -- Go debugger: delve.
-  use({"jose-elias-alvarez/nvim-lsp-ts-utils"}) -- Utilities to improve the TypeScript development experience for Neovim's built-in LSP client.
+  -- use({"jose-elias-alvarez/nvim-lsp-ts-utils"}) -- Utilities to improve the TypeScript development experience for Neovim's built-in LSP client.
   use 'ludovicchabant/vim-gutentags'
   use {"folke/todo-comments.nvim", requires = "nvim-lua/plenary.nvim"}
 
   use 'numtostr/FTerm.nvim'
   use 'cespare/vim-toml' -- Vim syntax for TOML: https://github.com/cespare/vim-toml
-
   use 'tmhedberg/SimpylFold' -- Python folding: https://github.com/tmhedberg/SimpylFold
-
   use 'dart-lang/dart-vim-plugin' -- Flutter / Dart: https://github.com/dart-lang/dart-vim-plugin
-
   use 'hashivim/vim-terraform' -- Terraform: https://github.com/hashivim/vim-terraform
 
   -- Latex
   use 'lervag/vimtex'
-  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
 
   -- Ruby
   use 'thoughtbot/vim-rspec' -- RSpec support for Vim
-  use 'tpope/vim-rvm' -- RVM support for Vim
 
   -- Lua development
   use {'folke/lua-dev.nvim'}
-  use {'simrat39/symbols-outline.nvim'}
+  use {'mhartington/formatter.nvim'}
 
   -- editing
   use 'andymass/vim-matchup'
   use 'windwp/nvim-autopairs'
-  use 'tpope/vim-surround'
-  use 'tpope/vim-repeat'
-  use 'tpope/vim-commentary'
-  use 'tpope/vim-scriptease'
-
-  -- Comments
-  use "terrortylor/nvim-comment"
 
   -- Git
   use({
     "lewis6991/gitsigns.nvim", -- Git signs written in pure lua
     requires = {"nvim-lua/plenary"},
-    config = require("plugins.gitsigns").config()
+    config = require("plugins.configs.gitsigns").config()
   })
-  -- use 'f-person/git-blame.nvim'
-  use 'sindrets/diffview.nvim'
-  -- use 'pwntester/octo.nvim'
 
-  -- Productivity
-  use 'jbyuki/nabla.nvim'
-  use 'Pocco81/TrueZen.nvim'
+  -- git history
+  use {"sindrets/diffview.nvim", requires = {"nvim-lua/plenary.nvim"}}
 
-  -- Utilities
-  use 'nacro90/numb.nvim'
-  use("folke/which-key.nvim") -- Create key bindings that stick. WhichKey is a lua plugin for Neovim 0.5 that displays a popup with possible keybindings of the command you started typing.
-  use 'norcalli/nvim-colorizer.lua'
-  use 'nvim-telescope/telescope-symbols.nvim'
+  -- highlighters and indicators
+  use {
+    "RRethy/vim-illuminate", -- word usage highlighter
+    config = function() end
+  }
+  use {
+    "jinh0/eyeliner.nvim", -- jump to word indictors
+    config = function()
+      vim.api.nvim_set_hl(0, "EyelinerPrimary", {underline = true})
+      vim.api.nvim_create_autocmd("ColorScheme", {pattern = {"*"}, callback = function() vim.api.nvim_set_hl(0, "EyelinerPrimary", {underline = true}) end})
+    end
+  }
+  use "DanilaMihailov/beacon.nvim" -- cursor movement highlighter
 
-  -- Syntax
-  use 'MTDL9/vim-log-highlighting'
+  -- modify surrounding characters
+  use({"kylechui/nvim-surround", config = function() require("nvim-surround").setup() end})
+
+  -- highlight yanked region
+  use "machakann/vim-highlightedyank"
+
+  -- move lines around
+  use "matze/vim-move"
+
+  -- suggest mappings
+  use {"folke/which-key.nvim", config = function() require("which-key").setup() end}
+
+  -- display hex colours
+  use {"norcalli/nvim-colorizer.lua", config = function() require("colorizer").setup() end}
 
   -- Icons
   use 'kyazdani42/nvim-web-devicons' -- lua `fork` of vim-web-devicons for neovim
@@ -265,56 +355,24 @@ M.load_plugins = function()
   use({
     "kyazdani42/nvim-tree.lua",
     branch = 'master', -- A file explorer tree for neovim written in lua
-    config = require("plugins.nvimtree").config(),
+    config = require("plugins.configs.nvimtree").config(),
     requires = "kyazdani42/nvim-web-devicons"
   })
-  use 'airblade/vim-rooter'
 
-  -- navigation
-  use 'easymotion/vim-easymotion'
-
-  use 'rbgrouleff/bclose.vim'
-
-  -- undo
-  use 'mbbill/undotree'
-
-  -- UI
-  use({
-    "lukas-reineke/indent-blankline.nvim", -- Indent guides for Neovim
-    config = require("plugins.indent-blankline").config()
-  })
   use({
     "akinsho/nvim-bufferline.lua", -- A snazzy bufferline for Neovim
     requires = "kyazdani42/nvim-web-devicons",
-    config = require("plugins.bufferline").config()
+    config = require("plugins.configs.bufferline").config()
   })
-  use({
-    "hoob3rt/lualine.nvim", -- A blazing fast and easy to configure neovim statusline plugin written in pure lua.
-    requires = {"kyazdani42/nvim-web-devicons", opt = true},
-    config = require("plugins.lualine").config()
-  })
-  use({'sindrets/winshift.nvim'})
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = {'kyazdani42/nvim-web-devicons', opt = true},
+    config = require("plugins.configs.lualine").config()
+    --
+  }
 
-  -- other
-  use({
-    "vuki656/package-info.nvim", -- See latest package versions in your package.json
-    config = require("plugins.package-info").config()
-  })
-
-  use({
-    "ahmedkhalf/project.nvim", -- The superior project management solution for neovim.
-    config = require("plugins.project").config()
-  })
-
-  use({
-    "jghauser/mkdir.nvim" -- This neovim plugin creates missing folders on save.
-  })
-
-  --  themes
-  -- use({'shaunsingh/nord.nvim', config = require("plugins.nord").config()})
-  -- use({'shaunsingh/doom-vibrant.nvim', config = require("plugins.doom").config()})
-  -- use({'marko-cerovac/material.nvim', config = require("plugins.material").config()})
-  use({'bluz71/vim-moonfly-colors', config = require("plugins.moonfly").config()})
+  -- code comments
+  use "b3nj5m1n/kommentary"
 
   -- Keep things up to date
   execute("PackerSync")

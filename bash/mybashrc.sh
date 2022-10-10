@@ -9,12 +9,12 @@ if [ -f "$HOME/Projects/src/github.com/lyze/posh-git-sh/git-prompt.sh" ]; then
   #end PoshGit
 fi
 
-echo "welcome $(whoami) - Loading My $SHELL Scripts" 
+echo "welcome $(whoami) - Loading My $SHELL Scripts"
 # Load Helpers
 for f in $HOME/Projects/src/github.com/chadit/dotfiles/bash/helpers/*.sh; do
-  echo -n ".."
- # echo $f  
-   . $f
+  # echo -n ".."
+  # echo $f
+  . $f
 done
 
 pathmunge $HOME/.goenv/bin
@@ -24,19 +24,19 @@ eval "$(goenv init -)"
 
 # initalize helpers and variables
 init_golang
+init_rust
 
 # added bin for yarn npm applications
-pathmunge $HOME/.yarn/bin after
+pathmunge $HOME/.yarn/bin
 # added bin for yarn npm applications
-pathmunge $HOME/.yarn/bin after
+pathmunge $HOME/.yarn/bin
 # add pip location to path
-pathmunge $HOME/.local.bin after
+pathmunge $HOME/.local.bin
 # Cargo for Rust
-pathmunge $HOME/.cargo/bin after
+pathmunge $HOME/.cargo/bin
 # Ruby
-pathmunge $HOME/gems/bin/ after
-pathmunge /usr/local/lib/ruby/gems/3.0.0/bin after
-
+pathmunge $HOME/gems/bin/
+pathmunge /usr/local/lib/ruby/gems/3.0.0/bin
 
 # Set Vim as default editor
 export VISUAL=vim
@@ -51,7 +51,7 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 #source <(kubectl completion bash)
 
-go_check_folder(){
+go_check_folder() {
   go list ./... | grep -v vendor | xargs go vet -v
 }
 
@@ -60,32 +60,31 @@ go_check_folder(){
 
 # sudo rsync -aAXv $HOME/pCloudDrive /run/media/chadit/Backup/
 
-set_shutDown(){
+set_shutDown() {
   sudo shutdown -P 01:00
 }
 
 if [ ! -d $BASHPRIVATE ]; then
-    echo "private repo not set"
+  echo "private repo not set"
 else
   # Load scripts from private repo, $BASHPRIVATE is a private Variable set in /etc/profile
   for f in $BASHPRIVATE/*.sh; do
     echo -n ".."
-   # echo $f  
-  #   . $f
+    # echo $f
+    #   . $f
   done
 fi
 
 #if [ -n "$BASH_VERSION" ]; then
-   # assume Bash
-  # . $HOME/Projects/src/github.com/jwilm/alacritty/alacritty-completions.bash
+# assume Bash
+# . $HOME/Projects/src/github.com/jwilm/alacritty/alacritty-completions.bash
 #fi
 
 echo ""
 
 if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
-    . /opt/local/etc/profile.d/bash_completion.sh
+  . /opt/local/etc/profile.d/bash_completion.sh
 fi
-
 
 # Source global definitions
 #if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/bash/mybashrc.sh ]; then
