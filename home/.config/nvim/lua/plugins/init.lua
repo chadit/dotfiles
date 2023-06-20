@@ -55,6 +55,9 @@ M.load_plugins = function()
     end
   })
 
+  -- debug
+  use "nvim-lua/plenary.nvim"
+
   -- auto complete AI
   use {'github/copilot.vim'} -- github copilot
 
@@ -70,10 +73,11 @@ M.load_plugins = function()
 
   -- lsp
   use "williamboman/mason.nvim"
-  use "williamboman/nvim-lsp-installer"
   use "neovim/nvim-lspconfig"
   use {
     "williamboman/mason-lspconfig.nvim",
+    lazy = true,
+    dependencies = {"williamboman/mason.nvim"},
     config = function() ---
       local has_mason, mason = pcall(require, "mason")
       if not has_mason then return end
@@ -81,20 +85,31 @@ M.load_plugins = function()
       mason.setup()
 
       local has_masonlspconfig, mason_lspconfig = pcall(require, "mason-lspconfig")
-      if not has_masonlspconfig then return end
+      if not has_masonlspconfig then
+        print("mason-lspconfig not found")
+        return
+      end
+
+      local lspconfig = require('lspconfig')
 
       mason_lspconfig.setup({
+        PATH = "prepend",
         ensure_installed = { --
-          "eslint-lsp",
+          "bashls",
+          -- "csharp_ls",
+          "eslint",
           "gopls",
-          "lua-language-server",
+          "golangci_lint_ls",
           "marksman",
-          "terraform-ls",
+          "pyright",
+          "lua_ls",
+          -- "marksman",
+          "terraformls",
           "tflint",
-          "rust-analyzer",
-          "typescript-language-server",
-          "yaml-language-server",
-          "yamllint"
+          "rust_analyzer",
+          "tsserver",
+          "solargraph",
+          "yamlls"
         }
       })
 
@@ -105,18 +120,38 @@ M.load_plugins = function()
               require("settings/shared").on_attach(client, bufnr)
               require("illuminate").on_attach(client)
 
-              if server_name == "terraformls" then
-                -- https://github.com/Afourcat/treesitter-terraform-doc.nvim/issues/1
-                -- doesn't support providers outside of the hashicorp namespace 🤦
-                require("treesitter-terraform-doc").setup()
-              end
+              if server_name == "terraformls" then require("treesitter-terraform-doc").setup() end
             end
+          })
+        end
+      })
+
+      local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+      mason_lspconfig.setup_handlers({
+        function(server_name) -- Default handler
+          lspconfig[server_name].setup {capabilities = capabilities}
+        end,
+        ["lua_ls"] = function()
+          lspconfig.lua_ls.setup({
+            capabilities = capabilities,
+            settings = {
+              Lua = {
+                diagnostics = {
+                  -- Tells Lua that a global variable named vim exists to not have warnings when configuring neovim
+                  globals = {"vim", "Player", "TensorCore"}
+                }
+              }
+            }
           })
         end
       })
 
     end
   }
+
+  -- williamboman/nvim-lsp-installer deprecated and replaced with mason.nvim
+  -- use "williamboman/nvim-lsp-installer"
 
   use "Afourcat/treesitter-terraform-doc.nvim" -- opens Terraform resource docs
 
@@ -162,7 +197,7 @@ M.load_plugins = function()
   use({"nvim-telescope/telescope-fzy-native.nvim"})
   use({"nvim-telescope/telescope-media-files.nvim"})
   use({"jvgrootveld/telescope-zoxide"})
-  use {"nvim-telescope/telescope-ui-select.nvim", config = function() require("telescope").setup({}) end}
+  use {"nvim-telescope/telescope-ui-select.nvim", config = function() require("telescope").setup({pickers = {find_files = {hidden = true}, grep_string = {hidden = true}}}) end}
   use "kyoh86/telescope-windows.nvim"
   use "crispgm/telescope-heading.nvim"
   use "xiyaowong/telescope-emoji.nvim"
@@ -186,7 +221,24 @@ M.load_plugins = function()
   use "mileszs/ack.vim"
 
   -- search indexer
-  use "kevinhwang91/nvim-hlslens"
+  use {
+    "kevinhwang91/nvim-hlslens",
+    config = function()
+      require('hlslens').setup()
+
+      local kopts = {noremap = true, silent = true}
+
+      vim.api.nvim_set_keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+      vim.api.nvim_set_keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+      vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+      vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+      vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+      vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+
+      vim.api.nvim_set_keymap('n', '<Leader>l', ':noh<CR>', kopts)
+    end
+  }
+
   use {
     "haya14busa/vim-asterisk",
     config = function()
@@ -212,60 +264,60 @@ M.load_plugins = function()
     "rcarriga/nvim-dap-ui",
     requires = {"mfussenegger/nvim-dap"},
     config = function() --
-      require("dapui").setup({
-        icons = {expanded = "▾", collapsed = "▸", current_frame = "▸"},
-        mappings = {
-          -- Use a table to apply multiple mappings
-          expand = {"<CR>", "<2-LeftMouse>"},
-          open = "o",
-          remove = "d",
-          edit = "e",
-          repl = "r",
-          toggle = "t"
-        },
-        expand_lines = vim.fn.has("nvim-0.7"),
-        layouts = {
-          { -- 
-            open_on_start = true,
-            elements = {
-              { --
-                id = "scopes",
-                size = 0.25
-              },
-              "breakpoints",
-              "stacks",
-              "watches"
-            },
-            width = 40,
-            position = "left"
-          },
-          {
-            elements = { --
-              elements = {"repl", "console"}
-            },
-            size = 0.25,
-            position = "bottom"
-          }
-        },
-        controls = {
-          -- Requires Neovim nightly (or 0.8 when released)
-          enabled = true,
-          -- Display controls in this element
-          element = "repl",
-          icons = {pause = "", play = "", step_into = "", step_over = "", step_out = "", step_back = "", run_last = "↻", terminate = "□"}
-        },
-        floating = {
-          max_height = nil, -- These can be integers or a float between 0 and 1.
-          max_width = nil, -- Floats will be treated as percentage of your screen.
-          border = "single", -- Border style. Can be "single", "double" or "rounded"
-          mappings = {close = {"q", "<Esc>"}}
-        },
-        windows = {indent = 1},
-        render = {
-          max_type_length = nil, -- Can be integer or nil.
-          max_value_lines = 100 -- Can be integer or nil.
-        }
-      })
+      -- require("dapui").setup({
+      --   icons = {expanded = "▾", collapsed = "▸", current_frame = "▸"},
+      --   mappings = {
+      --     -- Use a table to apply multiple mappings
+      --     expand = {"<CR>", "<2-LeftMouse>"},
+      --     open = "o",
+      --     remove = "d",
+      --     edit = "e",
+      --     repl = "r",
+      --     toggle = "t"
+      --   },
+      --   expand_lines = vim.fn.has("nvim-0.7") == 1,
+      --   layouts = {
+      --     { -- 
+      --       open_on_start = true,
+      --       elements = {
+      --         { --
+      --           id = "scopes",
+      --           size = 0.25
+      --         },
+      --         "breakpoints",
+      --         "stacks",
+      --         "watches"
+      --       },
+      --       width = 40,
+      --       position = "left"
+      --     },
+      --     {
+      --       elements = { --
+      --         elements = {"repl", "console"}
+      --       },
+      --       size = 0.25,
+      --       position = "bottom"
+      --     }
+      --   },
+      --   controls = {
+      --     -- Requires Neovim nightly (or 0.8 when released)
+      --     enabled = true,
+      --     -- Display controls in this element
+      --     element = "repl",
+      --     icons = {pause = "", play = "", step_into = "", step_over = "", step_out = "", step_back = "", run_last = "↻", terminate = "□"}
+      --   },
+      --   floating = {
+      --     max_height = nil, -- These can be integers or a float between 0 and 1.
+      --     max_width = nil, -- Floats will be treated as percentage of your screen.
+      --     border = "single", -- Border style. Can be "single", "double" or "rounded"
+      --     mappings = {close = {"q", "<Esc>"}}
+      --   },
+      --   windows = {indent = 1},
+      --   render = {
+      --     max_type_length = nil, -- Can be integer or nil.
+      --     max_value_lines = 100 -- Can be integer or nil.
+      --   }
+      -- })
     end
   }
   use {"leoluz/nvim-dap-go", requires = {"mfussenegger/nvim-dap"}, run = "go install github.com/go-delve/delve/cmd/dlv@latest", config = function() require("dap-go").setup() end}

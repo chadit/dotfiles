@@ -3,7 +3,7 @@
 # Go Setup
 func ()
 {
-    local INSTALLVER=1.17.3
+    local INSTALLVER=1.20.1
     local SCRIPTUSER=${SUDO_USER}
     local FILETAR="go${INSTALLVER}.linux-amd64.tar.gz"
     local UNTARFOLDERNAME="go"

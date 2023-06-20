@@ -40,13 +40,7 @@ init_rust() {
 }
 
 init_golang() {
-  # if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   export GOPATH=$HOME/Projects
-  # elif [[ "$OSTYPE" == "darwin"* ]]; then
-  # Mac OSX
-  #export GOPATH=$HOME/Projects
-  # fi
-
   if [ -d /usr/lib64/golang/ ]; then
     export GOROOT="/usr/lib64/golang"
   fi
@@ -59,18 +53,24 @@ init_golang() {
   GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
   export GO111MODULE=on
   export GOBIN=$GOPATH/bin
-  #export GO111MODULE=auto
   pathmunge $GOROOT
   pathmunge $GOPATH
   pathmunge $GOROOT/bin
   pathmunge $GOPATH/bin
 
   echo $(go version)
-  # fi
 }
 
 list_golang() {
   find /usr/lib64/ -maxdepth 1 -type d -name 'go*' | sort
+}
+
+init_java_sdk() {
+  if test -f "$HOME/.sdkman/bin/sdkman-init.sh"; then
+    # curl -s "https://get.sdkman.io" | bash
+    # shellcheck source=/dev/null # to ignore the error BASH Language Server
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+  fi
 }
 
 set_java_home() {
@@ -85,12 +85,23 @@ set_java_home() {
     export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
     pathmunge $JAVA_HOME/bin
   fi
-}
 
-set_flugger_bin() {
-  if test -d "$HOME/Development/flutter/bin"; then
-    echo "flutter bin found"
-    pathmunge $HOME/Development/flutter/bin
+  if test -d "/usr/lib/jvm/java-17-openjdk-amd64"; then
+    # echo "test"
+    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    pathmunge $JAVA_HOME/bin
+  fi
+
+  if test -d "/usr/lib/jvm/java-18-openjdk-amd64"; then
+    # echo "test"
+    export JAVA_HOME=/usr/lib/jvm/java-18-openjdk-amd64
+    pathmunge $JAVA_HOME/bin
+  fi
+
+  if test -d "/usr/lib/jvm/java-19-openjdk-amd64"; then
+    # echo "test"
+    export JAVA_HOME=/usr/lib/jvm/java-19-openjdk-amd64
+    pathmunge $JAVA_HOME/bin
   fi
 }
 
@@ -115,11 +126,20 @@ set_lua_bin() {
   if test -d "$HOME/.luarocks/lib/luarocks/rocks-5.3"; then
     echo "lua rocks 5.3 bin found"
     pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3
+
+    if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin" ]; then
+      pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin
+    fi
   fi
 
-  # lua
-  # pathmunge "$HOME/luarocks-3.3.1/lua_modules/bin"
-  # pathmunge "$HOME/.luarocks/lib/luarocks/rocks-5.3"
+  if test -d "$HOME/.luarocks/lib/luarocks/rocks-5.4"; then
+    echo "lua rocks 5.4 bin found"
+    pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.4
+
+    if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.4/luaformatter/scm-1/bin" ]; then
+      pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.4/luaformatter/scm-1/bin
+    fi
+  fi
 
 }
 
@@ -168,6 +188,10 @@ remove_sync_conflicts() {
 
 }
 
+update_ubuntu() {
+  sudo apt update && sudo apt upgrade && sudo apt dist-upgrade && sudo apt autoremove && sudo apt autoclean
+}
+
 update_os() {
   local CURRENTDIR=$(pwd)
 
@@ -182,10 +206,25 @@ update_os() {
   sudo npm install --location=global n
   sudo n latest
 
+  #sudo snap refresh
+  #sudo snap refresh snap-store
+  sudo flatpak update
+
   #go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
-  cd $HOME/Projects/src/github.com/chadit/Environment/workstation
-  ansible-playbook playbook.yml
+  # cd $HOME/Projects/src/github.com/chadit/Environment/workstation
+  # ansible-playbook playbook.yml
+  #cd $HOME/Projects/src/github.com/chadit/Environment
+  #make run-workstation
+
+  sudo pacman -Syyu --noconfirm
+
+  $HOME/Projects/src/github.com/chadit/dotfiles/install/vscode.sh
+
+  install_kubectl
+
+  # sdkman.io TODO move to java maintain script
+  sdk selfupdate
 
   cd $CURRENTDIR
 }

@@ -3,8 +3,8 @@
 local nvimtree_mappings = require("plugins.configs.nvimtree").keymaps
 local package_info = require("plugins.package-info").keymaps
 local telescope_mappings = require("plugins.telescope").keymaps
-local trouble_mappings = require("plugins.trouble").keymaps
-local ts_lsp_mappings = require("plugins.lsp-ts-utils").keymaps
+-- local trouble_mappings = require("plugins.trouble").keymaps
+-- local ts_lsp_mappings = require("plugins.lsp-ts-utils").keymaps
 
 local extend_table = vim.tbl_deep_extend
 local has_notify, notify = pcall(require, "notify")

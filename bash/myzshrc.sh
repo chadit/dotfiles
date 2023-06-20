@@ -1,5 +1,4 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # loading dependancies if not exist
 if test -d "$HOME/.oh-my-zsh"; then
@@ -26,7 +25,7 @@ ZSH_THEME="robbyrussell"
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=5000
+HISTSIZE=10000
 SAVEHIST=1000
 ##bindkey -e
 # End of lines configured by zsh-newuser-install
@@ -69,8 +68,15 @@ fi
 
 # hoping this removes the history on reload
 unsetopt share_history
+
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+
 ##setopt completealiases
-##setopt HIST_IGNORE_SPACE
 ##setopt INC_APPEND_HISTORY
 ##setopt EXTENDED_HISTORY
 ##setopt CORRECT_ALL
@@ -172,14 +178,11 @@ if [ -d "$HOME/.rbenv/bin" ]; then
   fi
 fi
 
-if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin" ]; then
-  pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin
-fi
-
 # initalize helpers and variables
 init_golang
+init_java_sdk
 set_java_home
-set_flugger_bin
+set_flutter_bin
 set_dart_bin
 set_lua_bin
 set_nvm
@@ -225,9 +228,34 @@ pathmunge $HOME/.local/bin
 
 pathmunge $HOME/.local/share/nvim/site/pack/packer/start
 
-# Set Vim as default editor
-export VISUAL=vim
-export EDITOR="$VISUAL"
+#
+# Editors
+#
+
+if [[ -z "$EDITOR" ]]; then
+  export EDITOR='nano'
+fi
+if [[ -z "$VISUAL" ]]; then
+  export VISUAL='nano'
+fi
+if [[ -z "$PAGER" ]]; then
+  export PAGER='less'
+fi
+
+#
+# Language
+#
+
+if [[ -z "$LANG" ]]; then
+  export LANG='en_US.UTF-8'
+fi
+
+#
+# Paths
+#
+
+# Ensure path arrays do not contain duplicates.
+typeset -gU cdpath fpath mailpath path
 
 # Ruby Gem
 mkdir -p $HOME/gems
@@ -281,8 +309,8 @@ fi
 # if test -f "$HOME/.ssh/id_cfa_sso"; then
 #   chmod 600 ~/.ssh/id_cfa_sso
 #   chmod 644 ~/.ssh/id_cfa_sso.pub
-#   ssh-add -K ~/.ssh/id_cfa_sso
-#   #eval $(keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso)
+#   ssh-add -K ~/.ssh/id_cfa_sso 2>/dev/null
+# #   #eval $(keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso)
 # fi
 
 # if test -f "$HOME/.ssh/id_ed25519"; then
@@ -305,6 +333,9 @@ if test -f "$HOME/.ssh/id_gitlab_ed25519"; then
   ssh-add ~/.ssh/id_gitlab_ed25519
   #eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519)
 fi
+
+ssh-add ~/.ssh/*rsa 2>/dev/null
+ssh-add ~/.ssh/*ed25519 2>/dev/null
 
 #cd $HOME
 
