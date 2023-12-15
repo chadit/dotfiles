@@ -7,12 +7,6 @@ else
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
-if test -d "$HOME/.nvm"; then
-else
-  echo "nvm not found, fetching"
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-fi
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -27,24 +21,15 @@ ZSH_THEME="robbyrussell"
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=1000
-##bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-##zstyle :compinstall filename '$HOME/.zshrc'
-
-##autoload -Uz compinit promptinit
-##compinit
-##promptinit
-# End of lines added by compinstall
 
 fpath=(~/.zsh/completion $fpath)
 
-echo "g-welcome $(whoami) - Loading My zsh Scripts"
+echo "-- welcome $(whoami) - Loading zsh --"
 
 # Set GPG
 export GPG_TTY=$(tty)
 
-if [[ $(uname) == "Darwin" ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
   alias gpg='gpg'
 else
   alias gpg='gpg2'
@@ -53,18 +38,28 @@ fi
 ## set git cache to store password for ssh
 git config --global credential.helper 'cache --timeout=9999999999999999999'
 
+
 # Load Helpers
-FILE=$HOME/Projects/src/github.com/chadit/dotfiles/bash/helpers
-if [ -d "$FILE" ]; then
-  for f in $FILE/*.sh; do
-    #  echo -n ".."
-    # echo $f
-    . $f
-  done
+# Function to load .sh files from given directories
+local function load_sh_files() {
+    for dir in "$@"; do
+        if [ -d "$dir" ]; then
+            for f in "$dir"/*.sh; do
+                . "$f"
+            done
+        fi
+    done
+}
 
-fi
+# Directories to load .sh files from
+directories=(
+    "$HELPER_DOTFILES_HOME/helpers"
+    "$HELPER_DOTFILES_HOME/bash/helpers"
+    "$HOME/Projects/helpers/mydotfiles/bash"
+)
 
-#echo -n "..........................."
+# Load .sh files from the specified directories
+load_sh_files "${directories[@]}"
 
 # hoping this removes the history on reload
 unsetopt share_history
@@ -76,45 +71,16 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
 
-##setopt completealiases
-##setopt INC_APPEND_HISTORY
-##setopt EXTENDED_HISTORY
-##setopt CORRECT_ALL
-##setopt SH_WORD_SPLIT
-##setopt IGNORE_EOF
-##setopt NO_BEEP
-##setopt extended_glob
-##setopt correct
-##setopt MENUCOMPLETE
-##setopt nohup
-##setopt ZLE
-##setopt MULTIBYTE
-##setopt NUMERIC_GLOB_SORT
-##setopt APPEND_HISTORY
-##setopt HIST_REDUCE_BLANKS
-
-##bindkey "^[[3~" delete-char
-##bindkey "^[[H"  beginning-of-line
-##bindkey "^[[F"  end-of-line
-
 if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]]; then
-  # source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
   # zsh-syntax-highlighting
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-  # if test -f "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"; then
-  #   source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  # fi
 fi
 
 if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]]; then
-  # source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 else
   # zsh-autosuggestions
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  #if test -f "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"; then
-  #  source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-  #fi
 fi
 
 # Which plugins would you like to load?
@@ -139,23 +105,11 @@ source <(kubectl completion zsh)
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
 
-# ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[cyan]%}"
-##ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[red]%}%{≡%G%} "
-##ZSH_THEME_GIT_PROMPT_CHANGED=" %{$fg[yellow]%}%{✚%G%} "
-
-##GIT_PROMPT_EXECUTABLE="haskell"
-# Set the prompt.
-#PROMPT='%n@%M%~$(RPROMPT) '
-#PROMPT='%B%m%~%b$(git_super_status) %# '
-# ---PROMPT='%B%m%~%b%# '
-
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}?"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
-
-#PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
 if [ -d "$HOME/.goenv/bin" ]; then
   pathmunge $HOME/.goenv/bin
@@ -179,9 +133,8 @@ if [ -d "$HOME/.rbenv/bin" ]; then
 fi
 
 # initalize helpers and variables
-init_golang
-init_java_sdk
-set_java_home
+go_init
+java_setup
 set_flutter_bin
 set_dart_bin
 set_lua_bin
@@ -196,19 +149,15 @@ pathmunge $HOME/.yarn/bin
 # add pip location to path
 pathmunge $HOME/.local.bin
 
-#python
-if [ -d "$HOME/Library/Python/3.7/bin" ]; then
-  pathmunge $HOME/Library/Python/3.7/bin
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Locate the highest Python version in the Library and add it to the PATH
+  highest_python_bin=$(find $HOME/Library/Python -type d -name 'bin' | sort -V | tail -1)
+  if [ -d "$highest_python_bin" ]; then
+    echo "Python $highest_python_bin bin found"
+    pathmunge "$highest_python_bin"
+  fi
 fi
 
-if [ -d "$HOME/Library/Python/3.8/bin" ]; then
-  pathmunge $HOME/Library/Python/3.8/bin
-fi
-
-if [ -d "$HOME/Library/Python/3.9/bin" ]; then
-  echo "Python 3.9 bin found"
-  pathmunge $HOME/Library/Python/3.9/bin
-fi
 
 #dotnet core
 # installed via https://docs.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
@@ -339,27 +288,15 @@ ssh-add ~/.ssh/*ed25519 2>/dev/null
 
 #cd $HOME
 
-#if [ ! -d $BASHPRIVATE ]; then
-#    echo "private repo not set"
-#fi
-
-# Load scripts from private repo, $BASHPRIVATE is a private Variable set in /etc/profile
-#for f in $BASHPRIVATE/*.sh; do
-#  echo -n ".."
-# echo $f
-# . $f
-#done
-
-#echo ""
 
 # start TMUX
 #tmux_default
 
 # Add to .zshrc
 # Source global definitions
-# if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh ]; then
+# if [ -f $HELPER_DOTFILES_HOME/zsh/myzshrc.sh ]; then
 #    echo "Loading My Scripts"
-#    . $HOME/Projects/src/github.com/chadit/dotfiles/bash/myzshrc.sh
+#    . $HELPER_DOTFILES_HOME/zsh/myzshrc.sh
 # fi
 
 #echo "---<"
@@ -381,3 +318,5 @@ else
 
   RPROMPT=""
 fi
+
+echo "-------------------------------------"

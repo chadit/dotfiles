@@ -1,9 +1,9 @@
-git_cleanup() {
+function git_cleanup() {
 	go clean -x
 	git prune && git gc --aggressive
 }
 
-git_prune() {
+function git_prune() {
 	local CURRENTDIR=$(pwd)
 	local BASEDIR="$HOME/Projects/src"
 	# if [ ! -d $BASEDIR ]; then
@@ -32,67 +32,19 @@ git_prune() {
 	cd $CURRENTDIR
 }
 
-git_pull() {
+function git_pull() {
 	git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
 	git fetch --all && git pull --all && git prune && git gc --aggressive
 
 	#git fetch --all && git pull --all && git prune && git gc --aggressive
 }
 
-branch_cleanup() {
+function git_branch_cleanup() {
 	git fetch -p && LANG=c git branch -vv | awk '/: gone]/&&!/^*/{print $1}' | xargs git branch -d
 }
 
-git_remove_non_main_branch() {
-	git branch | grep -v "qa" | grep -v "prod" | grep -v "develop" | grep -v "staging" | grep -v "master" | grep -v "main" | xargs git branch -D
-}
-
-git_refresh_upstream() {
-	git fetch upstream
-	git checkout main
-	git merge upstream/main
-	git push
-}
-
-#diff two files with vim
-#vim -d <file1> <file2>
-
-#1. Pull latest on develop
-#2. checkout feature branch
-#3. git rebase -i origin/develop
-#4. view list, reorder if needed (:wq to exit)
-#5. resolve conflicts and commit
-#6. repeat till none are shown
-
-#reset a single file
-## git checkout dbe4cca438a372c0a0685d85b524e6d64094187d -- README.md
-
-# reset a single file from origin/develop
-## git checkout origin/develop -- fileName
-## git checkout upstream/develop -- README.md
-
-branch_rebase() {
-	name=$1
-	echo "rebasing branch ($name)"
-
-	if [ "$(git branch --list develop)" ]; then
-		git checkout develop
-	else
-		git checkout main
-	fi
-
-	git pull
-	git checkout $name
-
-	if [ "$(git branch --list develop)" ]; then
-		git rebase -i origin/develop
-	else
-		git rebase -i origin/main
-	fi
-}
-
 #Create a new branch git and github
-branch_create() {
+function git_branch_create() {
 	name=$1
 	echo "creating a new branch ($name) for git"
 	git pull
@@ -103,18 +55,18 @@ branch_create() {
 }
 
 # Reset a branch with Origin
-branch_reset() {
+function git_branch_reset() {
 	git fetch --prune
 	git reset --hard @{upstream}
 	git clean -x -d -f
 	#git prune && git gc --aggressive
 }
 
-branch_prune() {
+function git_branch_prune() {
 	git prune && git gc --aggressive
 }
 
-branch_delete() {
+function git_branch_delete() {
 	name=$1
 	echo "remove branch $name"
 	if [ "$(git branch --list develop)" ]; then
@@ -131,7 +83,7 @@ branch_delete() {
 	git branch -D $name
 }
 
-git_merge_no_commit() {
+function git_merge_no_commit() {
 	git add -A
 	git commit --amend
 
@@ -141,7 +93,7 @@ git_merge_no_commit() {
 	#that will update the last commit
 }
 
-git_update_folder() {
+function git_update_folder() {
 	local CURRENTDIR=$(pwd)
 	local FOLDER=$1
 	echo $FOLDER
@@ -160,4 +112,25 @@ git_update_folder() {
 		cd $FOLDER
 	done
 	cd $CURRENTDIR
+}
+
+function git_update_dependancy_repos() {
+  # List of Git repositories to update
+
+  # tries to get the logged in user, if multiple users are logged in, it will get the first one.
+  local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+
+  REPOS=(
+    "/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    "/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+  )
+  
+  # Loop through all repositories and update them
+  for repo in "${REPOS[@]}"; do
+    if [ -d "$repo" ]; then
+      echo "Updating repository: $repo"
+      git -C "$repo" pull
+		fi
+  done
+
 }

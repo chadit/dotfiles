@@ -30,6 +30,13 @@ which_shell() {
   fi
 }
 
+# Function to extract version from a path
+extract_version_from_path() {
+    local path="$1"
+    local version=${path##*-}  # Extracts the substring after the last '-'
+    echo $version
+}
+
 init_rust() {
   # Cargo for Rust
   if [ -d $HOME/.cargo/bin ]; then
@@ -39,71 +46,7 @@ init_rust() {
   fi
 }
 
-init_golang() {
-  export GOPATH=$HOME/Projects
-  if [ -d /usr/lib64/golang/ ]; then
-    export GOROOT="/usr/lib64/golang"
-  fi
 
-  if [ -d /usr/local/go ]; then
-    export GOROOT="/usr/local/go"
-  fi
-
-  #export GOCACHE=off <-- required on by default as of 1.12
-  GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
-  export GO111MODULE=on
-  export GOBIN=$GOPATH/bin
-  pathmunge $GOROOT
-  pathmunge $GOPATH
-  pathmunge $GOROOT/bin
-  pathmunge $GOPATH/bin
-
-  echo $(go version)
-}
-
-list_golang() {
-  find /usr/lib64/ -maxdepth 1 -type d -name 'go*' | sort
-}
-
-init_java_sdk() {
-  if test -f "$HOME/.sdkman/bin/sdkman-init.sh"; then
-    # curl -s "https://get.sdkman.io" | bash
-    # shellcheck source=/dev/null # to ignore the error BASH Language Server
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-  fi
-}
-
-set_java_home() {
-  if test -f "/usr/libexec/java_home"; then
-    # echo "test"
-    export JAVA_HOME=$(/usr/libexec/java_home)
-    pathmunge $JAVA_HOME/bin
-  fi
-
-  if test -d "/usr/lib/jvm/java-16-openjdk-amd64"; then
-    # echo "test"
-    export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
-    pathmunge $JAVA_HOME/bin
-  fi
-
-  if test -d "/usr/lib/jvm/java-17-openjdk-amd64"; then
-    # echo "test"
-    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-    pathmunge $JAVA_HOME/bin
-  fi
-
-  if test -d "/usr/lib/jvm/java-18-openjdk-amd64"; then
-    # echo "test"
-    export JAVA_HOME=/usr/lib/jvm/java-18-openjdk-amd64
-    pathmunge $JAVA_HOME/bin
-  fi
-
-  if test -d "/usr/lib/jvm/java-19-openjdk-amd64"; then
-    # echo "test"
-    export JAVA_HOME=/usr/lib/jvm/java-19-openjdk-amd64
-    pathmunge $JAVA_HOME/bin
-  fi
-}
 
 set_dart_bin() {
   if test -d "$HOME/.pub-cache/bin"; then
@@ -118,37 +61,29 @@ set_lua_bin() {
     . ~/.luaver/luaver
   fi
 
-  if test -d "$HOME/luarocks-3.3.1/lua_modules/bin"; then
-    echo "lua rocks 3.3.1 bin found"
-    pathmunge $HOME/luarocks-3.3.1/lua_modules/bin
+  # find the version of lua rocks and use that.
+  zsh_lua_home=$(find $HOME/.luarocks/lib/luarocks -type d -name 'rocks-*' | sort -V | tail -1)
+  if [ -d "$zsh_lua_home" ]; then
+    zsh_luarocks_version=$(extract_version_from_path $zsh_lua_home)
+    echo "LuaRocks version: $zsh_luarocks_version"
+
+    # Recursively find all 'bin' folders in the directory
+    find "$zsh_lua_home" -type d -name 'bin' | while read -r bin; do
+      pathmunge "$bin"
+    done
   fi
-
-  if test -d "$HOME/.luarocks/lib/luarocks/rocks-5.3"; then
-    echo "lua rocks 5.3 bin found"
-    pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3
-
-    if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin" ]; then
-      pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin
-    fi
-  fi
-
-  if test -d "$HOME/.luarocks/lib/luarocks/rocks-5.4"; then
-    echo "lua rocks 5.4 bin found"
-    pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.4
-
-    if [ -d "$HOME/.luarocks/lib/luarocks/rocks-5.4/luaformatter/scm-1/bin" ]; then
-      pathmunge $HOME/.luarocks/lib/luarocks/rocks-5.4/luaformatter/scm-1/bin
-    fi
-  fi
-
 }
 
 set_nvm() {
   if test -d "$HOME/.nvm"; then
-    echo "nvm found"
     export NVM_DIR=$HOME/.nvm
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+    echo "nvm $(nvm --version)"
+  else
+    echo "nvm not found, installing, restart shell when done"
+    # using githubusercontent to always get the latest from master
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
   fi
 }
 
@@ -163,65 +98,39 @@ reset_touchpad() {
   sudo modprobe psmouse
 }
 
-# removes sync conflicts that can happen from syncthing or pcloud
-remove_sync_conflicts() {
-  if [[ -d /mnt/c/Projects ]]; then
-    echo "/mnt/c/Projects"
-    find /mnt/c/Projects -name "*.sync-conflict*"
-    find /mnt/c/Projects -name "*.sync-conflict*" -exec rm -rf {} \;
 
-    find /mnt/c/Projects -name "*.syncthing*"
-    find /mnt/c/Projects -name "*.syncthing*" -exec rm -rf {} \;
-
-    find /mnt/c/Projects -name "*conflicted*"
-    find /mnt/c/Projects -name "*conflicted*" -exec rm -rf {} \;
-  fi
-
-  find $HOME/Projects -name "*.sync-conflict*"
-  find $HOME/Projects -name "*.sync-conflict*" -exec rm -rf {} \;
-  #find $HOME/.vim -name "*.sync-conflict*"
-  #find $HOME/.vim -name "*.sync-conflict*" -exec rm -rf {} \;
-  find $HOME/Projects -name "*.syncthing*"
-  find $HOME/Projects -name "*.syncthing*" -exec rm -rf {} \;
-  find $HOME/Projects -name "*conflicted*"
-  find $HOME/Projects -name "*conflicted*" -exec rm -rf {} \;
-
-}
 
 update_ubuntu() {
   sudo apt update && sudo apt upgrade && sudo apt dist-upgrade && sudo apt autoremove && sudo apt autoclean
 }
+
+
 
 update_os() {
   local CURRENTDIR=$(pwd)
 
   update_repos
 
-  # cleanup docker
-  echo "docker cleanup"
-  docker_cleanup_volumes
+
+
+
+  echo "update nvm"
+  # using githubusercontent to always get the latest from master
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
   echo "update npm"
+  node_update_npm_latest 
   sudo npm cache clean -f
-  sudo npm install --location=global n
+  # sudo npm install --location=global n
   sudo n latest
 
-  #sudo snap refresh
-  #sudo snap refresh snap-store
-  sudo flatpak update
+  upgrade_flutter
 
-  #go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+  
 
-  # cd $HOME/Projects/src/github.com/chadit/Environment/workstation
-  # ansible-playbook playbook.yml
-  #cd $HOME/Projects/src/github.com/chadit/Environment
-  #make run-workstation
+  
 
-  sudo pacman -Syyu --noconfirm
-
-  $HOME/Projects/src/github.com/chadit/dotfiles/install/vscode.sh
-
-  install_kubectl
+  $HELPER_DOTFILES_HOME/install/vscode.sh
 
   # sdkman.io TODO move to java maintain script
   sdk selfupdate
@@ -248,76 +157,8 @@ update_alacritty() {
   cd $CURRENTDIR
 }
 
-update_system_symbolic() {
-  ln -sf $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig
-  sudo ln -sf $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig
 
-  mkdir -p $HOME/.config/alacritty
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.config/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
-
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh $HOME/.zsh
-
-  if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh/.zsh ]; then
-    sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.zsh/.zsh
-  fi
-
-  #if [ -f $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig ]; then
-  #  sudo rm $HOME/Projects/helpers/mydotfiles/bash/Git/.gitconfig
-  #fi
-
-  # main zshrc file
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.zshrc $HOME/.zshrc
-
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim $HOME/.vim
-
-  # if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim ]; then
-  #   sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.vim/.vim
-  # fi
-
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vimrc $HOME/.vimrc
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local $HOME/.vimrc.local
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.vimrc.local.bundles $HOME/.vimrc.local.bundles
-
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux $HOME/.tmux
-
-  if [ -f $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux/.tmux ]; then
-    sudo rm $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux/.tmux
-  fi
-
-  ln -sf $HOME/Projects/src/github.com/chadit/dotfiles/home/.tmux.conf $HOME/.tmux.conf
-}
-
-## using vim plugin addon handler
-setup_youcompleteme() {
-  local CURRENTDIR=$(pwd)
-
-  if [ -d "$HOME/.vim/plugged/YouCompleteMe" ]; then
-    cd $HOME/.vim/plugged/YouCompleteMe
-    git reset --hard
-    git pull && git prune && git gc --aggressive
-    python3 install.py --all
-  fi
-
-  if [ -d "$HOME/.config/nvim/plugged/YouCompleteMe" ]; then
-    cd $HOME/.config/nvim/plugged/YouCompleteMe
-    git reset --hard
-    git pull && git prune && git gc --aggressive
-    python3 install.py --all
-  fi
-  #cd ~/.config/nvim/plugged/YouCompleteMe
-
-  cd $CURRENTDIR
-}
-
-update_system_exec() {
-  find $HOME/Projects/helpers -type f -name "*.sh" -exec sudo chmod +x {} \;
-  find $HOME/Projects/helpers -type f -name "*.zsh" -exec sudo chmod +x {} \;
-  find $HOME/Projects/bin -type f -exec sudo chmod +x {} \;
-}
-
-set_shutDown() {
-  sudo shutdown -P 01:00
-}
+# ln -sf $HOME/Projects/src/github.com/maxgallup/tailscale-status/tailscale-status@maxgallup.github.com $HOME/.local/share/gnome-shell/extensions/tailscale-status@maxgallup.github.com
 
 fetch_protoc() {
   local CURRENTDIR=$(pwd)
@@ -330,22 +171,6 @@ fetch_protoc() {
   unzip protoc-$PROTOC_VERSION-linux-x86_64.zip -d $HOME/.local
 
   cd $CURRENTDIR
-}
-
-generate_lua_table() {
-  local tableName=$1
-  local filePath=$2
-  local fileNames=("$3")
-
-  i=1
-  echo "    $tableName = {" >>$filePath
-
-  for eachfile in $fileNames; do
-    file_name="${eachfile##*/}"
-    echo "        [$i] = \"$file_name\"," >>$filePath
-    ((i++))
-  done
-  echo "    }," >>$filePath
 }
 
 # attach to an existing tmux sessions, if does not exist, cleaning create one
@@ -366,15 +191,3 @@ tmux_default() {
     fi
   fi
 }
-
-# Load private functions
-FILE=$HOME/Projects/helpers/mydotfiles/bash
-if [ -d "$FILE" ]; then
-  for f in $FILE/*.sh; do
-    # echo -n ".."
-    # echo $f
-    . $f
-  done
-
-  # echo -n "..........................."
-fi
