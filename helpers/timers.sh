@@ -8,6 +8,8 @@ function timer_git_update() {
 
 # Function to create the service file
 create_service_file() {
+    local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+
     sudo bash -c "cat <<EOF > '$SERVICE_PATH'
 [Unit]
 Description=Git Pull Service
@@ -15,8 +17,8 @@ Description=Git Pull Service
 [Service]
 Type=oneshot
 EnvironmentFile=/etc/environment
-User=chadit
-Group=chadit
+User=$logged_in_user
+Group=$logged_in_user
 ExecStart=/bin/zsh $HELPER_DOTFILES_HOME/helpers/timers/git-timer.sh
 EOF"
 }
@@ -64,6 +66,8 @@ function timer_system_cleanup() {
 
 # Function to create the service file
 create_service_file() {
+    local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+
     sudo bash -c "cat <<EOF > '$SERVICE_PATH'
 [Unit]
 Description=system cleanup
@@ -71,8 +75,8 @@ Description=system cleanup
 [Service]
 Type=oneshot
 EnvironmentFile=/etc/environment
-User=chadit
-Group=chadit
+User=$logged_in_user
+Group=$logged_in_user
 ExecStart=/bin/zsh $HELPER_DOTFILES_HOME/helpers/timers/system-timer.sh
 EOF"
 }
