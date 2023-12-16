@@ -51,12 +51,14 @@ function go_update_linux(){
 
         # setup folders
         if [ ! -f ${INSTALLPATH} ]; then
+            local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+
             sudo mkdir -p ${INSTALLPATH}
             # make folders to build windows exe's on linux
             sudo mkdir -p ${INSTALLPATH}/pkg/windows_amd64
             sudo mkdir -p ${INSTALLPATH}/pkg/windows_amd64/runtime
             sudo mkdir -p ${INSTALLPATH}/pkg/windows_amd64/runtime/internal/
-            sudo chown -R chadit ${INSTALLPATH}/pkg/windows_amd64
+            sudo chown -R ${logged_in_user} ${INSTALLPATH}/pkg/windows_amd64
         fi
 
         
@@ -65,7 +67,7 @@ function go_update_linux(){
     fi
 }
 
-function go_init() {
+function go_setup() {
     export GOPATH=$HOME/Projects
     if [ -d /usr/lib64/golang/ ]; then
         export GOROOT="/usr/lib64/golang"
@@ -75,16 +77,30 @@ function go_init() {
         export GOROOT="/usr/local/go"
     fi
 
-    #export GOCACHE=off <-- required on by default as of 1.12
-    GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
-    export GO111MODULE=on
-    export GOBIN=$GOPATH/bin
-    pathmunge $GOROOT
-    pathmunge $GOPATH
-    pathmunge $GOROOT/bin
-    pathmunge $GOPATH/bin
+    # if https://github.com/go-nv/goenv is installed, init it.
+    # in go programming this is not really needed unless there is a really good reason to use a different version of go.
+    # example: cloud go runner that is not the latest version of go.
+    if [ -d "$HOME/.goenv/bin" ]; then
+        pathmunge $HOME/.goenv/bin
+        export GOENV_ROOT="$HOME/.goenv"
+        export PATH="$GOENV_ROOT/bin:$PATH"
+        eval "$(goenv init -)"
+    fi
 
-    echo $(go version)
+    if [ -z "$GOROOT" ]; then
+        echo "GOROOT is not set."
+    else
+        #export GOCACHE=off <-- required on by default as of 1.12
+        GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
+        export GO111MODULE=on
+        export GOBIN=$GOPATH/bin
+        pathmunge $GOROOT
+        pathmunge $GOPATH
+        pathmunge $GOROOT/bin
+        pathmunge $GOPATH/bin
+
+        echo $(go version)
+    fi
 }
 
 go_tools_install() {
@@ -111,4 +127,8 @@ go_tools_install() {
     for tool in "${tools[@]}"; do
         go install "${tool}@latest"
     done
+}
+
+go_clean_mod() {
+    go clean -modcache
 }

@@ -74,12 +74,14 @@ setopt HIST_SAVE_NO_DUPS
 if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]]; then
 else
   # zsh-syntax-highlighting
+  echo "zsh-syntax-highlighting not found, fetching"
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
 if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]]; then
 else
   # zsh-autosuggestions
+  echo "zsh-autosuggestions not found, fetching"
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
@@ -111,13 +113,6 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}?"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
 
-if [ -d "$HOME/.goenv/bin" ]; then
-  pathmunge $HOME/.goenv/bin
-  export GOENV_ROOT="$HOME/.goenv"
-  export PATH="$GOENV_ROOT/bin:$PATH"
-  eval "$(goenv init -)"
-fi
-
 if [ -d "$HOME/.rbenv/shims" ]; then
   pathmunge $HOME/.rbenv/shims
 fi
@@ -133,21 +128,15 @@ if [ -d "$HOME/.rbenv/bin" ]; then
 fi
 
 # initalize helpers and variables
-go_init
+go_setup
 java_setup
-set_flutter_bin
-set_dart_bin
+node_setup
+flutter_setup
+dart_setup
+rust_setup
+
 set_lua_bin
-set_nvm
-init_rust
 
-#export GITHUB_TOKEN=ad13cc0ddbd2a33a8a6e9d1c64c20261c0c3fd31
-
-# added bin for yarn npm applications
-pathmunge $HOME/.yarn/bin
-
-# add pip location to path
-pathmunge $HOME/.local.bin
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Locate the highest Python version in the Library and add it to the PATH
@@ -165,17 +154,21 @@ if [ -d "$HOME/.dotnet" ]; then
   pathmunge $HOME/.dotnet
 fi
 
-#pathmunge $HOME/.local/bin
+if [ -d "$HOME/.zsh/plugins/zsh-git-prompt/src/.bin" ]; then
+  pathmunge $HOME/.zsh/plugins/zsh-git-prompt/src/.bin
+fi
 
-pathmunge $HOME/.zsh/plugins/zsh-git-prompt/src/.bin
+if [ -d "/usr/local/bin" ]; then
+  pathmunge "/usr/local/bin"
+fi
 
-pathmunge "/usr/local/bin"
+if [ -d "$HOME/.local/bin" ]; then
+  pathmunge $HOME/.local/bin
+fi
 
-pathmunge $HOME/.npm-global/bin
-
-pathmunge $HOME/.local/bin
-
-pathmunge $HOME/.local/share/nvim/site/pack/packer/start
+if [ -d "$HOME/.local/share/nvim/site/pack/packer/start" ]; then
+  pathmunge $HOME/.local/share/nvim/site/pack/packer/start
+fi
 
 #
 # Editors

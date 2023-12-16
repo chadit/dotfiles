@@ -37,23 +37,11 @@ extract_version_from_path() {
     echo $version
 }
 
-init_rust() {
-  # Cargo for Rust
-  if [ -d $HOME/.cargo/bin ]; then
-    pathmunge $HOME/.cargo/bin
-    echo $(rustc -V)
-    export RUST_BACKTRACE=1
-  fi
-}
 
 
 
-set_dart_bin() {
-  if test -d "$HOME/.pub-cache/bin"; then
-    echo "dart bin found"
-    pathmunge $HOME/.pub-cache/bin
-  fi
-}
+
+
 
 set_lua_bin() {
   if test -d "$HOME/.luaver"; then
@@ -71,19 +59,6 @@ set_lua_bin() {
     find "$zsh_lua_home" -type d -name 'bin' | while read -r bin; do
       pathmunge "$bin"
     done
-  fi
-}
-
-set_nvm() {
-  if test -d "$HOME/.nvm"; then
-    export NVM_DIR=$HOME/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-    echo "nvm $(nvm --version)"
-  else
-    echo "nvm not found, installing, restart shell when done"
-    # using githubusercontent to always get the latest from master
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
   fi
 }
 
@@ -112,50 +87,12 @@ update_os() {
   update_repos
 
 
-
-
-  echo "update nvm"
-  # using githubusercontent to always get the latest from master
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-
-  echo "update npm"
-  node_update_npm_latest 
-  sudo npm cache clean -f
-  # sudo npm install --location=global n
-  sudo n latest
-
-  upgrade_flutter
-
-  
-
-  
-
   $HELPER_DOTFILES_HOME/install/vscode.sh
 
-  # sdkman.io TODO move to java maintain script
-  sdk selfupdate
-
   cd $CURRENTDIR
 }
 
-update_alacritty() {
-  local CURRENTDIR=$(pwd)
 
-  if test -d "$HOME/Projects/src/github.com/alacitty/alacritty"; then
-    echo "github.com/alacitty/alacritty"
-    cd $HOME/Projects/src/github.com/alacitty/alacritty
-    git reset --hard && git pull -f && git prune && git gc --aggressive
-
-    cargo build --release
-    infocmp alacritty
-    sudo cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH
-    sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
-    sudo desktop-file-install extra/linux/Alacritty.desktop
-    sudo update-desktop-database
-  fi
-
-  cd $CURRENTDIR
-}
 
 
 # ln -sf $HOME/Projects/src/github.com/maxgallup/tailscale-status/tailscale-status@maxgallup.github.com $HOME/.local/share/gnome-shell/extensions/tailscale-status@maxgallup.github.com

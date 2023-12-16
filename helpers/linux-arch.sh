@@ -1,6 +1,11 @@
 # linux-arch.sh : commands to help with arch linux
 
-arch_list-desktop-environment(){
+arch_list_aur_packages() {
+  # List all AUR packages
+  pacman -Qm
+}
+
+arch_list_desktop_environment(){
   # Check for desktop environment using environment variable
   if [ "$XDG_CURRENT_DESKTOP" ]; then
       echo "Desktop Environment: $XDG_CURRENT_DESKTOP"
@@ -19,7 +24,7 @@ arch_list-desktop-environment(){
   fi
 }
 
-arch_backup-packages() {
+arch_backup_packages() {
   local save_dir="$HELPER_DOTFILES_HOME/backup/arch"
   mkdir -p "$save_dir"
 
@@ -50,5 +55,20 @@ arch_update() {
   else
       # Remove orphaned packages
       sudo pacman -Rns $orphans --noconfirm
+  fi
+}
+
+arch_setup_aur() {
+  # install yay
+  if ! command -v yay &> /dev/null; then
+    local CURRENTDIR=$(pwd)
+    echo "yay not found. installing"
+    cd ~
+
+    sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+
+    cd $CURRENTDIR
+  else
+    echo "yay is installed"
   fi
 }

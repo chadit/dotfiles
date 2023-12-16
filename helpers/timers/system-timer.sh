@@ -4,4 +4,5 @@
 
 source $HELPER_DOTFILES_HOME/helpers/system.sh
 
+system_update
 system_cleanup

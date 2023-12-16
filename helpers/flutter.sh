@@ -1,4 +1,4 @@
-set_flutter_bin() {
+function flutter_setup() {
   if test -d "$HOME/development/flutter/bin"; then
     pathmunge $HOME/development/flutter/bin
 
@@ -14,11 +14,40 @@ set_flutter_bin() {
     fi
 
     echo "$version_and_channel"
+  else
+    echo "flutter not installed, run flutter_install, restart terminal after install completes"
+    flutter_install
   fi  
 }
 
-upgrade_flutter() {
+function flutter_install(){
+  local CURRENTDIR=$(pwd)
+
   if test -d "$HOME/development/flutter/bin"; then
+    echo "flutter already installed"
     flutter upgrade
+  else
+    echo "install flutter"
+    cd ~/Downloads
+
+    git clone --branch stable https://github.com/flutter/flutter.git
+
+    # # Add Flutter to your path (adjust the file according to your shell)
+    # echo 'export PATH="$PATH:/opt/flutter/bin"' >> ~/.bashrc
+    # source ~/.bashrc
+
+    # # Run Flutter doctor
+    # flutter doctor
+
+   fi
+
+    cd $CURRENTDIR
+}
+
+function flutter_upgrade() {
+  if command -v flutter >/dev/null 2>&1; then
+    flutter upgrade
+  else
+    flutter_install
   fi
 }

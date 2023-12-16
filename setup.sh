@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# this assumes the repo is already cloned to ~/Projects/src/github.com/chadit/dotfiles
+
 # Function to get the primary logged-in user
 function get_logged_in_user() {
     # Assuming the first non-root user is the primary user
@@ -47,13 +49,11 @@ function update_zshrc() {
     fi
 }
 
-
-
 # This script must be run as root
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
    exit 1
 fi
 
-#update_environment_file
+update_environment_file
 update_zshrc

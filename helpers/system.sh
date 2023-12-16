@@ -83,6 +83,24 @@ function system_cleanup() {
 # system system_update should not assume functions are available as it is also used by systemd.timers,
 # which does not load the zsh profile.
 function system_update() {
+    function system_shared_update(){
+        echo "update java sdkman"
+        source_helper "java.sh"
+        java_sdkman_upgrade_latest
+
+        echo "update node"
+        source_helper "node.sh"
+        node_update
+
+        echo "update flutter"
+        source_helper "flutter.sh"
+        flutter_upgrade
+
+        echo "update rust"
+        source_helper "rust.sh"
+        rust_update
+    }
+
     # update os
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo "Operating System: macOS"
@@ -125,17 +143,18 @@ function system_update() {
         source_helper "go.sh"
         go_update_linux
         go_tools_install
+        go_clean_mod
 
-        echo "update flutter"
+        echo "update kubernetes"
         source_helper "kubernetes.sh"
         kube_install_kubectl_linux
+
+        
 
 
     else
         echo "Operating System: Unknown"
     fi
 
-    echo "update java sdkman"
-    source_helper "java.sh"
-    java_sdkman_upgrade_latest
+    system_shared_update
 }
