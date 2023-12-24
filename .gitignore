@@ -2,3 +2,4 @@ backup
 deprecated
 **/.vim/plugged
 tags
+lazy-lock.json

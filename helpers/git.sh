@@ -6,10 +6,7 @@ function git_cleanup() {
 function git_prune() {
 	local CURRENTDIR=$(pwd)
 	local BASEDIR="$HOME/Projects/src"
-	# if [ ! -d $BASEDIR ]; then
-	#   	BASEDIR="/Users/chadengland/Projects/src"
-	# fi
-
+	
 	cd $BASEDIR
 	for i in $(find . -name ".git" | cut -c 3-); do
 		cd "$i"
@@ -19,17 +16,16 @@ function git_prune() {
 		cd $BASEDIR
 	done
 
-	#find . -name .git -type d -prune | while read line; do
-	#	echo "Processing file '$line'"
-	#	cd $line
-	#	cd ..;
-	#up 1
-	#cd ../
-	#	echo `pwd`
-	#git prune && git gc --aggressive
-	#done
-
 	cd $CURRENTDIR
+}
+
+function git_rebase() {
+	branch=$1
+	echo "rebase branch ($branch) for git"
+	git fetch origin
+	git rebase origin/$branch
+	echo "completed the rebase of the branch"
+	#git push -f
 }
 
 function git_pull() {

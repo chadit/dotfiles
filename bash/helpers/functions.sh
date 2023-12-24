@@ -30,38 +30,6 @@ which_shell() {
   fi
 }
 
-# Function to extract version from a path
-extract_version_from_path() {
-    local path="$1"
-    local version=${path##*-}  # Extracts the substring after the last '-'
-    echo $version
-}
-
-
-
-
-
-
-
-set_lua_bin() {
-  if test -d "$HOME/.luaver"; then
-    echo "luaver"
-    . ~/.luaver/luaver
-  fi
-
-  # find the version of lua rocks and use that.
-  zsh_lua_home=$(find $HOME/.luarocks/lib/luarocks -type d -name 'rocks-*' | sort -V | tail -1)
-  if [ -d "$zsh_lua_home" ]; then
-    zsh_luarocks_version=$(extract_version_from_path $zsh_lua_home)
-    echo "LuaRocks version: $zsh_luarocks_version"
-
-    # Recursively find all 'bin' folders in the directory
-    find "$zsh_lua_home" -type d -name 'bin' | while read -r bin; do
-      pathmunge "$bin"
-    done
-  fi
-}
-
 set_wsl_links() {
   ln -s /mnt/c/Projects $HOME/Projects
 
@@ -73,13 +41,9 @@ reset_touchpad() {
   sudo modprobe psmouse
 }
 
-
-
 update_ubuntu() {
   sudo apt update && sudo apt upgrade && sudo apt dist-upgrade && sudo apt autoremove && sudo apt autoclean
 }
-
-
 
 update_os() {
   local CURRENTDIR=$(pwd)

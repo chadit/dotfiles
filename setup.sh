@@ -2,15 +2,9 @@
 
 # this assumes the repo is already cloned to ~/Projects/src/github.com/chadit/dotfiles
 
-# Function to get the primary logged-in user
-function get_logged_in_user() {
-    # Assuming the first non-root user is the primary user
-    who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1
-}
-
 # Function to add or update HELPER_DOTFILES_HOME in /etc/environment
 function update_environment_file() {
-    local logged_in_user=$(get_logged_in_user)
+    local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
     # change if installed somewhere else.
     local helper_dotfiles_home="HELPER_DOTFILES_HOME=/home/${logged_in_user}/Projects/src/github.com/chadit/dotfiles/"
     echo "HELPER_DOTFILES_HOME: ${helper_dotfiles_home}"
@@ -35,7 +29,7 @@ function update_environment_file() {
 }
 
 function update_zshrc() {
-    local logged_in_user=$(get_logged_in_user)
+    local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
 
     search_line="if [ -f \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh ]; then"
 
@@ -49,6 +43,11 @@ function update_zshrc() {
     fi
 }
 
+function update_link_nvim(){
+    mkdir -p ~/.config/nvim
+    ln -sf $HELPER_DOTFILES_HOME/config/nvim $HOME/.config/nvim
+}
+
 # This script must be run as root
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
@@ -57,3 +56,4 @@ fi
 
 update_environment_file
 update_zshrc
+update_link_nvim

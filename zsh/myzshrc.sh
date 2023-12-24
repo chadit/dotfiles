@@ -134,8 +134,8 @@ node_setup
 flutter_setup
 dart_setup
 rust_setup
-
-set_lua_bin
+ssh_setup
+lua_setup
 
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -205,79 +205,6 @@ export GEM_HOME=$HOME/gems
 
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-# AWS-Okta
-# TODO: might be needed for linux
-#export AWS_OKTA_BACKEND=secret-service
-#export AWS_OKTA_BACKEND=pass
-
-export APPLE_SSH_ADD_BEHAVIOR=true
-
-echo -e "\nLoading keychain"
-eval $(ssh-agent -s)
-ssh-add
-
-if [ -d "$HOME/.ssh" ]; then
-  chmod 700 ~/.ssh
-fi
-
-if test -f "$HOME/.ssh/authorized_keys"; then
-  chmod 644 ~/.ssh/authorized_keys
-fi
-
-# keychain --clear # only if we want to rest the keys
-# keychain fun
-if test -f "$HOME/.ssh/id_rsa"; then
-  chmod 600 ~/.ssh/id_rsa
-  chmod 644 ~/.ssh/id_rsa.pub
-  ssh-add ~/.ssh/id_rsa
-  #eval $(keychain --eval --agents ssh id_rsa)
-fi
-
-if test -f "$HOME/.ssh/id_rsa_nil"; then
-  chmod 600 ~/.ssh/id_rsa_nil
-  chmod 644 ~/.ssh/id_rsa_nil.pub
-  ssh-add ~/.ssh/id_rsa_nil
-  #eval $(keychain --eval --agents ssh id_rsa_nil)
-fi
-
-# if test -f "$HOME/.ssh/ids_id_rsa"; then
-#   chmod 600 ~/.ssh/ids_id_rsa
-#   chmod 644 ~/.ssh/ids_id_rsa.pub
-#   ssh-add -K ~/.ssh/ids_id_rsa
-#   #eval $(keychain --eval --agents ssh ids_id_rsa)
-# fi
-
-# if test -f "$HOME/.ssh/id_cfa_sso"; then
-#   chmod 600 ~/.ssh/id_cfa_sso
-#   chmod 644 ~/.ssh/id_cfa_sso.pub
-#   ssh-add -K ~/.ssh/id_cfa_sso 2>/dev/null
-# #   #eval $(keychain --eval --agents ssh $HOME/.ssh/id_cfa_sso)
-# fi
-
-# if test -f "$HOME/.ssh/id_ed25519"; then
-#   chmod 600 ~/.ssh/id_ed25519
-#   chmod 644 ~/.ssh/id_ed25519.pub
-#   ssh-add -K ~/.ssh/id_ed25519
-#   #eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519)
-# fi
-
-if test -f "$HOME/.ssh/ssh_iv_ed25519"; then
-  chmod 600 ~/.ssh/ssh_iv_ed25519
-  chmod 644 ~/.ssh/ssh_iv_ed25519.pub
-  ssh-add ~/.ssh/ssh_iv_ed25519 2>/dev/null
-  #eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519)
-fi
-
-if test -f "$HOME/.ssh/id_gitlab_ed25519"; then
-  chmod 600 ~/.ssh/id_gitlab_ed25519
-  chmod 644 ~/.ssh/id_gitlab_ed25519.pub
-  ssh-add ~/.ssh/id_gitlab_ed25519
-  #eval $(keychain --eval --agents ssh $HOME/.ssh/id_ed25519)
-fi
-
-ssh-add ~/.ssh/*rsa 2>/dev/null
-ssh-add ~/.ssh/*ed25519 2>/dev/null
 
 #cd $HOME
 
