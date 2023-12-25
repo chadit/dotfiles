@@ -1,19 +1,24 @@
 -- lsp.lua
 
+-- Functional wrapper for mapping custom keybindings
+-- mode (as in Vim modes like Normal/Insert mode)
+-- lhs (the custom keybinds you need)
+-- rhs (the commands or existing keybinds to customise)
+-- opts (additional options like <silent>/<noremap>, see :h map-arguments for more info on it)
+local function map(mode, lhs, rhs, opts)
+  local options = { noremap = true }
+  if opts then
+    options = vim.tbl_extend("force", options, opts)
+  end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
+
 local show = vim.schedule_wrap(function(msg)
   local has_notify, notify = pcall(require, "plugins.notify")
   if has_notify then
     notify.notify_info(msg, "ensure-tools")
   end
 end)
-
-local events = {
-  BufEnter = "BufEnter",
-  BufRead = "BufRead",
-  UIEnter = "UIEnter",
-  InsertEnter = "InsertEnter",
-  VeryLazy = "VeryLazy",
-}
 
 -- -- https://github.com/williamboman/mason-lspconfig.nvim?tab=readme-ov-file#available-lsp-servers
 local ensure_language_servers = {
@@ -82,145 +87,168 @@ local ensure_tools = {
   "yamlfmt"
 }
 
---local servers = {
---   gopls = {
---     settings = {
---       gopls = {
---         hints = {
---           assignVariableTypes = true,
---           compositeLiteralFields = true,
---           compositeLiteralTypes = true,
---           constantValues = true,
---           functionTypeParameters = true,
---           parameterNames = true,
---           rangeVariableTypes = true,
---         },
---         semanticTokens = true,
---       },
---     },
---   },
---   html = {},
---   jsonls = {
---     settings = {
---       json = {
---         schemas = require("schemastore").json.schemas(),
---       },
---     },
---   },
---   pyright = {
---     settings = {
---       python = {
---         analysis = {
---           typeCheckingMode = "off",
---           autoSearchPaths = true,
---           useLibraryCodeForTypes = true,
---           diagnosticMode = "workspace",
---         },
---       },
---     },
---   },
---   -- pylsp = {}, -- Integration with rope for refactoring - https://github.com/python-rope/pylsp-rope
--- rust_analyzer = {
---   settings = {
---     ["rust-analyzer"] = {
---       cargo = { allFeatures = true },
---       checkOnSave = {
---         command = "cargo clippy",
---         extraArgs = { "--no-deps" },
---       },
---     },
---   },
--- },
---   lua_ls = {
---     settings = {
---       Lua = {
---         runtime = {
---           -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
---           version = "LuaJIT",
---           -- Setup your lua path
---           path = vim.split(package.path, ";"),
---         },
---         diagnostics = {
---           -- Get the language server to recognize the `vim` global
---           globals = { "vim", "describe", "it", "before_each", "after_each", "packer_plugins", "MiniTest" },
---           -- disable = { "lowercase-global", "undefined-global", "unused-local", "unused-vararg", "trailing-space" },
---         },
---         workspace = {
---           checkThirdParty = false,
---         },
---         completion = { callSnippet = "Replace" },
---         telemetry = { enable = false },
---         hint = {
---           enable = false,
---         },
---       },
---     },
---   },
---   tsserver = {
---     disable_formatting = true,
---     settings = {
---       javascript = {
---         inlayHints = {
---           includeInlayEnumMemberValueHints = true,
---           includeInlayFunctionLikeReturnTypeHints = true,
---           includeInlayFunctionParameterTypeHints = true,
---           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
---           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
---           includeInlayPropertyDeclarationTypeHints = true,
---           includeInlayVariableTypeHints = true,
---         },
---       },
---       typescript = {
---         inlayHints = {
---           includeInlayEnumMemberValueHints = true,
---           includeInlayFunctionLikeReturnTypeHints = true,
---           includeInlayFunctionParameterTypeHints = true,
---           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
---           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
---           includeInlayPropertyDeclarationTypeHints = true,
---           includeInlayVariableTypeHints = true,
---         },
---       },
---     },
---   },
---   vimls = {},
---   -- tailwindcss = {},
---   yamlls = {
---     schemastore = {
---       enable = true,
---     },
---     settings = {
---       yaml = {
---         hover = true,
---         completion = true,
---         validate = true,
---         schemas = require("schemastore").json.schemas(),
---       },
---     },
---   },
---   jdtls = {},
---   dockerls = {},
---   -- graphql = {},
---   bashls = {},
---   taplo = {},
---   -- omnisharp = {},
---   -- kotlin_language_server = {},
---   -- emmet_ls = {},
---   -- marksman = {},
---   -- angularls = {},
---   -- sqls = {
---   -- settings = {
---   --   sqls = {
---   --     connections = {
---   --       {
---   --         driver = "sqlite3",
---   --         dataSourceName = os.getenv "HOME" .. "/workspace/db/chinook.db",
---   --       },
---   --     },
---   --   },
---   -- },
---   -- },
---}
+local servers = {
+  gopls = {
+    settings = {
+      gopls = {
+        gofumpt = true,
+        codelenses = {
+          gc_details = false,
+          generate = true,
+          regenerate_cgo = true,
+          run_govulncheck = true,
+          test = true,
+          tidy = true,
+          upgrade_dependency = true,
+          vendor = true,
+        },
+        hints = {
+          assignVariableTypes = true,
+          compositeLiteralFields = true,
+          compositeLiteralTypes = true,
+          constantValues = true,
+          functionTypeParameters = true,
+          parameterNames = true,
+          rangeVariableTypes = true,
+        },
+        semanticTokens = true,
+        analyses = {
+          fieldalignment = true,
+          nilness = true,
+          unusedparams = true,
+          unusedwrite = true,
+          useany = true,
+          shadow = true,
+        },
+        usePlaceholders = true,
+        completeUnimported = true,
+        staticcheck = true,
+        directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+      },
+    },
+  },
+  --   html = {},
+  --   jsonls = {
+  --     settings = {
+  --       json = {
+  --         schemas = require("schemastore").json.schemas(),
+  --       },
+  --     },
+  --   },
+  --   pyright = {
+  --     settings = {
+  --       python = {
+  --         analysis = {
+  --           typeCheckingMode = "off",
+  --           autoSearchPaths = true,
+  --           useLibraryCodeForTypes = true,
+  --           diagnosticMode = "workspace",
+  --         },
+  --       },
+  --     },
+  --   },
+  --   -- pylsp = {}, -- Integration with rope for refactoring - https://github.com/python-rope/pylsp-rope
+  -- rust_analyzer = {
+  --   settings = {
+  --     ["rust-analyzer"] = {
+  --       cargo = { allFeatures = true },
+  --       checkOnSave = {
+  --         command = "cargo clippy",
+  --         extraArgs = { "--no-deps" },
+  --       },
+  --     },
+  --   },
+  -- },
+  lua_ls = {
+    settings = {
+      Lua = {
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = "LuaJIT",
+          -- Setup your lua path
+          path = vim.split(package.path, ";"),
+        },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = { "vim", "describe", "it", "before_each", "after_each", "packer_plugins", "MiniTest" },
+          -- disable = { "lowercase-global", "undefined-global", "unused-local", "unused-vararg", "trailing-space" },
+        },
+        workspace = {
+          checkThirdParty = false,
+        },
+        completion = { callSnippet = "Replace" },
+        telemetry = { enable = false },
+        hint = {
+          enable = false,
+        },
+      },
+    },
+  },
+  --   tsserver = {
+  --     disable_formatting = true,
+  --     settings = {
+  --       javascript = {
+  --         inlayHints = {
+  --           includeInlayEnumMemberValueHints = true,
+  --           includeInlayFunctionLikeReturnTypeHints = true,
+  --           includeInlayFunctionParameterTypeHints = true,
+  --           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+  --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+  --           includeInlayPropertyDeclarationTypeHints = true,
+  --           includeInlayVariableTypeHints = true,
+  --         },
+  --       },
+  --       typescript = {
+  --         inlayHints = {
+  --           includeInlayEnumMemberValueHints = true,
+  --           includeInlayFunctionLikeReturnTypeHints = true,
+  --           includeInlayFunctionParameterTypeHints = true,
+  --           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+  --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+  --           includeInlayPropertyDeclarationTypeHints = true,
+  --           includeInlayVariableTypeHints = true,
+  --         },
+  --       },
+  --     },
+  --   },
+  --   vimls = {},
+  --   -- tailwindcss = {},
+  --   yamlls = {
+  --     schemastore = {
+  --       enable = true,
+  --     },
+  --     settings = {
+  --       yaml = {
+  --         hover = true,
+  --         completion = true,
+  --         validate = true,
+  --         schemas = require("schemastore").json.schemas(),
+  --       },
+  --     },
+  --   },
+  --   jdtls = {},
+  --   dockerls = {},
+  --   -- graphql = {},
+  --   bashls = {},
+  --   taplo = {},
+  --   -- omnisharp = {},
+  --   -- kotlin_language_server = {},
+  --   -- emmet_ls = {},
+  --   -- marksman = {},
+  --   -- angularls = {},
+  --   -- sqls = {
+  --   -- settings = {
+  --   --   sqls = {
+  --   --     connections = {
+  --   --       {
+  --   --         driver = "sqlite3",
+  --   --         dataSourceName = os.getenv "HOME" .. "/workspace/db/chinook.db",
+  --   --       },
+  --   --     },
+  --   --   },
+  --   -- },
+  --   -- },
+}
 
 local function fetch_lsp_to_mason_list(tbl)
   if not tbl or #tbl == 0 then return nil end
@@ -240,57 +268,15 @@ local function fetch_lsp_to_mason_list(tbl)
   return new_list
 end
 
--- local function fetch_config(tool_name, extra_opts)
---   if not tool_name then return {} end
+local function fetch_config(tool_name, extra_opts)
+  if not tool_name then return {} end
 
---   --local mason_registry = require("mason-registry")
+  local server_settings = {}
+  if servers[tool_name] then server_settings = servers[tool_name] end
+  local opts = vim.tbl_deep_extend("force", extra_opts, server_settings or {})
 
---   -- Package installation folder
---   local install_root_dir = vim.fn.stdpath "data" .. "/mason"
-
---   if tool_name == "rust_analyzer" then
---     show("fetch_config: " .. tool_name .. ", install_root_dir: " .. install_root_dir)
-
---     local server_settings = {}
---     if servers["rust_analyzer"] then server_settings = servers["rust_analyzer"] end
-
---     local opts = vim.tbl_deep_extend("force", extra_opts, server_settings or {})
-
---     -- DAP settings - https://github.com/simrat39/rust-tools.nvim#a-better-debugging-experience
---     -- local extension_path = install_root_dir .. "/packages/codelldb/extension/"
---     -- local codelldb = mason_registry.get_package("codelldb")
---     -- local extension_path = codelldb:get_install_path() .. "/extension/"
-
---     -- local codelldb_path = extension_path .. "adapter/codelldb"
---     -- local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
---     -- local ih = require "inlay-hints"
-
---     return {
---       tools = {
---         -- executor = require("rust-tools/executors").toggleterm,
---         hover_actions = { border = "solid" },
---         on_initialized = function()
---           vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "CursorHold", "InsertLeave" }, {
---             pattern = { "*.rs" },
---             callback = function()
---               vim.lsp.codelens.refresh()
---             end,
---           })
---           -- ih.set_all()
---         end,
---         -- inlay_hints = {
---         --   auto = false,
---         -- },
---       },
---       server = opts,
---       -- dap = {
---       --   adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
---       -- },
---     }
---   end
-
---   return {}
--- end
+  return opts
+end
 
 local function check_tools(tbl)
   if not tbl or #tbl == 0 then return end
@@ -355,7 +341,7 @@ function M.new()
   return {
     { -- windwp/nvim-ts-autotag
       "windwp/nvim-ts-autotag",
-      event = events.InsertEnter,
+      -- event = events.InsertEnter,
       config = function()
         local has_plugin, plg = pcall(require, "nvim-ts-autotag")
         if not has_plugin then return end
@@ -371,7 +357,15 @@ function M.new()
         end)
       end,
       config = function()
-        require("mason").setup()
+        require("mason").setup({
+          ui = {
+            icons = {
+              package_installed = "✓",
+              package_pending = "➜",
+              package_uninstalled = "✗"
+            }
+          }
+        })
       end,
     },
 
@@ -473,10 +467,70 @@ function M.new()
         { "theHamsta/nvim-dap-virtual-text" },
       },
     },
+
+    {
+      "nvim-neotest/neotest",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "antoinemadec/FixCursorHold.nvim",
+        "nvim-treesitter/nvim-treesitter"
+      }
+    }
   }
 end
 
 function M.setup()
+  local has_lspconfig, lspconfig = pcall(require, "lspconfig")
+  if not has_lspconfig then
+    return
+  end
+
+  -- load settings for each server
+  for _, server_name in ipairs(ensure_language_servers) do
+    if lspconfig[server_name] then
+      -- load custom settings otherwise load defaults.
+      if server_name == "rust_analyzer" then
+        require "plugins.rust".dap_config()
+      else
+        local on_attach = function(client, bufnr)
+          show("LSP attached for: " .. client.name)
+
+          -- Enable completion triggered by <c-x><c-o>
+          vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+          -- See `:help vim.lsp.*` for documentation on any of the below functions
+          local bufopts = { noremap = true, silent = true, buffer = bufnr }
+          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+          vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+          vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+          vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+          vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+          vim.keymap.set('n', '<space>wl', function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+          end, bufopts)
+          vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+          vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+          vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+          vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+          vim.keymap.set('n', '<space>f', function()
+            vim.lsp.buf.format({
+              async = true,
+              filter = function(client1)
+                return client1.name == "null-ls"
+              end
+            })
+          end, bufopts)
+        end
+
+        local base_opt = { on_attach = on_attach }
+        local opt = fetch_config(server_name, base_opt)
+        lspconfig[server_name].setup(opt)
+      end
+    end
+  end
+
   local has_dap_plugin, dap = pcall(require, "dap")
   if not has_dap_plugin then return end
 
@@ -497,13 +551,22 @@ function M.setup()
     dapui.close()
   end
 
-  require "plugins.rust".dap_config()
+
+
+  vim.fn.sign_define('DapBreakpoint', { text = '🟥', texthl = '', linehl = '', numhl = '' })
+  vim.fn.sign_define('DapStopped', { text = '▶️', texthl = '', linehl = '', numhl = '' })
 end
 
 function M.keymaps()
-  vim.keymap.set("n", "<Leader>dt", ':DapToggleBreakpoint<CR>')
-  vim.keymap.set("n", "<Leader>dx", ':DapTerminate<CR>')
-  vim.keymap.set("n", "<Leader>do", ':DapStepOver<CR>')
+  -- map("n", "<Leader>dt", ':DapToggleBreakpoint<CR>')
+  -- map("n", "<Leader>dx", ':DapTerminate<CR>')
+  -- map("n", "<Leader>do", ':DapStepOver<CR>')
+
+  map('n', '<F5>', '<cmd>lua require "dap".continue()<CR>', { silent = true, noremap = true })
+  map('n', '<F10>', '<cmd>lua require "dap".step_over()<CR>', { silent = true, noremap = true })
+  map('n', '<F11>', '<cmd>lua require "dap".step_into()<CR>', { silent = true, noremap = true })
+  map('n', '<F12>', '<cmd>lua require "dap".step_out()<CR>', { silent = true, noremap = true })
+  map('n', '<leader>b', '<cmd>lua require "dap".toggle_breakpoint()<CR>', { silent = true, noremap = true })
 end
 
 return M

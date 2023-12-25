@@ -1,12 +1,5 @@
 -- rust.lua
 
--- local show = vim.schedule_wrap(function(msg)
---   local has_notify, notify = pcall(require, "plugins.notify")
---   if has_notify then
---     notify.notify_info(msg, "ensure-tools")
---   end
--- end)
-
 local function get_codelldb()
   local mason_registry = require "mason-registry"
   local codelldb = mason_registry.get_package "codelldb"
@@ -21,9 +14,6 @@ local function get_codelldb()
   else
     liblldb_path = extension_path .. "lldb/lib/liblldb.so"
   end
-
-  -- show("Installing codelldb..." .. codelldb_path)
-  -- show("Installing liblldb_path..." .. liblldb_path)
 
   return codelldb_path, liblldb_path
 end
@@ -136,10 +126,10 @@ function M.dap_config()
       autoSetHints = true,
       runnables = { use_telescope = true },
       inlay_hints = {
-        auto = false,
-        -- show_parameter_hints = false,
-        -- parameter_hints_prefix = " <-",
-        -- other_hints_prefix = "» ",
+        -- auto = false,
+        show_parameter_hints = false,
+        parameter_hints_prefix = " <-",
+        other_hints_prefix = "» ",
       },
       hover_actions = { border = "solid" },
       on_initialized = function()

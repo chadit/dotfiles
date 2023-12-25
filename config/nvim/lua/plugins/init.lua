@@ -71,6 +71,7 @@ function M.load_plugins()
     "plugins.lualine",
     "plugins.autocomplete",
     "plugins.rust",
+    "plugins.go",
   }
 
   for _, plugin_file in ipairs(plugin_files) do
