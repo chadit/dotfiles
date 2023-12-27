@@ -56,7 +56,8 @@ local ensure_tools = {
   "cpptools", -- c/c++/rust
   "bash-debug-adapter",
   "chrome-debug-adapter",
-  "delve", -- go
+  "debugpy", -- python
+  "delve",   -- go
   "elixir-ls",
   "go-debug-adapter",
   "js-debug-adapter",
@@ -72,12 +73,14 @@ local ensure_tools = {
   "pylint",
   "yamllint",
   -- Formatter
+  "black",
   "buf",
   "gofumpt",
   "goimports",
   "golines",
   "gomodifytags",
   "gotests",
+  "isort",
   "jq",
   "luaformatter",
   "markdownlint",
@@ -85,6 +88,22 @@ local ensure_tools = {
   "rubocop",
   "rubyfmt",
   "yamlfmt"
+}
+
+local signs = {
+  { name = "DiagnosticSignError", text = "" },
+  { name = "DiagnosticSignWarn", text = "" },
+  { name = "DiagnosticSignHint", text = "" },
+  { name = "DiagnosticSignInfo", text = "" },
+  { name = "DapBreakpoint", text = "🔴" },
+  { name = "DapStopped", text = "▶️" },
+  -- { name = "DapUIPlay", text = "▶️" },
+  -- { name = "DapUIPause", text = "⏸" },
+  -- { name = "DapUIStop", text = "⏹" },
+  -- { name = "DapUIRewind", text = "⏪" },
+  -- { name = "DapUIFastForward", text = "⏩" },
+  -- { name = "DapUIFrame", text = "🔲" },
+  -- { name = "DapUIBreakpoint", text = "🔴" },
 }
 
 local servers = {
@@ -135,30 +154,18 @@ local servers = {
   --       },
   --     },
   --   },
-  --   pyright = {
-  --     settings = {
-  --       python = {
-  --         analysis = {
-  --           typeCheckingMode = "off",
-  --           autoSearchPaths = true,
-  --           useLibraryCodeForTypes = true,
-  --           diagnosticMode = "workspace",
-  --         },
-  --       },
-  --     },
-  --   },
-  --   -- pylsp = {}, -- Integration with rope for refactoring - https://github.com/python-rope/pylsp-rope
-  -- rust_analyzer = {
-  --   settings = {
-  --     ["rust-analyzer"] = {
-  --       cargo = { allFeatures = true },
-  --       checkOnSave = {
-  --         command = "cargo clippy",
-  --         extraArgs = { "--no-deps" },
-  --       },
-  --     },
-  --   },
-  -- },
+  pyright = {
+    settings = {
+      python = {
+        analysis = {
+          typeCheckingMode = "off",
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          diagnosticMode = "workspace",
+        },
+      },
+    },
+  },
   lua_ls = {
     settings = {
       Lua = {
@@ -381,6 +388,51 @@ function M.new()
       end,
     },
 
+    {
+      "jose-elias-alvarez/null-ls.nvim",
+      event = "BufReadPre",
+      dependencies = "nvim-lua/plenary.nvim",
+      config = function()
+        local null_ls = require("null-ls")
+        -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+        local formatting = null_ls.builtins.formatting
+        -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+        local diagnostics = null_ls.builtins.diagnostics
+        local augroup = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
+
+        -- https://github.com/prettier-solidity/prettier-plugin-solidity
+        null_ls.setup({
+          debug = false,
+          on_attach = function(client, bufnr)
+            if client.supports_method("textDocument/formatting") then
+              vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+              vim.api.nvim_create_autocmd({ "InsertLeave", "BufWritePre" }, {
+                group = augroup,
+                buffer = bufnr,
+                callback = function()
+                  vim.lsp.buf.format({ bufnr = bufnr })
+                end,
+              })
+            end
+          end,
+          sources = {
+            formatting.prettier.with({
+              extra_filetypes = { "toml" },
+              extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
+            }),
+            formatting.black.with({ extra_args = { "--fast", "--line-length=120" } }),
+            formatting.isort,
+            formatting.stylua,
+            formatting.gofmt,
+            formatting.goimports,
+            formatting.markdownlint,
+            diagnostics.golangci_lint,
+            diagnostics.markdownlint,
+          },
+        })
+      end
+    },
+
     { -- neovim/nvim-lspconfig
       "neovim/nvim-lspconfig",
       dependencies = {
@@ -402,8 +454,28 @@ function M.new()
           config = function()
             require("lsp_lines").setup()
 
-            -- disable virtual_text since it's redundant due to lsp_lines.
-            vim.diagnostic.config({ virtual_text = false })
+            local diag_config = {
+              -- disable virtual text
+              virtual_text = false,
+              -- show signs
+              signs = {
+                active = signs,
+              },
+              update_in_insert = true,
+              underline = true,
+              severity_sort = true,
+              float = {
+                focusable = false,
+                style = "minimal",
+                border = "rounded",
+                source = "always",
+                header = "",
+                prefix = "",
+                suffix = "",
+              },
+            }
+
+            vim.diagnostic.config(diag_config)
           end
         },
         -- Adds LSP completion capabilities
@@ -463,19 +535,24 @@ function M.new()
     { -- mfussenegger/nvim-dap
       "mfussenegger/nvim-dap",
       dependencies = {
-        { "rcarriga/nvim-dap-ui" },
+        {
+          "rcarriga/nvim-dap-ui",
+          config = function()
+            -- uses neodev to get type checking
+            require("neodev").setup({
+              library = { plugins = { "nvim-dap-ui" }, types = true },
+            })
+          end
+        },
         { "theHamsta/nvim-dap-virtual-text" },
+        { "mfussenegger/nvim-dap-python" },      -- for python
+        { "nvim-telescope/telescope-dap.nvim" }, -- for telescope integration
       },
+      config = function()
+        local path = require('mason-registry').get_package('debugpy'):get_install_path()
+        require('dap-python').setup(path .. '/venv/bin/python')
+      end
     },
-
-    {
-      "nvim-neotest/neotest",
-      dependencies = {
-        "nvim-lua/plenary.nvim",
-        "antoinemadec/FixCursorHold.nvim",
-        "nvim-treesitter/nvim-treesitter"
-      }
-    }
   }
 end
 
@@ -527,6 +604,12 @@ function M.setup()
         local base_opt = { on_attach = on_attach }
         local opt = fetch_config(server_name, base_opt)
         lspconfig[server_name].setup(opt)
+
+        if server_name == "gopls" then
+          require("plugins.go").dap_config()
+        elseif server_name == "bashls" then
+          require("plugins.bash").dap_config()
+        end
       end
     end
   end
@@ -537,7 +620,49 @@ function M.setup()
   local has_dapui_plugin, dapui = pcall(require, "dapui")
   if not has_dapui_plugin then return end
 
-  dapui.setup()
+  require("nvim-dap-virtual-text").setup()
+
+  dapui.setup({
+    expand_lines = true,
+    icons = { expanded = "", collapsed = "", circular = "" },
+    mappings = {
+      -- Use a table to apply multiple mappings
+      expand = { "<CR>", "<2-LeftMouse>" },
+      open = "o",
+      remove = "d",
+      edit = "e",
+      repl = "r",
+      toggle = "t",
+    },
+    layouts = {
+      {
+        elements = {
+          { id = "scopes",      size = 0.33 },
+          { id = "breakpoints", size = 0.17 },
+          { id = "stacks",      size = 0.25 },
+          { id = "watches",     size = 0.25 },
+        },
+        size = 0.33,
+        position = "right",
+      },
+      {
+        elements = {
+          { id = "repl",    size = 0.45 },
+          { id = "console", size = 0.55 },
+        },
+        size = 0.27,
+        position = "bottom",
+      },
+    },
+    floating = {
+      max_height = 0.9,
+      max_width = 0.5,             -- Floats will be treated as percentage of your screen.
+      border = vim.g.border_chars, -- Border style. Can be 'single', 'double' or 'rounded'
+      mappings = {
+        close = { "q", "<Esc>" },
+      },
+    },
+  })
 
   dap.listeners.after.event_initialized["dapui_config"] = function()
     dapui.open()
@@ -551,22 +676,49 @@ function M.setup()
     dapui.close()
   end
 
+  for _, sign in ipairs(signs) do
+    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+  end
 
+  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+    border = "rounded",
+  })
 
-  vim.fn.sign_define('DapBreakpoint', { text = '🟥', texthl = '', linehl = '', numhl = '' })
-  vim.fn.sign_define('DapStopped', { text = '▶️', texthl = '', linehl = '', numhl = '' })
+  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+    border = "rounded",
+  })
 end
 
 function M.keymaps()
-  -- map("n", "<Leader>dt", ':DapToggleBreakpoint<CR>')
-  -- map("n", "<Leader>dx", ':DapTerminate<CR>')
-  -- map("n", "<Leader>do", ':DapStepOver<CR>')
-
   map('n', '<F5>', '<cmd>lua require "dap".continue()<CR>', { silent = true, noremap = true })
   map('n', '<F10>', '<cmd>lua require "dap".step_over()<CR>', { silent = true, noremap = true })
   map('n', '<F11>', '<cmd>lua require "dap".step_into()<CR>', { silent = true, noremap = true })
   map('n', '<F12>', '<cmd>lua require "dap".step_out()<CR>', { silent = true, noremap = true })
-  map('n', '<leader>b', '<cmd>lua require "dap".toggle_breakpoint()<CR>', { silent = true, noremap = true })
+
+  -- toggle a debug breakpoint
+  map('n', '<leader>db', '<cmd>lua require "dap".toggle_breakpoint()<CR>', { silent = true, noremap = true })
+
+  -- run the closes python run test
+  vim.keymap.set('n', '<leader>dpr', ":lua require('dap-python').test_method()<CR>",
+    { silent = true, noremap = true })
+
+  -- run the python test class
+  vim.keymap.set('n', '<leader>dpc', ":lua require('dap-python').test_class()<CR>",
+    { silent = true, noremap = true })
+
+  -- function() require('dap-python').debug_selection() end
+  vim.keymap.set('n', '<leader>dps <ESC>', ":lua require('dap-python').debug_selection()<CR>",
+    { silent = true, noremap = true })
+
+  -- open dap gui
+  vim.keymap.set('n', '<leader>dui', ":lua require('dapui').toggle()<CR>",
+    { silent = true, noremap = true })
+
+  vim.keymap.set('n', '<leader>du[', ":lua require('dapui').toggle(1)<CR>",
+    { silent = true, noremap = true })
+
+  vim.keymap.set('n', '<leader>du]', ":lua require('dapui').toggle(2)<CR>",
+    { silent = true, noremap = true })
 end
 
 return M

@@ -23,8 +23,6 @@ function M.load_plugins()
     return
   end
 
-  --plg.setup({
-
   local plugins = {
     { "folke/lazy.nvim",      lazy = false, tag = "stable", priority = 1000 }, -- latest stable release
 
@@ -37,15 +35,6 @@ function M.load_plugins()
 
     -- Useful plugin to show you pending keybinds.
     { 'folke/which-key.nvim', opts = {} },
-
-    {
-      -- Add indentation guides even on blank lines
-      'lukas-reineke/indent-blankline.nvim',
-      -- Enable `lukas-reineke/indent-blankline.nvim`
-      -- See `:help ibl`
-      main = 'ibl',
-      opts = {},
-    },
 
     {
       "simrat39/inlay-hints.nvim",
@@ -61,17 +50,20 @@ function M.load_plugins()
   -- Load config for plugins
   local loaded_plugins = {}
   local plugin_files = {
-    "plugins.git",
-    "plugins.lsp",
-    "plugins.neo-tree",
-    "plugins.notify",
-    "plugins.telescope",
-    "plugins.treesitter",
-    "plugins.theme",
-    "plugins.lualine",
     "plugins.autocomplete",
-    "plugins.rust",
+    "plugins.git",
     "plugins.go",
+    "plugins.indentline",
+    "plugins.lsp",
+    "plugins.lualine",
+    "plugins.neo-tree",
+    -- "plugins.neotest",
+    "plugins.notify",
+    "plugins.python",
+    "plugins.rust",
+    "plugins.telescope",
+    "plugins.theme",
+    "plugins.treesitter",
   }
 
   for _, plugin_file in ipairs(plugin_files) do
@@ -91,7 +83,11 @@ function M.load_plugins()
     end
   end
 
-  local extra_opts = {}
+  local extra_opts = {
+    defaults = { lazy = false, priority = 1000 },
+    ui = { wrap = "true" },
+    change_detection = { enabled = true },
+  }
   plg.setup(plugins, extra_opts)
 
   -- run settings for plugins

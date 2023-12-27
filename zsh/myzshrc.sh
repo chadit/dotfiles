@@ -239,4 +239,6 @@ else
   RPROMPT=""
 fi
 
+# reset the path hash to avoid issues with zsh
+hash -r
 echo "-------------------------------------"

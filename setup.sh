@@ -48,6 +48,10 @@ function update_link_nvim(){
     ln -sf $HELPER_DOTFILES_HOME/config/nvim $HOME/.config/nvim
 }
 
+function update_learning_links(){
+    ln -sf ~/Projects/src/github.com/chadit/CodeChallenges/exercism ~/exercism
+}
+
 # This script must be run as root
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 

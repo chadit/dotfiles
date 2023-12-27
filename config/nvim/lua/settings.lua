@@ -21,6 +21,7 @@ vim.opt.expandtab = true -- convert tabs to spaces
 -- UI config
 vim.opt.number = true         -- show absolute number
 vim.opt.relativenumber = true -- add numbers to each line on the left side
+
 vim.opt.numberwidth = 2       -- set number column width to 4 {default 4}
 vim.opt.cursorline = true     -- highlight cursor line underneath the cursor horizontally
 vim.opt.splitbelow = true     -- open new vertical split bottom
@@ -65,3 +66,5 @@ vim.opt.title = true
 vim.opt.visualbell = true
 
 vim.opt.shortmess = vim.opt.shortmess + { c = true }
+
+vim.opt.guicursor = '' -- status line handles mode so cursor doesn't need to

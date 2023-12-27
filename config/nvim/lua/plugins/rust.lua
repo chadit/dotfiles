@@ -73,6 +73,34 @@ function M.dap_config()
   local lsp_utils = require "utils.lsp"
   local opts = lsp_utils.opts "rust-tools.nvim"
 
+  local has_dap_plugin, dap = pcall(require, "dap")
+  if not has_dap_plugin then
+    --------------------------
+    -- C/C++ --
+    --------------------------
+    dap.adapters.lldb = {
+      type = "executable",
+      command = "/opt/homebrew/opt/llvm/bin/lldb-vscode", -- adjust as needed, must be absolute path
+      name = "lldb",
+    }
+
+    dap.configurations.cpp = {
+      {
+        name = "Launch",
+        type = "lldb",
+        request = "launch",
+        program = function()
+          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+        args = {},
+      },
+    }
+
+    dap.configurations.c = dap.configurations.cpp
+  end
+
   -- load after plugs are installed.
   if opts and not opts.capabilities then
     opts.capabilities = lsp_utils.capabilities()

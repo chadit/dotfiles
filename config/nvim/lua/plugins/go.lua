@@ -1,5 +1,12 @@
 -- go.lua
 
+local show = vim.schedule_wrap(function(msg)
+  local has_notify, notify = pcall(require, "plugins.notify")
+  if has_notify then
+    notify.notify_info(msg, "go")
+  end
+end)
+
 local M = {}
 
 function M.new()
@@ -49,6 +56,7 @@ function M.new()
         vim.api.nvim_create_autocmd("BufWritePre", {
           pattern = "*.go",
           callback = function()
+            show("Formatting go file")
             require('go.format').goimport() -- goimport + gofmt
             --vim.lsp.buf.format({ async = true }) -- format only
           end,
@@ -63,6 +71,48 @@ function M.new()
       build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
     },
   }
+end
+
+function M.dap_config()
+  local has_dap_plugin, dap = pcall(require, "dap")
+  if not has_dap_plugin then
+    --------------------------
+    -- Golang --
+    --------------------------
+    dap.adapters.delve = {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = "dlv",
+        args = { "dap", "-l", "127.0.0.1:${port}" },
+      },
+    }
+
+    -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+    dap.configurations.go = {
+      {
+        type = "delve",
+        name = "Debug",
+        request = "launch",
+        program = "${file}",
+      },
+      {
+        type = "delve",
+        name = "Debug test", -- configuration for debugging test files
+        request = "launch",
+        mode = "test",
+        program = "${file}",
+      },
+      -- works with go.mod packages and sub packages
+      {
+        type = "delve",
+        name = "Debug test (go.mod)",
+        request = "launch",
+        mode = "test",
+        program = "./${relativeFileDirname}",
+      },
+    }
+  end
 end
 
 return M

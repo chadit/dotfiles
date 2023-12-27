@@ -16,6 +16,9 @@ function M.new()
         vim.cmd.colorscheme 'catppuccin-mocha'
       end,
     },
+    {
+      "ryanoasis/vim-devicons",
+    }
   }
 end
 

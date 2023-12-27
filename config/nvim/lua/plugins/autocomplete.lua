@@ -1,37 +1,36 @@
 -- autocomplete.lua
 
--- local show = vim.schedule_wrap(function(msg)
---   local has_notify, notify = pcall(require, "plugins.notify")
---   if has_notify then
---     notify.notify_info(msg, "ensure-tools")
---   end
--- end)
-
 local M = {}
 
 function M.new()
   return {
     {
       -- Autocompletion framework
-      { 'hrsh7th/nvim-cmp' },
-
-      -- LSP completion source
-      { 'hrsh7th/cmp-nvim-lsp' },
-
-      -- Useful completion sources:
-      { 'hrsh7th/cmp-nvim-lua' },
-      { 'hrsh7th/cmp-nvim-lsp-signature-help' },
-      { 'hrsh7th/cmp-vsnip' },
-      { 'hrsh7th/cmp-path' },
-      { 'hrsh7th/cmp-buffer' },
-      { 'hrsh7th/vim-vsnip' },
-
-      -- Snippet Engine & its associated nvim-cmp source
-      { 'L3MON4D3/LuaSnip' },
-      { 'saadparwaiz1/cmp_luasnip' },
-
-      -- Adds a number of user-friendly snippets
-      { 'rafamadriz/friendly-snippets' },
+      'hrsh7th/nvim-cmp',
+      event = {
+        "InsertEnter",
+        "CmdlineEnter",
+      },
+      dependencies = {
+        -- LSP completion source
+        'hrsh7th/cmp-nvim-lsp',
+        -- Useful completion sources:
+        'hrsh7th/cmp-nvim-lua',
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        "hrsh7th/cmp-cmdline",
+        'saadparwaiz1/cmp_luasnip',
+        -- Snippet Engine & its associated nvim-cmp source
+        {
+          'L3MON4D3/LuaSnip',
+          event = "InsertEnter",
+          -- Adds a number of user-friendly snippets
+          dependencies = "rafamadriz/friendly-snippets",
+        },
+        'hrsh7th/cmp-nvim-lsp-signature-help',
+        'hrsh7th/cmp-vsnip',
+        'hrsh7th/vim-vsnip',
+      },
     },
   }
 end
@@ -39,6 +38,36 @@ end
 function M.setup()
   local has_plugin, cmp = pcall(require, "cmp")
   if not has_plugin then return end
+
+  local kind_icons = {
+    Text = "󰉿",
+    Method = "m",
+    Function = "󰊕",
+    Constructor = "",
+    Field = "",
+    Variable = "󰆧",
+    Class = "󰌗",
+    Interface = "",
+    Module = "",
+    Property = "",
+    Unit = "",
+    Value = "󰎠",
+    Enum = "",
+    Keyword = "󰌋",
+    Snippet = "",
+    Color = "󰏘",
+    File = "󰈙",
+    Reference = "",
+    Folder = "󰉋",
+    EnumMember = "",
+    Constant = "󰇽",
+    Struct = "",
+    Event = "",
+    Operator = "󰆕",
+    TypeParameter = "󰊄",
+    Codeium = "󰚩",
+    Copilot = "",
+  }
 
   cmp.setup({
     -- Enable LSP snippets
@@ -78,15 +107,16 @@ function M.setup()
     },
     formatting = {
       fields = { 'menu', 'abbr', 'kind' },
-      format = function(entry, item)
+      format = function(entry, vim_item)
+        vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind)
         local menu_icon = {
           nvim_lsp = 'λ',
           vsnip = '⋗',
           buffer = 'Ω',
           path = '🖫',
         }
-        item.menu = menu_icon[entry.source.name]
-        return item
+        vim_item.menu = menu_icon[entry.source.name]
+        return vim_item
       end,
     },
   })
