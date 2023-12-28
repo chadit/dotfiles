@@ -1,0 +1,6 @@
+* add search functionality into a file.  example, search for all functions test() in all files
+* add support to show buffers like tabs, similar to vscode
+* look into neotest, if it works better then just plain dap
+
+errors: 
+* ssh nvim, clipboard: no provider. Try ":checkhealth" or ":h clipboard". (ssh from windows so could be that.)
