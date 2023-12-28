@@ -104,6 +104,30 @@ local opts = {
       { "filetype" },
       { "encoding" },
       { "fileformat" },
+      {
+        'copilot',
+        -- -- Default values
+        symbols = {
+          status = {
+            icons = {
+              enabled = "",
+              disabled = "",
+              warning = "",
+              unknown = ""
+            },
+            hl = {
+              enabled = "#50FA7B",
+              disabled = "#6272A4",
+              warning = "#FFB86C",
+              unknown = "#FF5555"
+            }
+          },
+          -- spinners = require("copilot-lualine.spinners").dots,
+          -- spinner_color = "#6272A4"
+        },
+        show_colors = true,
+        show_loading = true
+      },
     },
     lualine_z = { "progress", "location" },
   },
@@ -135,6 +159,8 @@ function M.new()
       event = { "VimEnter", "InsertEnter", "BufReadPre", "BufAdd", "BufNew", "BufReadPost" },
       dependencies = {
         "catppuccin/nvim", -- not a real dependency, but needed for theme
+        "AndreM222/copilot-lualine",
+        "nvim-tree/nvim-web-devicons",
       },
       config = function()
         local has_plugin, lualine = pcall(require, "lualine")

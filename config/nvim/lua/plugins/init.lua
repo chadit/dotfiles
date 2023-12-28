@@ -51,6 +51,7 @@ function M.load_plugins()
   local loaded_plugins = {}
   local plugin_files = {
     "plugins.autocomplete",
+    "plugins.copilot",
     "plugins.git",
     "plugins.go",
     "plugins.indentline",

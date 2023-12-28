@@ -93,13 +93,16 @@ function M.setup()
     },
     -- Installed sources:
     sources = {
-      { name = 'path' },                                       -- file paths
-      { name = 'nvim_lsp',               keyword_length = 3 }, -- from language server
-      { name = 'nvim_lsp_signature_help' },                    -- display function signatures with current parameter emphasized
-      { name = 'nvim_lua',               keyword_length = 2 }, -- complete neovim's Lua runtime API such vim.lsp.*
-      { name = 'buffer',                 keyword_length = 2 }, -- source current buffer
-      { name = 'vsnip',                  keyword_length = 2 }, -- nvim-cmp source for vim-vsnip
-      { name = 'calc' },                                       -- source for math calculation
+      -- Copilot Source
+      { name = "copilot",                group_index = 2 },
+      -- Other Sources
+      { name = 'nvim_lsp',               keyword_length = 3, group_index = 2 }, -- from language server
+      { name = 'path',                   group_index = 2 },                     -- file paths
+      { name = 'nvim_lsp_signature_help' },                                     -- display function signatures with current parameter emphasized
+      { name = 'nvim_lua',               keyword_length = 2 },                  -- complete neovim's Lua runtime API such vim.lsp.*
+      { name = 'buffer',                 keyword_length = 2 },                  -- source current buffer
+      { name = 'vsnip',                  keyword_length = 2 },                  -- nvim-cmp source for vim-vsnip
+      { name = 'calc' },                                                        -- source for math calculation
     },
     window = {
       completion = cmp.config.window.bordered(),
