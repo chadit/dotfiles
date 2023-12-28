@@ -56,6 +56,7 @@ function M.load_plugins()
     "plugins.go",
     "plugins.indentline",
     "plugins.lsp",
+    "plugins.null-ls",
     "plugins.lualine",
     "plugins.neo-tree",
     -- "plugins.neotest",

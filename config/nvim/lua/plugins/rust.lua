@@ -1,15 +1,15 @@
 -- rust.lua
 
 local function get_codelldb()
-  local mason_registry = require "mason-registry"
-  local codelldb = mason_registry.get_package "codelldb"
+  local mason_registry = require("mason-registry")
+  local codelldb = mason_registry.get_package("codelldb")
   local extension_path = codelldb:get_install_path() .. "/extension/"
 
   local codelldb_path = extension_path .. "adapter/codelldb"
   local liblldb_path = ""
-  if vim.loop.os_uname().sysname:find "Windows" then
+  if vim.loop.os_uname().sysname:find("Windows") then
     liblldb_path = extension_path .. "lldb\\bin\\liblldb.dll"
-  elseif vim.fn.has "mac" == 1 then
+  elseif vim.fn.has("mac") == 1 then
     liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
   else
     liblldb_path = extension_path .. "lldb/lib/liblldb.so"
@@ -27,17 +27,27 @@ function M.new()
       ft = { "rust" },
       event = { "BufReadPost *.rs" },
       dependencies = {
-        "rust-lang/rust.vim",    -- syntax highlighting
+        "rust-lang/rust.vim", -- syntax highlighting
         "neovim/nvim-lspconfig", -- lsp support
         "nvim-lua/plenary.nvim", -- debugging support
-        "mfussenegger/nvim-dap"  -- debugging support
+        "mfussenegger/nvim-dap", -- debugging support
       },
       opts = {
         on_attach = function(_, bufnr)
           -- Hover actions
-          vim.keymap.set("n", "<C-space>", require("rust-tools").hover_actions.hover_actions, { buffer = bufnr })
+          vim.keymap.set(
+            "n",
+            "<C-space>",
+            require("rust-tools").hover_actions.hover_actions,
+            { buffer = bufnr }
+          )
           -- Code action groups
-          vim.keymap.set("n", "<Leader>a", require("rust-tools").code_action_group.code_action_group, { buffer = bufnr })
+          vim.keymap.set(
+            "n",
+            "<Leader>a",
+            require("rust-tools").code_action_group.code_action_group,
+            { buffer = bufnr }
+          )
         end,
         settings = {
           ["rust-analyzer"] = {
@@ -70,8 +80,8 @@ end
 
 function M.dap_config()
   local codelldb_path, liblldb_path = get_codelldb()
-  local lsp_utils = require "utils.lsp"
-  local opts = lsp_utils.opts "rust-tools.nvim"
+  local lsp_utils = require("utils.lsp")
+  local opts = lsp_utils.opts("rust-tools.nvim")
 
   local has_dap_plugin, dap = pcall(require, "dap")
   if not has_dap_plugin then
@@ -90,6 +100,7 @@ function M.dap_config()
         type = "lldb",
         request = "launch",
         program = function()
+          ---@diagnostic disable-next-line: redundant-parameter
           return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
         end,
         cwd = "${workspaceFolder}",
@@ -128,7 +139,7 @@ function M.dap_config()
       local bufnr = event.buf
 
       -- Register keymappings
-      local wk = require "which-key"
+      local wk = require("which-key")
       local keys = { mode = { "n", "v" }, ["<leader>lc"] = { name = "+Crates" } }
       wk.register(keys)
 
@@ -149,7 +160,7 @@ function M.dap_config()
     end,
   })
 
-  require("rust-tools").setup {
+  require("rust-tools").setup({
     tools = {
       autoSetHints = true,
       runnables = { use_telescope = true },
@@ -161,19 +172,22 @@ function M.dap_config()
       },
       hover_actions = { border = "solid" },
       on_initialized = function()
-        vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "BufEnter", "CursorHold", "InsertLeave" }, {
-          pattern = { "*.rs" },
-          callback = function()
-            vim.lsp.codelens.refresh()
-          end,
-        })
+        vim.api.nvim_create_autocmd(
+          { "BufReadPost", "BufWritePost", "BufEnter", "CursorHold", "InsertLeave" },
+          {
+            pattern = { "*.rs" },
+            callback = function()
+              vim.lsp.codelens.refresh()
+            end,
+          }
+        )
       end,
     },
     server = opts,
     dap = {
       adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
     },
-  }
+  })
   return true
 end
 

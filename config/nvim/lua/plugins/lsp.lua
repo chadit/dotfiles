@@ -87,7 +87,8 @@ local ensure_tools = {
   "prettier",
   "rubocop",
   "rubyfmt",
-  "yamlfmt"
+  "stylua",
+  "yamlfmt",
 }
 
 local signs = {
@@ -97,13 +98,6 @@ local signs = {
   { name = "DiagnosticSignInfo", text = "" },
   { name = "DapBreakpoint", text = "🔴" },
   { name = "DapStopped", text = "▶️" },
-  -- { name = "DapUIPlay", text = "▶️" },
-  -- { name = "DapUIPause", text = "⏸" },
-  -- { name = "DapUIStop", text = "⏹" },
-  -- { name = "DapUIRewind", text = "⏪" },
-  -- { name = "DapUIFastForward", text = "⏩" },
-  -- { name = "DapUIFrame", text = "🔲" },
-  -- { name = "DapUIBreakpoint", text = "🔴" },
 }
 
 local servers = {
@@ -146,14 +140,6 @@ local servers = {
       },
     },
   },
-  --   html = {},
-  --   jsonls = {
-  --     settings = {
-  --       json = {
-  --         schemas = require("schemastore").json.schemas(),
-  --       },
-  --     },
-  --   },
   pyright = {
     settings = {
       python = {
@@ -191,75 +177,13 @@ local servers = {
       },
     },
   },
-  --   tsserver = {
-  --     disable_formatting = true,
-  --     settings = {
-  --       javascript = {
-  --         inlayHints = {
-  --           includeInlayEnumMemberValueHints = true,
-  --           includeInlayFunctionLikeReturnTypeHints = true,
-  --           includeInlayFunctionParameterTypeHints = true,
-  --           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-  --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-  --           includeInlayPropertyDeclarationTypeHints = true,
-  --           includeInlayVariableTypeHints = true,
-  --         },
-  --       },
-  --       typescript = {
-  --         inlayHints = {
-  --           includeInlayEnumMemberValueHints = true,
-  --           includeInlayFunctionLikeReturnTypeHints = true,
-  --           includeInlayFunctionParameterTypeHints = true,
-  --           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-  --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-  --           includeInlayPropertyDeclarationTypeHints = true,
-  --           includeInlayVariableTypeHints = true,
-  --         },
-  --       },
-  --     },
-  --   },
-  --   vimls = {},
-  --   -- tailwindcss = {},
-  --   yamlls = {
-  --     schemastore = {
-  --       enable = true,
-  --     },
-  --     settings = {
-  --       yaml = {
-  --         hover = true,
-  --         completion = true,
-  --         validate = true,
-  --         schemas = require("schemastore").json.schemas(),
-  --       },
-  --     },
-  --   },
-  --   jdtls = {},
-  --   dockerls = {},
-  --   -- graphql = {},
-  --   bashls = {},
-  --   taplo = {},
-  --   -- omnisharp = {},
-  --   -- kotlin_language_server = {},
-  --   -- emmet_ls = {},
-  --   -- marksman = {},
-  --   -- angularls = {},
-  --   -- sqls = {
-  --   -- settings = {
-  --   --   sqls = {
-  --   --     connections = {
-  --   --       {
-  --   --         driver = "sqlite3",
-  --   --         dataSourceName = os.getenv "HOME" .. "/workspace/db/chinook.db",
-  --   --       },
-  --   --     },
-  --   --   },
-  --   -- },
-  --   -- },
 }
 
 local function fetch_lsp_to_mason_list(tbl)
-  if not tbl or #tbl == 0 then return nil end
-  local ok_mlsp, mlsp = pcall(require, 'mason-lspconfig')
+  if not tbl or #tbl == 0 then
+    return nil
+  end
+  local ok_mlsp, mlsp = pcall(require, "mason-lspconfig")
   if not ok_mlsp then
     return nil
   end
@@ -276,24 +200,30 @@ local function fetch_lsp_to_mason_list(tbl)
 end
 
 local function fetch_config(tool_name, extra_opts)
-  if not tool_name then return {} end
+  if not tool_name then
+    return {}
+  end
 
   local server_settings = {}
-  if servers[tool_name] then server_settings = servers[tool_name] end
+  if servers[tool_name] then
+    server_settings = servers[tool_name]
+  end
   local opts = vim.tbl_deep_extend("force", extra_opts, server_settings or {})
 
   return opts
 end
 
 local function check_tools(tbl)
-  if not tbl or #tbl == 0 then return end
+  if not tbl or #tbl == 0 then
+    return
+  end
 
   require("mason-lspconfig").setup({
     automatic_installation = true,
     ensure_installed = ensure_language_servers,
   })
 
-  local mr = require 'mason-registry'
+  local mr = require("mason-registry")
 
   for _, name in ipairs(tbl) do
     local p = mr.get_package(name)
@@ -307,24 +237,35 @@ local function check_tools(tbl)
           if version_type == "string" then
             if not version == "Package is not outdated." then
               can_update = true
-              extra = extra .. ", new_version_ok: " .. tostring(ok) .. ", new_version_string: " .. tostring(version)
+              extra = extra
+                  .. ", new_version_ok: "
+                  .. tostring(ok)
+                  .. ", new_version_string: "
+                  .. tostring(version)
             end
           elseif type(version) == "table" then
             local current_version = version["current_version"] or ""
             local latest_version = version["latest_version"] or ""
             if current_version ~= latest_version then
               can_update = true
-              extra = extra ..
-                  ", new_version_ok: " ..
-                  tostring(ok) ..
-                  ", current_version: " .. tostring(current_version) .. ", latest_version: " .. tostring(latest_version)
+              extra = extra
+                  .. ", new_version_ok: "
+                  .. tostring(ok)
+                  .. ", current_version: "
+                  .. tostring(current_version)
+                  .. ", latest_version: "
+                  .. tostring(latest_version)
             end
           else
-            local uf = require "utils.format"
+            local uf = require("utils.format")
             local version_string = uf.TableToString(version)
-            extra = extra ..
-                ", new_version_ok: " ..
-                tostring(ok) .. ", type:" .. tostring(version_type) .. ", new_version: " .. version_string
+            extra = extra
+                .. ", new_version_ok: "
+                .. tostring(ok)
+                .. ", type:"
+                .. tostring(version_type)
+                .. ", new_version: "
+                .. version_string
           end
         end)
 
@@ -351,7 +292,9 @@ function M.new()
       -- event = events.InsertEnter,
       config = function()
         local has_plugin, plg = pcall(require, "nvim-ts-autotag")
-        if not has_plugin then return end
+        if not has_plugin then
+          return
+        end
         plg.setup()
       end,
     },
@@ -369,9 +312,9 @@ function M.new()
             icons = {
               package_installed = "✓",
               package_pending = "➜",
-              package_uninstalled = "✗"
-            }
-          }
+              package_uninstalled = "✗",
+            },
+          },
         })
       end,
     },
@@ -380,57 +323,12 @@ function M.new()
       "williamboman/mason-lspconfig.nvim",
       dependencies = {
         "williamboman/mason.nvim",
-        "rcarriga/nvim-notify" -- not really a dependency but used for logging
+        "rcarriga/nvim-notify", -- not really a dependency but used for logging
       },
       config = function()
         check_tools(fetch_lsp_to_mason_list(ensure_language_servers))
         check_tools(fetch_lsp_to_mason_list(ensure_tools))
       end,
-    },
-
-    {
-      "jose-elias-alvarez/null-ls.nvim",
-      event = "BufReadPre",
-      dependencies = "nvim-lua/plenary.nvim",
-      config = function()
-        local null_ls = require("null-ls")
-        -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-        local formatting = null_ls.builtins.formatting
-        -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-        local diagnostics = null_ls.builtins.diagnostics
-        local augroup = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
-
-        -- https://github.com/prettier-solidity/prettier-plugin-solidity
-        null_ls.setup({
-          debug = false,
-          on_attach = function(client, bufnr)
-            if client.supports_method("textDocument/formatting") then
-              vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-              vim.api.nvim_create_autocmd({ "InsertLeave", "BufWritePre" }, {
-                group = augroup,
-                buffer = bufnr,
-                callback = function()
-                  vim.lsp.buf.format({ bufnr = bufnr })
-                end,
-              })
-            end
-          end,
-          sources = {
-            formatting.prettier.with({
-              extra_filetypes = { "toml" },
-              extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
-            }),
-            formatting.black.with({ extra_args = { "--fast", "--line-length=120" } }),
-            formatting.isort,
-            formatting.stylua,
-            formatting.gofmt,
-            formatting.goimports,
-            formatting.markdownlint,
-            diagnostics.golangci_lint,
-            diagnostics.markdownlint,
-          },
-        })
-      end
     },
 
     { -- neovim/nvim-lspconfig
@@ -441,7 +339,7 @@ function M.new()
         "williamboman/mason-lspconfig.nvim",
         -- A Neovim Lua plugin providing access to the SchemaStore catalog.
         "b0o/schemastore.nvim",
-        "jose-elias-alvarez/null-ls.nvim",
+        -- "jose-elias-alvarez/null-ls.nvim",
         "hrsh7th/cmp-nvim-lsp",
         -- Extensible UI for Neovim notifications and LSP progress messages.
         -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -476,41 +374,42 @@ function M.new()
             }
 
             vim.diagnostic.config(diag_config)
-          end
+          end,
         },
         -- Adds LSP completion capabilities
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-path',
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-path",
         -- rust tools
-        "simrat39/rust-tools.nvim", "rust-lang/rust.vim",
+        "simrat39/rust-tools.nvim",
+        "rust-lang/rust.vim",
       },
       event = { -- fixes an issue with lazy loading an running overlays.
-        'BufReadPost *.go',
-        'BufReadPost *.rs',
-        'BufReadPost *.c',
-        'BufReadPost *.gcc',
-        'BufReadPost *.h',
-        'BufReadPost *.ts',
-        'BufReadPost *.js',
-        'BufReadPost *.html',
+        "BufReadPost *.go",
+        "BufReadPost *.rs",
+        "BufReadPost *.c",
+        "BufReadPost *.gcc",
+        "BufReadPost *.h",
+        "BufReadPost *.ts",
+        "BufReadPost *.js",
+        "BufReadPost *.html",
       },
       config = function()
-        vim.api.nvim_create_autocmd('LspAttach', {
-          group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+        vim.api.nvim_create_autocmd("LspAttach", {
+          group = vim.api.nvim_create_augroup("UserLspConfig", {}),
           callback = function(ev)
             -- Enable completion triggered by <c-x><c-o>
-            vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+            vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
             -- Buffer local mappings.
             -- See `:help vim.lsp.*` for documentation on any of the below functions
             local opts = { buffer = ev.buf }
             -- n = normal mode, K = shift + k, display honor info for word under cursor.
             -- these are dependent on the ev callback. cannot be moved to .keymaps()
-            vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-            vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-            vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
-          end
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+            vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+            vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+          end,
         })
       end,
     },
@@ -525,11 +424,11 @@ function M.new()
       dependencies = { "nvim-tree/nvim-web-devicons" },
       config = function()
         require("trouble").setup({
-          auto_open = true,           -- automatically open the list when you have diagnostics
-          auto_close = true,          -- automatically close the list when you have no diagnostics
-          use_diagnostic_signs = true -- enabling this will use the signs defined in your lsp client
+          auto_open = true,            -- automatically open the list when you have diagnostics
+          auto_close = true,           -- automatically close the list when you have no diagnostics
+          use_diagnostic_signs = true, -- enabling this will use the signs defined in your lsp client
         })
-      end
+      end,
     },
 
     { -- mfussenegger/nvim-dap
@@ -542,16 +441,16 @@ function M.new()
             require("neodev").setup({
               library = { plugins = { "nvim-dap-ui" }, types = true },
             })
-          end
+          end,
         },
         { "theHamsta/nvim-dap-virtual-text" },
         { "mfussenegger/nvim-dap-python" },      -- for python
         { "nvim-telescope/telescope-dap.nvim" }, -- for telescope integration
       },
       config = function()
-        local path = require('mason-registry').get_package('debugpy'):get_install_path()
-        require('dap-python').setup(path .. '/venv/bin/python')
-      end
+        local path = require("mason-registry").get_package("debugpy"):get_install_path()
+        require("dap-python").setup(path .. "/venv/bin/python")
+      end,
     },
   }
 end
@@ -567,36 +466,43 @@ function M.setup()
     if lspconfig[server_name] then
       -- load custom settings otherwise load defaults.
       if server_name == "rust_analyzer" then
-        require "plugins.rust".dap_config()
+        require("plugins.rust").dap_config()
       else
         local on_attach = function(client, bufnr)
           show("LSP attached for: " .. client.name)
 
+          -- loads keymaps when the a buffer is attached.
+
           -- Enable completion triggered by <c-x><c-o>
-          vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+          vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
           -- See `:help vim.lsp.*` for documentation on any of the below functions
           local bufopts = { noremap = true, silent = true, buffer = bufnr }
-          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-          vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-          vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-          vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-          vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-          vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-          vim.keymap.set('n', '<space>wl', function()
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+
+          vim.keymap.set("n", "<leader>gd", vim.lsp.buf.declaration, bufopts)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+          vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, bufopts)
+
+          vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, bufopts)
+          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
+
+          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+          vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
+          vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, bufopts)
+          vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
+          vim.keymap.set("n", "<leader>wl", function()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
           end, bufopts)
-          vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-          vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-          vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-          vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-          vim.keymap.set('n', '<space>f', function()
+
+          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+
+          vim.keymap.set("n", "<leader>f", function()
             vim.lsp.buf.format({
               async = true,
               filter = function(client1)
                 return client1.name == "null-ls"
-              end
+              end,
             })
           end, bufopts)
         end
@@ -615,10 +521,14 @@ function M.setup()
   end
 
   local has_dap_plugin, dap = pcall(require, "dap")
-  if not has_dap_plugin then return end
+  if not has_dap_plugin then
+    return
+  end
 
   local has_dapui_plugin, dapui = pcall(require, "dapui")
-  if not has_dapui_plugin then return end
+  if not has_dapui_plugin then
+    return
+  end
 
   require("nvim-dap-virtual-text").setup()
 
@@ -690,35 +600,39 @@ function M.setup()
 end
 
 function M.keymaps()
-  map('n', '<F5>', '<cmd>lua require "dap".continue()<CR>', { silent = true, noremap = true })
-  map('n', '<F10>', '<cmd>lua require "dap".step_over()<CR>', { silent = true, noremap = true })
-  map('n', '<F11>', '<cmd>lua require "dap".step_into()<CR>', { silent = true, noremap = true })
-  map('n', '<F12>', '<cmd>lua require "dap".step_out()<CR>', { silent = true, noremap = true })
+  map("n", "<F5>", '<cmd>lua require "dap".continue()<CR>', { silent = true, noremap = true })
+  map("n", "<F10>", '<cmd>lua require "dap".step_over()<CR>', { silent = true, noremap = true })
+  map("n", "<F11>", '<cmd>lua require "dap".step_into()<CR>', { silent = true, noremap = true })
+  map("n", "<F12>", '<cmd>lua require "dap".step_out()<CR>', { silent = true, noremap = true })
 
   -- toggle a debug breakpoint
-  map('n', '<leader>db', '<cmd>lua require "dap".toggle_breakpoint()<CR>', { silent = true, noremap = true })
+  map("n", "<leader>db", '<cmd>lua require "dap".toggle_breakpoint()<CR>', { silent = true, noremap = true })
 
   -- run the closes python run test
-  vim.keymap.set('n', '<leader>dpr', ":lua require('dap-python').test_method()<CR>",
-    { silent = true, noremap = true })
+  vim.keymap.set(
+    "n",
+    "<leader>dpr",
+    ":lua require('dap-python').test_method()<CR>",
+    { silent = true, noremap = true }
+  )
 
   -- run the python test class
-  vim.keymap.set('n', '<leader>dpc', ":lua require('dap-python').test_class()<CR>",
-    { silent = true, noremap = true })
+  vim.keymap.set("n", "<leader>dpc", ":lua require('dap-python').test_class()<CR>", { silent = true, noremap = true })
 
   -- function() require('dap-python').debug_selection() end
-  vim.keymap.set('n', '<leader>dps <ESC>', ":lua require('dap-python').debug_selection()<CR>",
-    { silent = true, noremap = true })
+  vim.keymap.set(
+    "n",
+    "<leader>dps <ESC>",
+    ":lua require('dap-python').debug_selection()<CR>",
+    { silent = true, noremap = true }
+  )
 
   -- open dap gui
-  vim.keymap.set('n', '<leader>dui', ":lua require('dapui').toggle()<CR>",
-    { silent = true, noremap = true })
+  vim.keymap.set("n", "<leader>dui", ":lua require('dapui').toggle()<CR>", { silent = true, noremap = true })
 
-  vim.keymap.set('n', '<leader>du[', ":lua require('dapui').toggle(1)<CR>",
-    { silent = true, noremap = true })
+  vim.keymap.set("n", "<leader>du[", ":lua require('dapui').toggle(1)<CR>", { silent = true, noremap = true })
 
-  vim.keymap.set('n', '<leader>du]', ":lua require('dapui').toggle(2)<CR>",
-    { silent = true, noremap = true })
+  vim.keymap.set("n", "<leader>du]", ":lua require('dapui').toggle(2)<CR>", { silent = true, noremap = true })
 end
 
 return M
