@@ -48,6 +48,16 @@ function update_link_nvim(){
     ln -sf $HELPER_DOTFILES_HOME/config/nvim $HOME/.config/nvim
 }
 
+function update_link_tmux(){
+    # link the custom tmux.config to the system
+    ln -sf $HELPER_DOTFILES_HOME/tmux/tmux.conf $HOME/.tmux.conf
+
+    if [ ! -d $HOME/.tmux/plugins/tpm ]; then
+        # install the tmux plugin manager
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    fi
+}
+
 function update_learning_links(){
     ln -sf ~/Projects/src/github.com/chadit/CodeChallenges/exercism ~/exercism
 }
@@ -61,3 +71,4 @@ fi
 update_environment_file
 update_zshrc
 update_link_nvim
+update_link_tmux

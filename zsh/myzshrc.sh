@@ -1,3 +1,12 @@
+# start tmux automatically
+if which tmux >/dev/null 2>&1; then
+  # if [[ $- =~ i ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_TTY" ]]; then
+  if [[ $- =~ i ]] && [[ -z "$TMUX" ]]; then
+    tmux attach-session -t $HOST || tmux new-session -s $HOST
+  fi
+fi
+
+
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # loading dependancies if not exist
