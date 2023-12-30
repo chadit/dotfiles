@@ -37,7 +37,7 @@ function update_zshrc() {
         echo "HELPER_DOTFILES_HOME/zsh/myzshrc.sh already exists in /home/${logged_in_user}/.zshrc."
     else
         echo "Adding HELPER_DOTFILES_HOME/zsh/myzshrc.sh to /home/${logged_in_user}/.zshrc."
-        
+
         content_to_add="# Add to .zshrc\n# Source global definitions\n$search_line\n    echo \"Loading My Scripts\"\n    . \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh\nfi"
         echo -e "$content_to_add" >> /home/${logged_in_user}/.zshrc
     fi
@@ -64,11 +64,15 @@ function update_learning_links(){
 
 # This script must be run as root
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 
-   exit 1
+    echo "This script must be run as root"
+    exit 1
 fi
 
 update_environment_file
 update_zshrc
 update_link_nvim
 update_link_tmux
+
+
+# TODO:
+# add the ripgrep based on linux and mac, this is needed for telescop search.

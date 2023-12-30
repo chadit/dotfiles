@@ -1,6 +1,5 @@
-* add search functionality into a file.  example, search for all functions test() in all files
-* add support to show buffers like tabs, similar to vscode
 * look into neotest, if it works better then just plain dap
 
 errors: 
 * ssh nvim, clipboard error fixed by using tmux as the wrapper. when in tmux, vim/nvim will use the tmux buffer.
+* if live_grep is not working, check that ripgrep is preinstalled.  if not, install it.
