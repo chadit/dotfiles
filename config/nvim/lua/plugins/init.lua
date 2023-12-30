@@ -1,3 +1,25 @@
+-- init.lua
+
+local function get_directory_files(directory)
+  local files = {}
+  local p = io.popen('find "' .. directory .. '" -type f')
+  if p then
+    for file in p:lines() do
+      if file:match("%.lua$") then -- Filter for Lua files
+        table.insert(files, file)
+      end
+    end
+    p:close()
+  end
+  return files
+end
+
+local function convert_path_to_module(path)
+  local module_path = path:match(".*/lua/(plugins/.*)") or path:match(".*/(plugins/.*)")
+  local module_name = module_path:gsub("%.lua$", ""):gsub("/", ".")
+  return module_name
+end
+
 local M = {}
 
 function M.load_plugins()
@@ -47,31 +69,18 @@ function M.load_plugins()
     { 'numToStr/Comment.nvim', opts = {} },
   }
 
-  -- Load config for plugins
-  local loaded_plugins = {}
-  local plugin_files = {
-    "plugins.autocomplete",
-    "plugins.copilot",
-    "plugins.git",
-    "plugins.go",
-    "plugins.indentline",
-    "plugins.lsp",
-    "plugins.null-ls",
-    "plugins.lualine",
-    "plugins.neo-tree",
-    -- "plugins.neotest",
-    "plugins.notify",
-    "plugins.python",
-    "plugins.rust",
-    "plugins.telescope",
-    "plugins.theme",
-    "plugins.treesitter",
-  }
+  local base_plugin_path = vim.fn.stdpath("config") .. "/lua/plugins"
 
-  for _, plugin_file in ipairs(plugin_files) do
-    local has_plugin, plugin = pcall(require, plugin_file)
-    if has_plugin then
-      loaded_plugins[plugin_file] = plugin
+  -- Load plugin files
+  local loaded_plugins = {}
+  local test_plugin_files = get_directory_files(base_plugin_path)
+  for _, file in ipairs(test_plugin_files) do
+    local plugin_file = convert_path_to_module(file)
+    if plugin_file ~= "plugins.init" then
+      local has_plugin, plugin = pcall(require, plugin_file)
+      if has_plugin and type(plugin) == "table" and not plugin["ignore"] then
+        loaded_plugins[plugin_file] = plugin
+      end
     end
   end
 

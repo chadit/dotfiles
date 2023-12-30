@@ -68,7 +68,7 @@ local function config()
 end
 
 
-local M = {}
+local M = { ignore = true }
 
 function M.new()
   return {

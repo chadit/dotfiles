@@ -8,4 +8,4 @@ alias cls=reset_terminal1
 alias vim="nvim"
 alias oldvim="\vim"
 
-alias exit_session="tmux detach -p"
+alias exit_session="tmux detach -P"

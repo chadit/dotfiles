@@ -34,10 +34,11 @@ function M.new()
             end
           end,
           sources = {
-            formatting.prettier.with({
-              extra_filetypes = { "toml" },
-              extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
-            }),
+            --  formatting.prettier.with({
+            --    extra_filetypes = { "toml" },
+            --    extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
+            --  }),
+            formatting.beautysh,                                                 -- bash
             formatting.black.with({ extra_args = { "--fast", "--line-length=120" } }), -- python
             formatting.isort,                                                    -- python
             formatting.stylua,                                                   -- lua
@@ -45,6 +46,7 @@ function M.new()
             formatting.goimports,                                                -- golang
             formatting.markdownlint,                                             -- markdown
             formatting.rubocop,                                                  -- ruby
+            formatting.taplo,                                                    -- toml
 
             diagnostics.golangci_lint,                                           -- golang
             diagnostics.markdownlint,                                            -- markdown

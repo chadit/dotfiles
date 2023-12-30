@@ -45,6 +45,7 @@ local ensure_language_servers = {
   "pyright",
   "rust_analyzer",
   "solargraph",
+  "taplo", -- toml
   "terraformls",
   "tsserver",
   "yamlls",
@@ -57,7 +58,7 @@ local ensure_tools = {
   "bash-debug-adapter",
   "chrome-debug-adapter",
   "debugpy", -- python
-  "delve",   -- go
+  "delve",  -- go
   "elixir-ls",
   "go-debug-adapter",
   "js-debug-adapter",
@@ -73,6 +74,7 @@ local ensure_tools = {
   "pylint",
   "yamllint",
   -- Formatter
+  "beautysh",
   "black",
   "buf",
   "gofumpt",
@@ -424,8 +426,8 @@ function M.new()
       dependencies = { "nvim-tree/nvim-web-devicons" },
       config = function()
         require("trouble").setup({
-          auto_open = true,            -- automatically open the list when you have diagnostics
-          auto_close = true,           -- automatically close the list when you have no diagnostics
+          auto_open = true,       -- automatically open the list when you have diagnostics
+          auto_close = true,      -- automatically close the list when you have no diagnostics
           use_diagnostic_signs = true, -- enabling this will use the signs defined in your lsp client
         })
       end,
@@ -444,7 +446,7 @@ function M.new()
           end,
         },
         { "theHamsta/nvim-dap-virtual-text" },
-        { "mfussenegger/nvim-dap-python" },      -- for python
+        { "mfussenegger/nvim-dap-python" },  -- for python
         { "nvim-telescope/telescope-dap.nvim" }, -- for telescope integration
       },
       config = function()
@@ -566,7 +568,7 @@ function M.setup()
     },
     floating = {
       max_height = 0.9,
-      max_width = 0.5,             -- Floats will be treated as percentage of your screen.
+      max_width = 0.5,          -- Floats will be treated as percentage of your screen.
       border = vim.g.border_chars, -- Border style. Can be 'single', 'double' or 'rounded'
       mappings = {
         close = { "q", "<Esc>" },

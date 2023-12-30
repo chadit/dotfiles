@@ -3,4 +3,4 @@
 * look into neotest, if it works better then just plain dap
 
 errors: 
-* ssh nvim, clipboard: no provider. Try ":checkhealth" or ":h clipboard". (ssh from windows so could be that.)
+* ssh nvim, clipboard error fixed by using tmux as the wrapper. when in tmux, vim/nvim will use the tmux buffer.
