@@ -58,10 +58,11 @@ local ensure_tools = {
   "bash-debug-adapter",
   "chrome-debug-adapter",
   "debugpy", -- python
-  "delve",  -- go
+  "delve",   -- go
   "elixir-ls",
   "go-debug-adapter",
   "js-debug-adapter",
+  "node-debug2-adapter", -- node
 
   -- Linters
   "ansible-lint",
@@ -426,8 +427,8 @@ function M.new()
       dependencies = { "nvim-tree/nvim-web-devicons" },
       config = function()
         require("trouble").setup({
-          auto_open = true,       -- automatically open the list when you have diagnostics
-          auto_close = true,      -- automatically close the list when you have no diagnostics
+          auto_open = true,            -- automatically open the list when you have diagnostics
+          auto_close = true,           -- automatically close the list when you have no diagnostics
           use_diagnostic_signs = true, -- enabling this will use the signs defined in your lsp client
         })
       end,
@@ -446,7 +447,7 @@ function M.new()
           end,
         },
         { "theHamsta/nvim-dap-virtual-text" },
-        { "mfussenegger/nvim-dap-python" },  -- for python
+        { "mfussenegger/nvim-dap-python" },      -- for python
         { "nvim-telescope/telescope-dap.nvim" }, -- for telescope integration
       },
       config = function()
@@ -509,7 +510,11 @@ function M.setup()
           end, bufopts)
         end
 
-        local base_opt = { on_attach = on_attach }
+        local base_opt = {
+          on_attach = on_attach,
+          capabilities = require("utils.lsp").capabilities()
+        }
+
         local opt = fetch_config(server_name, base_opt)
         lspconfig[server_name].setup(opt)
 
@@ -517,6 +522,8 @@ function M.setup()
           require("plugins.go").dap_config()
         elseif server_name == "bashls" then
           require("plugins.bash").dap_config()
+        elseif server_name == "node2" then
+          require("plugins.node").dap_config()
         end
       end
     end
@@ -567,12 +574,16 @@ function M.setup()
       },
     },
     floating = {
-      max_height = 0.9,
-      max_width = 0.5,          -- Floats will be treated as percentage of your screen.
-      border = vim.g.border_chars, -- Border style. Can be 'single', 'double' or 'rounded'
+      max_height = nil,
+      max_width = nil,
+      -- max_height = 0.9,
+      -- max_width = 0.5,             -- Floats will be treated as percentage of your screen.
+      border = "single", -- Border style. Can be 'single', 'double' or 'rounded'
       mappings = {
         close = { "q", "<Esc>" },
       },
+      windows = { indent = 1 },
+      render = { max_type_length = nil },
     },
   })
 
