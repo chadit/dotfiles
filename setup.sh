@@ -60,6 +60,8 @@ function update_link_tmux(){
 
 function update_learning_links(){
     ln -sf ~/Projects/src/github.com/chadit/CodeChallenges/exercism ~/exercism
+
+    ln -sf ~/Projects/src/github.com/chadit/dotfiles/alacritty/alacritty.toml ~/.alacritty.toml
 }
 
 # This script must be run as root

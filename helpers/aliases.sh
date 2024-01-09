@@ -9,3 +9,5 @@ alias vim="nvim"
 alias oldvim="\vim"
 
 alias exit_session="tmux detach -P"
+
+alias gpull="git pull -f && git prune && git gc --aggressive"

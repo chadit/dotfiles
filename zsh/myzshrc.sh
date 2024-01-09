@@ -28,12 +28,12 @@ ZSH_THEME="robbyrussell"
 
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=1000
+HISTSIZE=100000
+SAVEHIST=100000
 
 fpath=(~/.zsh/completion $fpath)
 
-echo "-- welcome $(whoami) - Loading zsh --"
+echo "---- Welcome $(whoami) - Loading zsh ----"
 
 # Set GPG
 export GPG_TTY=$(tty)
@@ -214,12 +214,6 @@ export GEM_HOME=$HOME/gems
 
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-#cd $HOME
-
-
-# start TMUX
-#tmux_default
 
 # Add to .zshrc
 # Source global definitions
