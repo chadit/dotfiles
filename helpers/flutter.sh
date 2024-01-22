@@ -28,10 +28,11 @@ function flutter_install(){
     flutter upgrade
   else
     echo "install flutter"
-    cd ~/Downloads
-
+    mkdir -p $HOME/development
+    cd $HOME/development
     git clone --branch stable https://github.com/flutter/flutter.git
-
+    flutter upgrade
+    
     # # Add Flutter to your path (adjust the file according to your shell)
     # echo 'export PATH="$PATH:/opt/flutter/bin"' >> ~/.bashrc
     # source ~/.bashrc

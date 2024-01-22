@@ -76,6 +76,9 @@ end
 function M.dap_config()
   local has_dap_plugin, dap = pcall(require, "dap")
   if not has_dap_plugin then return end
+
+  require("dap-go").setup()
+
   --------------------------
   -- Golang --
   --------------------------
@@ -98,7 +101,7 @@ function M.dap_config()
     },
     {
       type = "delve",
-      name = "Debug test",   -- configuration for debugging test files
+      name = "Debug test", -- configuration for debugging test files
       request = "launch",
       mode = "test",
       program = "${file}",

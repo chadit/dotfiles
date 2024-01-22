@@ -115,6 +115,10 @@ function system_update() {
                 source_helper "linux-arch.sh"
                 arch_update
             fi
+
+            # -- update vscode for linux via source.
+            vscode_update
+
         else
             echo "os-release not found"
         fi

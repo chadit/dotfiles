@@ -1,6 +1,9 @@
 #!/bin/zsh
 
 function vscode_stable() {
+  local CURRENTDIR=$(pwd)
+  cd $HELPER_DOTFILES_HOME/backup/install
+
   VSCODE_URL="https://update.code.visualstudio.com/latest/linux-x64/stable"
   INSTALL_DIR="/opt/code"
 
@@ -40,9 +43,13 @@ Keywords=vscode;"
   fi
 
   echo "VSCode has been updated to the latest version."
+  cd $CURRENTDIR
 }
 
 function vscode_insider() {
+  local CURRENTDIR=$(pwd)
+  cd $HELPER_DOTFILES_HOME/backup/install
+
   VSCODE_URL="https://update.code.visualstudio.com/latest/linux-x64/insider"
   INSTALL_DIR="/opt/vscode"
 
@@ -68,7 +75,7 @@ Icon=/opt/vscode/resources/app/resources/linux/code.png
 Terminal=false
 Type=Application
 Categories=Utility;TextEditor;Development;IDE;
-Keywords=vscode;"
+Keywords=vscodeI;"
 
     local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
     sudo touch /usr/share/applications/vscode.desktop
@@ -81,4 +88,10 @@ Keywords=vscode;"
   fi
 
   echo "VSCode has been updated to the insider version."
+  cd $CURRENTDIR
+}
+
+function vscode_update() {
+    vscode_stable
+    vscode_insider
 }

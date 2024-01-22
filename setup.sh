@@ -1,12 +1,33 @@
 #!/bin/bash
+echo "1"
 
-# this assumes the repo is already cloned to ~/Projects/src/github.com/chadit/dotfiles
+function set_script_home() {
+    # this assumes the repo is already cloned to ~/Projects/src/github.com/chadit/dotfiles
+    local logged_in_user_name=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+    USER_HOME="/home/${logged_in_user_name}"
+    # check if running on macos
+    if [ -d "/Users/${logged_in_user_name}" ]; then
+        USER_HOME="/Users/${logged_in_user_name}"
+    fi
+
+    if [ ! -d "$USER_HOME/Projects/src/github.com/chadit/dotfiles" ]; then
+        echo "dotfiles repo not found at $USER_HOME/Projects/src/github.com/chadit/dotfiles"
+        exit 1
+    fi
+
+    echo "dotfiles repo found at $USER_HOME/Projects/src/github.com/chadit/dotfiles"
+}
+
+set_script_home
+
+
+
 
 # Function to add or update HELPER_DOTFILES_HOME in /etc/environment
 function update_environment_file() {
-    local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+    # local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
     # change if installed somewhere else.
-    local helper_dotfiles_home="HELPER_DOTFILES_HOME=/home/${logged_in_user}/Projects/src/github.com/chadit/dotfiles/"
+    local helper_dotfiles_home="HELPER_DOTFILES_HOME=${USER_HOME}/Projects/src/github.com/chadit/dotfiles/"
     echo "HELPER_DOTFILES_HOME: ${helper_dotfiles_home}"
 
     # Check if HELPER_DOTFILES_HOME already exists in /etc/environment
@@ -29,18 +50,25 @@ function update_environment_file() {
 }
 
 function update_zshrc() {
-    local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+    # local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+
+    local zshrc_location="${USER_HOME}/.zshrc"
+    # if [ -f "/Users/${logged_in_user}/.zshrc" ]; then
+    #     zshrc_location="/Users/${logged_in_user}/.zshrc"           
+    # fi
 
     search_line="if [ -f \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh ]; then"
 
-    if grep -Fxq "$search_line" /home/${logged_in_user}/.zshrc; then
-        echo "HELPER_DOTFILES_HOME/zsh/myzshrc.sh already exists in /home/${logged_in_user}/.zshrc."
+    if grep -Fxq "$search_line" ${zshrc_location} ; then
+        echo "HELPER_DOTFILES_HOME/zsh/myzshrc.sh already exists in ${zshrc_location}."
     else
-        echo "Adding HELPER_DOTFILES_HOME/zsh/myzshrc.sh to /home/${logged_in_user}/.zshrc."
+        echo "Adding HELPER_DOTFILES_HOME/zsh/myzshrc.sh to ${zshrc_location}."
 
         content_to_add="# Add to .zshrc\n# Source global definitions\n$search_line\n    echo \"Loading My Scripts\"\n    . \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh\nfi"
-        echo -e "$content_to_add" >> /home/${logged_in_user}/.zshrc
+        echo -e "$content_to_add" >> ${zshrc_location}
     fi
+
+    ln -sf $HELPER_DOTFILES_HOME/alacritty/alacritty.toml ~/.alacritty.toml
 }
 
 function update_link_nvim(){
@@ -59,9 +87,7 @@ function update_link_tmux(){
 }
 
 function update_learning_links(){
-    ln -sf ~/Projects/src/github.com/chadit/CodeChallenges/exercism ~/exercism
-
-    ln -sf ~/Projects/src/github.com/chadit/dotfiles/alacritty/alacritty.toml ~/.alacritty.toml
+    ln -sf ${USER_HOME}/Projects/src/github.com/chadit/CodeChallenges/exercism ~/exercism
 }
 
 # This script must be run as root

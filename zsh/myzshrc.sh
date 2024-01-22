@@ -137,8 +137,8 @@ if [ -d "$HOME/.rbenv/bin" ]; then
 fi
 
 # initalize helpers and variables
-go_setup
 java_setup
+go_setup
 node_setup
 flutter_setup
 dart_setup
@@ -151,7 +151,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   # Locate the highest Python version in the Library and add it to the PATH
   highest_python_bin=$(find $HOME/Library/Python -type d -name 'bin' | sort -V | tail -1)
   if [ -d "$highest_python_bin" ]; then
-    echo "Python $highest_python_bin bin found"
+    # echo "Python $highest_python_bin bin found"
     pathmunge "$highest_python_bin"
   fi
 fi
@@ -231,15 +231,36 @@ if [ -f /usr/share/powerline/bindings/zsh/powerline.zsh ]; then
   # POWERLINE_BASH_SELECT=1
   source /usr/share/powerline/bindings/zsh/powerline.zsh
 else
-  function prompt_char {
-    git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
-    echo '○'
-  }
+  powerline_paths=$(find $HOME/Library/Python/ -type f -path '*/zsh/powerline.zsh' 2>/dev/null)
+  if [ -z "$folder_limit" ]; then
+    # Sort the paths by Python version (highest version last)
+    sorted_paths=$(echo "$powerline_paths" | sort -V)
 
-  export PROMPT='%n@%m[%~]:$(git_prompt_info)$(prompt_char)%{$reset_color%} '
+    # Get the last (highest Python version) path
+    newest_powerline=$(echo "$sorted_paths" | tail -n 1)
 
-  RPROMPT=""
+    # Check if a powerline.sh was found
+    if [ -n "$newest_powerline" ]; then
+      echo "Sourcing Powerline from: $newest_powerline"
+      # powerline-daemon -q
+      # POWERLINE_BASH_CONTINUATION=1
+      # POWERLINE_BASH_SELECT=1
+      source "$newest_powerline"
+    fi
+    # source /usr/local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
+  else
+    echo "Powerline not found loading default."
+
+    function prompt_char {
+      git branch >/dev/null 2>/dev/null && echo '±' && return
+      hg root >/dev/null 2>/dev/null && echo '☿' && return
+      echo '○'
+    }
+
+    export PROMPT='%n@%m[%~]:$(git_prompt_info)$(prompt_char)%{$reset_color%} '
+
+    RPROMPT=""
+  fi
 fi
 
 # reset the path hash to avoid issues with zsh

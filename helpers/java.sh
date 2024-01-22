@@ -24,6 +24,11 @@ function java_sdkman_init() {
   else
     echo "sdkman not found, installing, restart shell when done"
     curl -s "https://get.sdkman.io" | bash
+    # install and init java
+    sdk install java
+    sdk current java
+    
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
   fi
 }
 
