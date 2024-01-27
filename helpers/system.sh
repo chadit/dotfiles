@@ -99,6 +99,9 @@ function system_update() {
         echo "update rust"
         source_helper "rust.sh"
         rust_update
+
+        echo "update special repos"
+        update_repos
     }
 
     # update os
@@ -161,4 +164,27 @@ function system_update() {
     fi
 
     system_shared_update
+}
+
+# system_move_contents : function to move contents from one directory to another.
+function system_move_contents() {
+    local src="$1"
+    local dest="$2"
+
+    # Check if source directory exists
+    if [ ! -d "$src" ]; then
+        echo "Source directory does not exist: $src"
+        return 1
+    fi
+
+    # Check if destination directory exists, if not create it
+    if [ ! -d "$dest" ]; then
+        echo "Destination directory does not exist, creating: $dest"
+        mkdir -p "$dest"
+    fi
+
+    # Move all contents from source to destination
+    mv "$src"/* "$dest"/
+
+    echo "Contents moved from $src to $dest"
 }

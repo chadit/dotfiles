@@ -14,6 +14,7 @@ function M.new()
     -- gopher
     {
       "olexsmir/gopher.nvim",
+      ft = { "go", "gomod" },
       dependencies = {
         "leoluz/nvim-dap-go"
       },
@@ -32,16 +33,19 @@ function M.new()
           goimport = "gopls",
           gofmt = "gopls",
         })
-      end
+      end,
+      build = function()
+        vim.cmd [[silent! GoInstallDeps]]
+      end,
     },
     -- go
     {
       "ray-x/go.nvim",
-      enabled = true,
       dependencies = { -- optional packages
         "ray-x/guihua.lua",
         "neovim/nvim-lspconfig",
         "nvim-treesitter/nvim-treesitter",
+        "mfussenegger/nvim-dap",
         "leoluz/nvim-dap-go"
       },
       config = function()

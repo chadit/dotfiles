@@ -45,16 +45,16 @@ update_ubuntu() {
   sudo apt update && sudo apt upgrade && sudo apt dist-upgrade && sudo apt autoremove && sudo apt autoclean
 }
 
-update_os() {
-  local CURRENTDIR=$(pwd)
+# update_os() {
+#   local CURRENTDIR=$(pwd)
 
-  update_repos
+#   update_repos
 
 
-  $HELPER_DOTFILES_HOME/install/vscode.sh
+#   $HELPER_DOTFILES_HOME/install/vscode.sh
 
-  cd $CURRENTDIR
-}
+#   cd $CURRENTDIR
+# }
 
 
 

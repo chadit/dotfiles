@@ -38,20 +38,22 @@ function M.new()
             --    extra_filetypes = { "toml" },
             --    extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
             --  }),
-            formatting.beautysh,                                                 -- bash
+            formatting.beautysh,                                                       -- bash
             formatting.black.with({ extra_args = { "--fast", "--line-length=120" } }), -- python
-            formatting.isort,                                                    -- python
-            formatting.stylua,                                                   -- lua
-            formatting.gofmt,                                                    -- golang
-            formatting.goimports,                                                -- golang
-            formatting.markdownlint,                                             -- markdown
-            formatting.rubocop,                                                  -- ruby
-            formatting.taplo,                                                    -- toml
+            formatting.isort,                                                          -- python
+            formatting.stylua,                                                         -- lua
+            formatting.gofmt,                                                          -- golang
+            -- formatting.goimports,                                                   -- golang
+            formatting.goimports_reviser,                                              -- golang
+            formatting.golines,                                                        -- golang, remove if you do not want it to auto wrap
+            formatting.markdownlint,                                                   -- markdown
+            formatting.rubocop,                                                        -- ruby
+            formatting.taplo,                                                          -- toml
 
-            diagnostics.golangci_lint,                                           -- golang
-            diagnostics.markdownlint,                                            -- markdown
-            diagnostics.eslint_d,                                                -- javascript
-            diagnostics.rubocop,                                                 -- ruby
+            diagnostics.golangci_lint,                                                 -- golang
+            diagnostics.markdownlint,                                                  -- markdown
+            diagnostics.eslint_d,                                                      -- javascript
+            diagnostics.rubocop,                                                       -- ruby
 
             completion.spell,
           },

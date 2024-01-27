@@ -130,3 +130,19 @@ function git_update_dependancy_repos() {
   done
 
 }
+
+# Function to remove all .git directories from a directory
+function git_remove_git_dirs() {
+    local dir="$1"
+
+    # Check if the directory exists
+    if [ ! -d "$dir" ]; then
+        echo "Directory does not exist: $dir"
+        return 1
+    fi
+
+    # Find and remove .git directories
+    find "$dir" -type d -name '.git' -exec echo "Removing {}" \; -exec rm -rf '{}' +
+
+    echo "All .git directories removed from $dir"
+}

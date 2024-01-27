@@ -69,6 +69,7 @@ local ensure_tools = {
   "buf",
   "gofumpt",
   "goimports",
+  "goimports-reviser",
   "golines",
   "gomodifytags",
   "gotests",
