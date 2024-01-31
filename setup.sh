@@ -54,7 +54,7 @@ function update_zshrc() {
 
     local zshrc_location="${USER_HOME}/.zshrc"
     # if [ -f "/Users/${logged_in_user}/.zshrc" ]; then
-    #     zshrc_location="/Users/${logged_in_user}/.zshrc"           
+    #     zshrc_location="/Users/${logged_in_user}/.zshrc"
     # fi
 
     search_line="if [ -f \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh ]; then"
