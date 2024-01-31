@@ -18,11 +18,6 @@ function set_script_home() {
     echo "dotfiles repo found at $USER_HOME/Projects/src/github.com/chadit/dotfiles"
 }
 
-set_script_home
-
-
-
-
 # Function to add or update HELPER_DOTFILES_HOME in /etc/environment
 function update_environment_file() {
     # local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
@@ -96,6 +91,7 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+set_script_home
 update_environment_file
 update_zshrc
 update_link_nvim
