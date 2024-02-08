@@ -1,13 +1,18 @@
 -- lsp.lua
 
-
-
 local show = vim.schedule_wrap(function(msg)
   local has_notify, notify = pcall(require, "plugins.notify")
   if has_notify then
     notify.notify_info(msg, "ensure-tools")
   end
 end)
+
+-- local show_error = vim.schedule_wrap(function(msg)
+--   local has_notify, notify = pcall(require, "plugins.notify")
+--   if has_notify then
+--     notify.notify_error(msg, "ensure-tools")
+--   end
+-- end)
 
 -- -- https://github.com/williamboman/mason-lspconfig.nvim?tab=readme-ov-file#available-lsp-servers
 local ensure_language_servers = {
@@ -61,6 +66,7 @@ local ensure_tools = {
   "jsonlint",
   "luacheck",
   "markdownlint",
+  "protolint",
   "pylint",
   "yamllint",
   -- Formatter
@@ -166,6 +172,54 @@ local servers = {
         telemetry = { enable = false },
         hint = {
           enable = false,
+        },
+      },
+    },
+  },
+  clangd = {
+    --server = {
+    capabilities = {
+      offsetEncoding = { "utf-8" },
+      offset_encoding = "utf-8",
+    },
+    filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
+    cmd = {
+      "clangd",
+      "--background-index",
+      "--clang-tidy",
+      "--header-insertion=iwyu",
+      "--completion-style=detailed",
+      "--function-arg-placeholders",
+      "--fallback-style=llvm",
+    },
+    init_options = {
+      usePlaceholders = true,
+      completeUnimported = true,
+      clangdFileStatus = true,
+    },
+    -- },
+    extensions = {
+      inlay_hints = {
+        inline = false,
+      },
+      ast = {
+        --These require codicons (https://github.com/microsoft/vscode-codicons)
+        role_icons = {
+          type = "",
+          declaration = "",
+          expression = "",
+          specifier = "",
+          statement = "",
+          ["template argument"] = "",
+        },
+        kind_icons = {
+          Compound = "",
+          Recovery = "",
+          TranslationUnit = "",
+          PackExpansion = "",
+          TemplateTypeParm = "",
+          TemplateTemplateParm = "",
+          TemplateParamObject = "",
         },
       },
     },
@@ -433,6 +487,7 @@ function M.setup()
   end
 
   -- load settings for each server
+  --local lsp_attached = false
   for _, server_name in ipairs(ensure_language_servers) do
     if lspconfig[server_name] then
       -- load custom settings otherwise load defaults.
@@ -440,6 +495,11 @@ function M.setup()
         require("plugins.rust").dap_config()
       else
         local on_attach = function(client, bufnr)
+          -- if lsp_attached then
+          --   show_error("An LSP is already attached, skipping: " .. client.name)
+          -- end
+          -- if not lsp_attached then
+          --   lsp_attached = true
           show("LSP attached for: " .. client.name)
 
           -- loads keymaps when the a buffer is attached.
@@ -476,14 +536,21 @@ function M.setup()
               end,
             })
           end, bufopts)
+          --  end
         end
-
+        -- clangd
         local base_opt = {
           on_attach = on_attach,
-          capabilities = require("utils.lsp").capabilities()
+          capabilities = require("utils.lsp").capabilities(),
         }
 
         local opt = fetch_config(server_name, base_opt)
+
+        -- if server_name == "clangd" then
+        --   local file_name = "/home/chadit/Downloads/clangd.lua"
+        --   require("utils.write").WriteFile(file_name, opt)
+        -- end
+
         lspconfig[server_name].setup(opt)
 
         if server_name == "gopls" then
@@ -496,8 +563,6 @@ function M.setup()
       end
     end
   end
-
-
 
   for _, sign in ipairs(signs) do
     vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })

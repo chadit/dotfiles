@@ -26,16 +26,16 @@ function M.load_plugins()
   -- [[ Install `lazy.nvim` plugin manager ]]
   --    https://github.com/folke/lazy.nvim
   --    `:help lazy.nvim.txt` for more info
-  local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
   if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system {
-      'git',
-      'clone',
-      '--filter=blob:none',
-      'https://github.com/folke/lazy.nvim.git',
-      '--branch=stable', -- latest stable release
+    vim.fn.system({
+      "git",
+      "clone",
+      "--filter=blob:none",
+      "https://github.com/folke/lazy.nvim.git",
+      "--branch=stable", -- latest stable release
       lazypath,
-    }
+    })
   end
   vim.opt.rtp:prepend(lazypath)
 
@@ -46,13 +46,15 @@ function M.load_plugins()
   end
 
   local plugins = {
-    { "folke/lazy.nvim",      lazy = false, tag = "stable", priority = 1000 }, -- latest stable release
+    { "folke/lazy.nvim",       lazy = false,     tag = "stable", priority = 1000 }, -- latest stable release
 
     -- Detect tabstop and shiftwidth automatically
-    { 'tpope/vim-sleuth' },
+    { "tpope/vim-sleuth" },
 
     -- Useful plugin to show you pending keybinds.
-    { 'folke/which-key.nvim', opts = {} },
+    { "folke/which-key.nvim",  opts = {} },
+
+    { "RRethy/vim-illuminate", event = "BufRead" },
 
     {
       "simrat39/inlay-hints.nvim",
@@ -62,7 +64,7 @@ function M.load_plugins()
     },
 
     -- "gc" to comment visual regions/lines
-    { 'numToStr/Comment.nvim', opts = {} },
+    { "numToStr/Comment.nvim", opts = {} },
   }
 
   local base_plugin_path = vim.fn.stdpath("config") .. "/lua/plugins"

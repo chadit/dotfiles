@@ -1,6 +1,8 @@
 local function setup()
   local has_plugin, plg = pcall(require, "neo-tree")
-  if not has_plugin then return end
+  if not has_plugin then
+    return
+  end
 
   plg.setup({
     close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
@@ -8,23 +10,26 @@ local function setup()
     enable_git_status = true,
     enable_diagnostics = true,
     filesystem = {
-      filtered_items = {
+      filtered_items         = {
         visible = true,
         hide_dotfiles = false,
         hide_gitignored = false,
         hide_hidden = false,
         never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
           ".DS_Store",
-          "thumbs.db"
+          "thumbs.db",
         },
       },
-      hijack_netrw_behavior = "open_default",
-      window = {
+      hijack_netrw_behavior  = "open_default",
+      window                 = {
         mappings = {
-          ['<leftrelease>'] = "open"
-        }
+          ["<leftrelease>"] = "open",
+        },
+      },
+      use_libuv_file_watcher = true, -- uses nvim built in file watcher.
+      follow_current_file    = {
+        enabled = true,
       }
-
     },
     window = {
       position = "left",
@@ -35,7 +40,7 @@ local function setup()
   -- Create an autocommand to open Neo-tree on Neovim startup
   vim.api.nvim_create_autocmd("VimEnter", {
     pattern = "*",
-    command = "Neotree"
+    command = "Neotree",
   })
 end
 
@@ -53,16 +58,15 @@ function M.new()
       },
       config = function()
         setup()
-      end
+      end,
     },
   }
 end
 
-function M.setup()
-end
+function M.setup() end
 
 function M.keymaps()
-  vim.keymap.set({ 'n', 'v' }, '<C-n>', ':Neotree toggle<CR>', {})
+  vim.keymap.set({ "n", "v" }, "<C-n>", ":Neotree toggle<CR>", {})
 end
 
 return M
