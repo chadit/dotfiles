@@ -41,23 +41,6 @@ reset_touchpad() {
   sudo modprobe psmouse
 }
 
-update_ubuntu() {
-  sudo apt update && sudo apt upgrade && sudo apt dist-upgrade && sudo apt autoremove && sudo apt autoclean
-}
-
-# update_os() {
-#   local CURRENTDIR=$(pwd)
-
-#   update_repos
-
-
-#   $HELPER_DOTFILES_HOME/install/vscode.sh
-
-#   cd $CURRENTDIR
-# }
-
-
-
 
 # ln -sf $HOME/Projects/src/github.com/maxgallup/tailscale-status/tailscale-status@maxgallup.github.com $HOME/.local/share/gnome-shell/extensions/tailscale-status@maxgallup.github.com
 

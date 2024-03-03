@@ -1,0 +1,408 @@
+{
+    "breadcrumbs.enabled": true,
+    "editor.acceptSuggestionOnEnter": "on",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": true,
+    "editor.cursorBlinking": "solid",
+    "editor.fontFamily": "'Hack Nerd Font', 'Cascadia code', Consolas",
+    "editor.fontSize": 18,
+    "editor.formatOnSave": true,
+    "editor.tabCompletion": "on",
+    "editor.suggestSelection": "first",
+    "editor.lineNumbers": "on",
+    "editor.minimap.enabled": true,
+    "editor.semanticHighlighting.enabled": true,
+    "editor.inlineSuggest.enabled": true,
+    "editor.largeFileOptimizations": false,
+    "workbench.productIconTheme": "material-product-icons",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.statusBar.visible": true,
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.colorTheme": "doom",
+    "files.trimFinalNewlines": true,
+    "files.watcherExclude": {
+        "**/*": false,
+        "**/.git/*/**": true,
+        "**/node_modules/*/**": true,
+        "**/dist/*/**": true,
+        "**/coverage/*/**": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/.hg/store/**": true,
+        "**/.npm/**": true
+    },
+    "files.exclude": {
+        "**/._*": true,
+        "**/node_modules/**": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true,
+        "dotnet/**/bin/**": true,
+        "dotnet/**/obj/**": true,
+        "dotnet/.idea/**": true,
+        "frontend/build/**": true,
+        "frontend/src/tailwind.output.css": true
+    },
+    "files.associations": {
+        "**/*.c.orig": "c",
+        "**/*.log*": "log",
+        "**/*.mak": "makefile",
+        "**/*.mk": "makefile",
+        "**/*.sxx": "systemtap",
+        "**/*.y": "c",
+        "**/.luacheckrc": "lua",
+        "**/.vscode/.easyRedis.redis": "json",
+        "**/Makefile.*": "makefile",
+        "**/auto/**/*": "shellscript",
+        "**/localconf": "lua",
+        "**/ngx*/**/*.t": "lua",
+        "**/opconf.example": "lua",
+        "**/opconf.lua*": "lua",
+        "*.json": "jsonc",
+        ".prettierrc": "jsonc",
+        ".stylelintrc": "jsonc"
+    },
+    "terminal.integrated.fontSize": 15,
+    "terminal.integrated.fontFamily": "'Hack Nerd Font', 'Cascadia code', Consolas, 'Courier New', monospace",
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "extensions.ignoreRecommendations": true,
+      // Golang stuff
+      "go.lintTool": "golangci-lint",
+      "go.lintFlags": [
+          "-v",
+          "--enable-all",
+          "--disable=forbidigo",
+          "--disable=gochecknoglobals",
+      ],
+      "go.vetFlags": ["-all"],
+      "go.lintOnSave": "package",
+      "go.vetOnSave": "package",
+      "go.testOnSave": false,
+      "go.useLanguageServer": true,
+      "gopls": {
+          "formatting.gofumpt": true,
+          "allExperiments": true,
+          "usePlaceholders": true,
+          "ui.semanticTokens": true, 
+          "completeUnimported": true,
+          "deepCompletion": true,
+          "staticcheck": true,
+          "analyses": {
+              "nilness": true,
+              "fieldalignment": true,
+              "shadow": true,
+              "unusedparams": true,
+              "unusedvariable": true,
+              "unusedwrite": true,
+              "useany": true
+          },
+          "codelenses": {
+              "run_govulncheck": true, 
+              "generate": false, // Don't show the `go generate` lens.
+              "gc_details": true, // Show a code lens toggling the display of gc's choices.
+              "regenerate_cgo": true,
+              "tidy": true,
+              "upgrade_dependency": true,
+              "vendor": false,
+              "test": true,
+          }
+      },
+      "go.coverOnSingleTest": true,
+      "go.coverOnSingleTestFile": true,
+      "go.coverOnTestPackage": true,
+      "go.coverageDecorator": {
+          "type": "gutter"
+          // "type": "highlight",
+          // "coveredHighlightColor": "#09ff001c",
+          // "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
+          // "coveredBorderColor": "#09ff001c",
+          // "uncoveredBorderColor": "rgba(128,64,64,0.25)",
+      },
+      "go.coverageOptions": "showBothCoveredAndUncoveredCode",
+      "go.testFlags": [
+          "-v",
+          "-test.failfast",
+          "-count=1",
+          "-race",
+          // "-gcflags all=-N -l" // allows delv to get remote information
+          "-benchtime=5s",
+          "-timeout=36s"
+      ],
+      "go.formatTool": "gofumpt",
+      "go.toolsManagement.autoUpdate": true,
+      "go.toolsManagement.checkForUpdates": "local",
+      "go.enableCodeLens": {
+         // "runtest": false // might not need this anymore now that the test runner is fixed
+      },
+      "go.delveConfig": {
+          "dlvLoadConfig": {
+              "followPointers": true,
+              "maxVariableRecurse": 1,
+              "maxStringLen": 8192,
+              "maxArrayValues": 128,
+              //"checkGoVersion": false,
+              "maxStructFields": -1
+          },
+          "apiVersion": 2,
+          "showGlobalVariables": false,
+          "debugAdapter": "legacy", // [[dlv-dap]] or [[legacy]]
+          // "substitutePath": [],
+          "dlvFlags": [
+              "--check-go-version=false",
+              "--disable-aslr"
+          ]
+      },
+      "go.diagnostic.vulncheck":"Imports",
+      "go.testTimeout": "36s",
+      "go.testEnvVars": {
+          "IS_NO_COLOR": "true"
+      },
+     // "go.testEnvFile": "${workspaceFolder}/.env.test",
+      "go.coverMode": "atomic",
+      "go.coverShowCounts": true,
+      "[go]": {
+          "editor.insertSpaces": false,
+          "editor.formatOnSave": true,
+          "editor.formatOnSaveMode": "file",
+          "editor.codeActionsOnSave": {
+              "source.organizeImports": "explicit",
+              "source.fixAll": "explicit"
+          },
+          "editor.snippetSuggestions": "none"
+      },
+      "[go.mod]": {
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+              "source.organizeImports": "explicit"
+          }
+      },
+    "C_Cpp.commentContinuationPatterns": [
+        "/**"
+    ],
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.cppStandard": "c++11",
+    "Lua.completion.callSnippet": "Both",
+    "Lua.completion.keywordSnippet": "Disable",
+    "Lua.diagnostics.severity": {
+        "doc-field-no-class": "Error!",
+        "duplicate-doc-field": "Error!",
+        "duplicate-doc-param": "Error!",
+        "lowercase-global": "Error!",
+        "undefined-doc-class": "Error!",
+        "undefined-doc-name": "Error!",
+        "undefined-doc-param": "Error!",
+        "undefined-field": "Error!",
+        "undefined-global": "Error!",
+        "redefined-local": "Error!",
+        "unused-local": "Error!",
+        "unused-vararg": "Error!",
+        "unused-label": "Error!",
+        "unused-function": "Error!",
+    },
+    "Lua.hover.viewStringMax": 20,
+    "Lua.runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "?/?.lua"
+    ],
+    "Lua.telemetry.enable": false,
+    "Lua.workspace.ignoreDir": [
+        ".vscode",
+        ".git",
+        "backup",
+        "logs"
+    ],
+    "Lua.workspace.ignoreSubmodules": false,
+    "Lua.workspace.preloadFileSize": 2000,
+    "Lua.workspace.useGitIgnore": false,
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "[javascript]": {
+        "editor.formatOnSave": false
+    },
+    "[json]": {
+        "editor.formatOnSave": false
+    },
+    "[jsonc]": {
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[makefile]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": false,
+        "editor.tabSize": 4
+    },
+    "[markdown]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": false,
+        "editor.tabSize": 2,
+        "files.trimFinalNewlines": false,
+        "files.trimTrailingWhitespace": false
+    },
+    "[yaml]": {
+      "editor.insertSpaces": true,
+      "editor.tabSize": 1,
+      //"editor.autoIndent": false
+      // "editor.detectIndentation": false,
+      // "editor.insertSpaces": true,
+      // "files.trimFinalNewlines": true,
+      //"files.trimTrailingWhitespace": true
+    },
+    "cmake.configureOnOpen": false,
+    "search.exclude": {
+        // hide build output from searches
+        "modules/oxide/build": true,
+        "modules/oxide-icons-default/dist": true,
+        "modules/tinymce/js": true,
+        "modules/tinymce/dist": true,
+        "modules/*/lib": true,
+        "js": true,
+        "dist": true,
+        // Search can just exclude node_modules completely
+        "node_modules": true
+    },
+    // unknown
+    "remote.SSH.remotePlatform": {
+      "dev_box": "linux"
+  },
+    "[csharp]": {
+        "editor.formatOnType": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit",
+          "source.fixAll": "explicit"
+      }
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "github.copilot.enable": {
+      "*": true,
+      "plaintext": true,
+      "markdown": true,
+      "scminput": false,
+      "yaml": true,
+      "go": true,
+      "jsonc": true,
+      "lua": true,
+      "shellscript": true
+  },
+    "vs-kubernetes": {
+        "vs-kubernetes.namespace": "",
+        "vs-kubernetes.kubectl-path": "",
+        "vs-kubernetes.helm-path": "",
+        "vs-kubernetes.minikube-path": "",
+        "vs-kubernetes.kubectlVersioning": "user-provided",
+        "vs-kubernetes.outputFormat": "yaml",
+        "vs-kubernetes.kubeconfig": "",
+        "vs-kubernetes.knownKubeconfigs": [],
+        "vs-kubernetes.autoCleanupOnDebugTerminate": false,
+        "vs-kubernetes.nodejs-autodetect-remote-root": true,
+        "vs-kubernetes.nodejs-remote-root": "",
+        "vs-kubernetes.nodejs-debug-port": 9229,
+        "vs-kubernetes.local-tunnel-debug-provider": "",
+        "checkForMinikubeUpgrade": true,
+        "logsDisplay": "webview",
+        "imageBuildTool": "Docker",
+        "vscode-kubernetes.helm-path.linux": "/home/chadit/.vs-kubernetes/tools/helm/linux-amd64/helm",
+        "vscode-kubernetes.kubectl-path.linux": "/home/chadit/.vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.minikube-path.linux": "/home/chadit/.vs-kubernetes/tools/minikube/linux-amd64/minikube",
+        "vscode-kubernetes.kubectl-path.windows": "C:\\Users\\chadi\\.vs-kubernetes\\tools\\kubectl\\kubectl.exe",
+        "vscode-kubernetes.helm-path.windows": "C:\\Users\\chadi\\.vs-kubernetes\\tools\\helm\\windows-amd64\\helm.exe",
+        "vscode-kubernetes.minikube-path.windows": "C:\\Users\\chadi\\.vs-kubernetes\\tools\\minikube\\windows-amd64\\minikube.exe",
+        "vscode-kubernetes.minikube-path.mac": "/Users/Chad.England.-ND/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
+    },
+    "settingsSync.ignoredSettings": [
+        "vscode-lua-format.configPath",
+        "vscode-lua-format.binaryPath",
+        "Lua.diagnostics.workspaceDelay",
+        "Lua.diagnostics.workspaceRate",
+        "Lua.diagnostics.disable",
+        "editor.fontSize"
+    ],
+    "vscode-lua-format.configPath": ".lua-format",
+    "vscode-lua-format.binaryPath": "/home/chadit/.luarocks/lib/luarocks/rocks-5.3/luaformatter/scm-1/bin/lua-format",
+    "Lua.diagnostics.workspaceDelay": -1,
+    "Lua.diagnostics.workspaceRate": 10,
+    "[lua]": {
+        "editor.defaultFormatter": "sumneko.lua"
+    },
+    "redhat.telemetry.enabled": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "json.maxItemsComputed": 30000,
+    "security.workspace.trust.untrustedFiles": "open",
+    "codemetrics.basics.ComplexityLevelHigh": 50,
+    "codemetrics.basics.ComplexityLevelNormal": 40,
+    "codemetrics.basics.ComplexityLevelExtreme": 70,
+    "telemetry.telemetryLevel": "off",
+    "npm.keybindingsChangedWarningShown": true,
+    "yaml.schemas": {
+        "kubernetes": "*.yaml"
+    },
+    "[sql]": {
+        "editor.defaultFormatter": "mtxr.sqltools"
+    },
+    "rust-analyzer.featureFlags": {
+        // Show diagnostics produced by rust-analyzer itself.
+        "lsp.diagnostics": true,
+        // Automatically insert `()` and `<>` when completing functions and types.
+        "completion.insertion.add-call-parenthesis": false,
+        // Enable completions like `.if`, `.match`, etc.
+        "completion.enable-postfix": true,
+        // Show notification when workspace is fully loaded
+        "notifications.workspace-loaded": true,
+        // Show error when no Cargo.toml was found
+        "notifications.cargo-toml-not-found": true,
+        // https://rust-analyzer.github.io/thisweek/2020/03/09/changelog-15.html
+        "completion.insertion.add-argument-snippets": true
+    },
+    "rust-analyzer.inlayHints.typeHints": false,
+    "rust-analyzer.inlayHints.parameterHints": false,
+    "rust-analyzer.inlayHints.chainingHints": false,
+    "terminal.explorerKind": "external",
+    "window.zoomLevel": 0.5,
+    "Lua.diagnostics.globals": [
+        
+  
+    ],
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off"
+    },
+    
+    "editor.accessibilitySupport": "off",
+    "react-native-tools.showUserTips": false,
+    "diffEditor.maxComputationTime": 0,
+    "editor.tabSize": 2,
+  "luahelper.Warn.CheckAfterDefine": true,
+  "luahelper.Warn.CheckErrorAndAlwaysFalse": true,
+  "luahelper.Warn.CheckBinaryExpressionDuplicate": true,
+  "luahelper.Warn.CheckErrorOrAlwaysTrue": true,
+  "luahelper.Warn.CheckFloatEq": true,
+  "luahelper.Warn.CheckFuncParam": true,
+  "luahelper.Warn.CheckImportModuleVar": true,
+  "luahelper.Warn.CheckIfNotVar": true,
+  "luahelper.Warn.CheckNoDefine": true,
+  "luahelper.Warn.CheckNoUseAssign": true,
+  "luahelper.Warn.CheckReferNoFile": true,
+  "luahelper.Warn.CheckSelfAssign": true,
+  "luacheck.maxNumberOfReports": 10000,
+  "vscode-kubernetes.kubectl-path.linux": "/usr/local/bin/kubectl",
+  "[csharp][go]": {
+      "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit",
+          "source.fixAll": "explicit"
+      }
+  }
+  }

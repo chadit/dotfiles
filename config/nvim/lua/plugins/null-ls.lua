@@ -34,27 +34,38 @@ function M.new()
             end
           end,
           sources = {
-            --  formatting.prettier.with({
-            --    extra_filetypes = { "toml" },
-            --    extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
-            --  }),
-            formatting.beautysh,                                                       -- bash
+            formatting.shfmt,                                                          -- (beautysh deprecated: use shfmt)                     -- bash
             formatting.black.with({ extra_args = { "--fast", "--line-length=120" } }), -- python
-            formatting.isort,                                                          -- python
-            formatting.stylua,                                                         -- lua
-            formatting.gofmt,                                                          -- golang
-            -- formatting.goimports,                                                   -- golang
+            formatting.buf,                                                            -- protobuf
+            formatting.cmake_format,                                                   -- cmake
+            formatting.gofumpt,                                                        -- golang
+            formatting.goimports,                                                      -- golang
             formatting.goimports_reviser,                                              -- golang
             formatting.golines,                                                        -- golang, remove if you do not want it to auto wrap
+            formatting.isort,                                                          -- python
             formatting.markdownlint,                                                   -- markdown
+            formatting.protolint,                                                      -- protobuf
+            formatting.stylua,                                                         -- lua
             formatting.rubocop,                                                        -- ruby
-            formatting.taplo,                                                          -- toml
+            formatting.yamlfmt,                                                        -- yaml
 
-            diagnostics.golangci_lint,                                                 -- golang
-            diagnostics.markdownlint,                                                  -- markdown
-            diagnostics.eslint_d,                                                      -- javascript
-            diagnostics.rubocop,                                                       -- ruby
+            diagnostics.buf,
+            diagnostics.gitlint, -- git
+            diagnostics.golangci_lint.with({
+              extra_args = { "-v", "--enable-all", "--disable=forbidigo",
+                "--disable=gochecknoglobals", "--out-format=json" },
+              -- diagnostics_format = "#{m} [#{c}]",
+            }),                       -- golang
 
+            diagnostics.markdownlint, -- markdown
+            -- diagnostics.perlimports,  -- perl
+            diagnostics.rubocop,      -- ruby
+            diagnostics.selene,       -- lua
+            diagnostics.staticcheck,  -- golang
+            diagnostics.yamllint,     -- yaml
+            diagnostics.zsh,          -- zsh
+
+            completion.luasnip,
             completion.spell,
           },
         })

@@ -117,6 +117,10 @@ function system_update() {
                 echo "Arch Linux detected. updating"
                 source_helper "linux-arch.sh"
                 arch_update
+            elif grep -q 'ID=ubuntu' /etc/os-release; then
+                echo "Ubuntu Linux detected. updating"
+                source_helper "linux-ubuntu.sh"
+                ubuntu_update
             fi
 
             # -- update vscode for linux via source.
@@ -152,9 +156,13 @@ function system_update() {
         go_tools_install
         go_clean_mod
 
+        echo "update ruby"
+        source_helper "ruby.sh"
+        ruby_update
+
         echo "update kubernetes"
         source_helper "kubernetes.sh"
-        kube_install_kubectl_linux
+        kube_install_kubectl
 
         
 

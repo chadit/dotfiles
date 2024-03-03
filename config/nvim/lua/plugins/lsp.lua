@@ -103,10 +103,11 @@ local servers = {
   gopls = {
     settings = {
       gopls = {
-        gofumpt = true,
+        gofumpt = true,      -- Use gofumpt formatting
+        staticcheck = true,  -- Enable staticcheck
         codelenses = {
-          gc_details = false,
-          generate = true,
+          generate = false,  -- Disable the `go generate` lens
+          gc_details = true, -- Show details about inline decisions
           regenerate_cgo = true,
           run_govulncheck = true,
           test = true,
@@ -123,18 +124,22 @@ local servers = {
           parameterNames = true,
           rangeVariableTypes = true,
         },
-        semanticTokens = true,
         analyses = {
           fieldalignment = true,
           nilness = true,
           unusedparams = true,
           unusedwrite = true,
+          unusedvariable = true,
           useany = true,
           shadow = true,
         },
+        experimentalPostfixCompletions = true,
         usePlaceholders = true,
         completeUnimported = true,
-        staticcheck = true,
+        semanticTokens = true,
+        symbolMatcher = "fuzzy",
+        deepCompletion = true,
+
         directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
       },
     },

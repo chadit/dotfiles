@@ -21,6 +21,14 @@ function java_sdkman_init() {
     # curl -s "https://get.sdkman.io" | bash
     # shellcheck source=/dev/null # to ignore the error BASH Language Server
     source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+    if ! command -v java &> /dev/null; then
+      echo "sdkman found, but not installed, installing, restart shell when done"
+      java_sdkman_upgrade_latest
+      # install and init java
+      sdk install java
+      sdk current java
+    fi
   else
     echo "sdkman not found, installing, restart shell when done"
     curl -s "https://get.sdkman.io" | bash
@@ -40,6 +48,11 @@ if [ -z "$JAVA_HOME" ]; then
     export JAVA_HOME=$(/usr/libexec/java_home)
     pathmunge $JAVA_HOME/bin
   else
+    # if jvm is not installed, then ensure it is setup
+    if [ ! -d /usr/lib/jvm ]; then
+echo "No Java installation found."
+
+    fi
     # Find available Java versions and sort them
     available_javas=$(find /usr/lib/jvm -maxdepth 1 -type d -name "java-*-openjdk" | sort -V)
 

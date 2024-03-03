@@ -112,7 +112,7 @@ plugins=(
 ZSH_DISABLE_COMPFIX=true
 
 source $ZSH/oh-my-zsh.sh
-source <(kubectl completion zsh)
+#source <(kubectl completion zsh)
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
 
@@ -122,29 +122,17 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]%}?"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
 
-if [ -d "$HOME/.rbenv/shims" ]; then
-  pathmunge $HOME/.rbenv/shims
-fi
-
-if [ -d "$HOME/.rbenv/bin" ]; then
-  pathmunge $HOME/.rbenv/bin
-  eval "$(rbenv init -)"
-
-  if rbenv -v >/dev/null; then
-    rbenv -v
-    ruby -v
-  fi
-fi
-
 # initalize helpers and variables
 java_setup
 go_setup
+ruby_setup
 node_setup
 flutter_setup
 dart_setup
 rust_setup
 ssh_setup
 lua_setup
+kube_setup
 
 
 if [[ "$OSTYPE" == "darwin"* ]]; then

@@ -43,6 +43,11 @@ function M.setup()
     return
   end
 
+  local snip_status_ok, luasnip = pcall(require, "luasnip")
+  if not snip_status_ok then
+    return
+  end
+
   local kind_icons = {
     Text = "󰉿",
     Method = "m",
@@ -77,27 +82,43 @@ function M.setup()
   require("luasnip.loaders.from_vscode").lazy_load()
 
   -- `/` cmdline setup.
-  cmp.setup.cmdline('/', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
+  -- cmp.setup.cmdline('/', {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = {
+  --     { name = 'buffer' }
+  --   }
+  -- })
 
   -- `:` cmdline setup.
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      {
-        name = 'cmdline',
-        option = {
-          ignore_cmds = { 'Man', '!' }
-        }
-      }
-    })
-  })
+  -- cmp.setup.cmdline(':', {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = cmp.config.sources({
+  --     { name = 'path' }
+  --   }, {
+  --     {
+  --       name = 'cmdline',
+  --       option = {
+  --         ignore_cmds = { 'Man', '!' }
+  --       }
+  --     }
+  --   })
+  -- })
+
+
+  local has_words_before = function()
+    if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+      return false
+    end
+    ---@diagnostic disable-next-line: deprecated
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+  end
+
+  local check_backspace = function()
+    local col = vim.fn.col(".") - 1
+    return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
+  end
+
 
   cmp.setup({
     completion = {
@@ -112,9 +133,35 @@ function M.setup()
     mapping = {
       ["<C-p>"] = cmp.mapping.select_prev_item(),
       ["<C-n>"] = cmp.mapping.select_next_item(),
-      -- Add tab support
-      ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-      ["<Tab>"] = cmp.mapping.select_next_item(),
+      -- ["<Tab>"] = cmp.mapping(function(fallback)
+      --   if cmp.visible() then
+      --     cmp.select_next_item()
+      --   else
+      --     fallback()
+      --   end
+      -- end, { "c" }),
+      -- ['<tab>'] = {
+      --   i = ...,
+      --   c = cmp.config.disable
+      -- },
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif cmp.visible() and has_words_before() then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+        elseif luasnip.expandable() then
+          luasnip.expand()
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        elseif check_backspace() then
+          fallback()
+        else
+          fallback()
+        end
+      end, {
+        "i",
+        "s",
+      }),
       ["<C-S-f>"] = cmp.mapping.scroll_docs(-4),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-Space>"] = cmp.mapping.complete(),

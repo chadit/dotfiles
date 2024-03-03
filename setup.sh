@@ -20,50 +20,44 @@ function set_script_home() {
 
 # Function to add or update HELPER_DOTFILES_HOME in /etc/environment
 function update_environment_file() {
-    # local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
     # change if installed somewhere else.
     local helper_dotfiles_home="HELPER_DOTFILES_HOME=${USER_HOME}/Projects/src/github.com/chadit/dotfiles/"
     echo "HELPER_DOTFILES_HOME: ${helper_dotfiles_home}"
 
-    # Check if HELPER_DOTFILES_HOME already exists in /etc/environment
-    if grep -q "^HELPER_DOTFILES_HOME=" /etc/environment; then
-        echo "HELPER_DOTFILES_HOME already exists in /etc/environment."
+    local env_config_file="/etc/environment"
+    local profile_config_file="/etc/profile"
+
+    if ! grep -q "^${helper_dotfiles_home}$" "$env_config_file"; then
+        echo "Appending $helper_dotfiles_home to $env_config_file"
+        echo "$helper_dotfiles_home" | sudo tee -a "$env_config_file" > /dev/null
     else
-        # Add HELPER_DOTFILES_HOME to /etc/environment
-        echo "Adding HELPER_DOTFILES_HOME to /etc/environment."
-        echo "${helper_dotfiles_home}" >> /etc/environment
+        echo "$helper_dotfiles_home already set in $env_config_file"
     fi
 
-    # Check if HELPER_DOTFILES_HOME already exists in /etc/profile
-    if grep -q "^HELPER_DOTFILES_HOME=" /etc/profile; then
-        echo "HELPER_DOTFILES_HOME already exists in /etc/profile."
+    if ! grep -q "^${helper_dotfiles_home}$" "$profile_config_file"; then
+        echo "Appending $helper_dotfiles_home to $profile_config_file"
+        echo "$helper_dotfiles_home" | sudo tee -a "$profile_config_file" > /dev/null
     else
-        # Add HELPER_DOTFILES_HOME to /etc/profile
-        echo "Adding HELPER_DOTFILES_HOME to /etc/profile."
-        echo "export ${helper_dotfiles_home}" >> /etc/profile
+        echo "$helper_dotfiles_home already set in $profile_config_file"
     fi
 }
 
 function update_zshrc() {
-    # local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
-
+    echo "Updating .zshrc"
+    # I run my own custom .zshrc file that is part of my repo.
     local zshrc_location="${USER_HOME}/.zshrc"
-    # if [ -f "/Users/${logged_in_user}/.zshrc" ]; then
-    #     zshrc_location="/Users/${logged_in_user}/.zshrc"
-    # fi
+    rm -f ${zshrc_location}
 
-    search_line="if [ -f \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh ]; then"
+cat <<EOF > ${zshrc_location}
+source /etc/profile
 
-    if grep -Fxq "$search_line" ${zshrc_location} ; then
-        echo "HELPER_DOTFILES_HOME/zsh/myzshrc.sh already exists in ${zshrc_location}."
-    else
-        echo "Adding HELPER_DOTFILES_HOME/zsh/myzshrc.sh to ${zshrc_location}."
-
-        content_to_add="# Add to .zshrc\n# Source global definitions\n$search_line\n    echo \"Loading My Scripts\"\n    . \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh\nfi"
-        echo -e "$content_to_add" >> ${zshrc_location}
-    fi
-
-    ln -sf $HELPER_DOTFILES_HOME/alacritty/alacritty.toml ~/.alacritty.toml
+# Add to .zshrc
+# Source global definitions
+if [ -f \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh ]; then
+    echo "Loading My Scripts"
+    . \$HELPER_DOTFILES_HOME/zsh/myzshrc.sh
+fi
+EOF
 }
 
 function update_link_nvim(){
@@ -83,6 +77,8 @@ function update_link_tmux(){
 
 function update_learning_links(){
     ln -sf ${USER_HOME}/Projects/src/github.com/chadit/CodeChallenges/exercism ~/exercism
+
+    ln -sf $HELPER_DOTFILES_HOME/alacritty/alacritty.toml ~/.alacritty.toml
 }
 
 # This script must be run as root
@@ -96,6 +92,7 @@ update_environment_file
 update_zshrc
 update_link_nvim
 update_link_tmux
+update_learning_links
 
 
 # TODO:

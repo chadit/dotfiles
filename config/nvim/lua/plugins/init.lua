@@ -46,7 +46,7 @@ function M.load_plugins()
   end
 
   local plugins = {
-    { "folke/lazy.nvim",       lazy = false,     tag = "stable", priority = 1000 }, -- latest stable release
+    { "folke/lazy.nvim",       lazy = false,     tag = "stable", priority = 1000 },
 
     -- Detect tabstop and shiftwidth automatically
     { "tpope/vim-sleuth" },

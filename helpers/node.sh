@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-
-
 function node_update_nvm(){
   # Fetch the current version of nvm
   current_version=$(nvm --version)
@@ -83,5 +81,7 @@ function node_setup(){
 
   if command -v node >/dev/null 2>&1; then
     echo "Node: $(node --version 2>&1 | head -n 1)"
+  else
+      echo "Node not found, please install"
   fi
 }

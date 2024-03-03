@@ -1,6 +1,19 @@
 # kubectl path
-function kube_install_kubectl_linux(){
-  if command -v kubectl >/dev/null 2>&1; then
+function kube_setup() {
+ if ! command -v kubectl &> /dev/null; then
+    echo "setup kubectl"
+    # Install kubectl
+    kube_install_kubectl
+  else
+    #echo "kubectl is already installed"
+    current_version=v$(kubectl version --client | head -n 1 | sed 's/Client Version: v//')
+    echo "kubectl: $current_version"
+    source <(kubectl completion zsh)
+  fi
+}
+
+function kube_install_kubectl(){
+#  if command -v kubectl >/dev/null 2>&1; then
     local CURRENTDIR=$(pwd)
   
     current_version=v$(kubectl version --client | head -n 1 | sed 's/Client Version: v//')
@@ -23,5 +36,17 @@ function kube_install_kubectl_linux(){
     else
         echo "kubectl is already at the latest version."
     fi
-  fi
+ # fi
+}
+
+function kube_cleanup_all(){
+  echo "kubectl delete crds"
+  kubectl delete crds --all
+  echo "kubectl delete deployments"
+	kubectl delete deployments --all
+  echo "kubectl delete pods"
+	kubectl delete pods --all
+  echo "kubectl delete services"
+	kubectl delete services --all
+  #kubectl delete all --all
 }
