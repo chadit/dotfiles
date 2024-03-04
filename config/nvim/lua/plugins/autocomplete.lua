@@ -81,30 +81,6 @@ function M.setup()
   -- load vscode style snippets from installed plugins.
   require("luasnip.loaders.from_vscode").lazy_load()
 
-  -- `/` cmdline setup.
-  -- cmp.setup.cmdline('/', {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = {
-  --     { name = 'buffer' }
-  --   }
-  -- })
-
-  -- `:` cmdline setup.
-  -- cmp.setup.cmdline(':', {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = cmp.config.sources({
-  --     { name = 'path' }
-  --   }, {
-  --     {
-  --       name = 'cmdline',
-  --       option = {
-  --         ignore_cmds = { 'Man', '!' }
-  --       }
-  --     }
-  --   })
-  -- })
-
-
   local has_words_before = function()
     if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
       return false
@@ -119,7 +95,6 @@ function M.setup()
     return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
   end
 
-
   cmp.setup({
     completion = {
       completeopt = "menu,menuone,preview,noselect",
@@ -133,17 +108,6 @@ function M.setup()
     mapping = {
       ["<C-p>"] = cmp.mapping.select_prev_item(),
       ["<C-n>"] = cmp.mapping.select_next_item(),
-      -- ["<Tab>"] = cmp.mapping(function(fallback)
-      --   if cmp.visible() then
-      --     cmp.select_next_item()
-      --   else
-      --     fallback()
-      --   end
-      -- end, { "c" }),
-      -- ['<tab>'] = {
-      --   i = ...,
-      --   c = cmp.config.disable
-      -- },
       ["<Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
@@ -158,10 +122,7 @@ function M.setup()
         else
           fallback()
         end
-      end, {
-        "i",
-        "s",
-      }),
+      end, { "i", "s", }),
       ["<C-S-f>"] = cmp.mapping.scroll_docs(-4),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-Space>"] = cmp.mapping.complete(),

@@ -1,0 +1,4 @@
+std = "nvim"  # Sets the Lua standard; adjust based on your project (lua51, lua52, lua53, luajit)
+
+[rules]
+global_usage = "allow"

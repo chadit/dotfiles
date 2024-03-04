@@ -1,5 +1,4 @@
 -- null-ls.lua
-
 local M = {}
 
 function M.new()
