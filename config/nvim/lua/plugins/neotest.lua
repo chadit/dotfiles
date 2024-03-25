@@ -8,10 +8,10 @@ local show = vim.schedule_wrap(function(msg)
 end)
 
 local function config()
-  -- local status_ok, nt = pcall(require, "neotest")
-  -- if not status_ok then
-  --   return
-  -- end
+  local status_ok, nt = pcall(require, "neotest")
+  if not status_ok then
+    return
+  end
 
   local namespace = vim.api.nvim_create_namespace("neotest")
   vim.diagnostic.config({
@@ -27,68 +27,77 @@ local function config()
 
   -- show("neotest python path " .. python_path)
 
-  -- local opts = {
-  --   running = {
-  --     concurrent = false,
-  --   },
-  --   status = {
-  --     virtual_text = true,
-  --     signs = false,
-  --   },
-  --   strategies = {
-  --     integrated = {
-  --       width = 180,
-  --     },
-  --   },
-  --   discovery = {
-  --     enabled = true,
-  --   },
-  --   diagnostic = {
-  --     enabled = true,
-  --   },
-  --   icons = {
-  --     --  running = "󰥔 ",
-  --     passed = "✅",
-  --     running = "⌛",
-  --     failed = "❌",
-  --     skipped = "🚫",
-  --     unknown = "❔",
+  local opts = {
+    --   running = {
+    --     concurrent = false,
+    --   },
+    --   status = {
+    --     virtual_text = true,
+    --     signs = false,
+    --   },
+    --   strategies = {
+    --     integrated = {
+    --       width = 180,
+    --     },
+    --   },
+    --   discovery = {
+    --     enabled = true,
+    --   },
+    --   diagnostic = {
+    --     enabled = true,
+    --   },
+    --   icons = {
+    --     --  running = "󰥔 ",
+    --     passed = "✅",
+    --     running = "⌛",
+    --     failed = "❌",
+    --     skipped = "🚫",
+    --     unknown = "❔",
 
-  --     expanded = "┐",
-  --     final_child_prefix = "└",
-  --   },
-  --   floating = {
-  --     border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
-  --   },
-  --   adapters = {
-  --     require("neotest-rust"),
-  --     require("neotest-go")({
-  --       experimental = {
-  --         test_table = true,
-  --       },
-  --     }),
-  --     require("neotest-python")({
-  --       dap = {
-  --         justMyCode = false,
-  --         console = "integratedTerminal",
-  --         stopOnEntry = false, -- which is the default
-  --         subProcess = false,  -- see config/testing.lua
-  --         openUIOnEntry = false,
-  --       },
-  --       args = { "--log-level", "DEBUG", "-- quiet" },
-  --       python = python_path,
-  --       --runner = "pytest",
-  --       runner = "unittest",
-  --       is_test_file = function(file_path)
-  --         return file_path:match("test_.*%.py$") ~= nil
-  --       end,
-  --     }),
-  --     require("neotest-plenary"),
-  --   },
-  -- }
+    --     expanded = "┐",
+    --     final_child_prefix = "└",
+    --   },
+    --   floating = {
+    --     border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
+    --   },
+    adapters = {
+      --     require("neotest-rust"),
+      require("neotest-go")({
+        args = {
+          "-count=1",
+          "-timeout=60s",
+          "-race",
+          "-cover",
+          "-benchtime=5s",
+          "-test.failfast"
+        },
+        recursive_run = true,
+        experimental = {
+          test_table = true,
+        },
+      }),
+      --     require("neotest-python")({
+      --       dap = {
+      --         justMyCode = false,
+      --         console = "integratedTerminal",
+      --         stopOnEntry = false, -- which is the default
+      --         subProcess = false,  -- see config/testing.lua
+      --         openUIOnEntry = false,
+      --       },
+      --       args = { "--log-level", "DEBUG", "-- quiet" },
+      --       python = python_path,
+      --       --runner = "pytest",
+      --       runner = "unittest",
+      --       is_test_file = function(file_path)
+      --         return file_path:match("test_.*%.py$") ~= nil
+      --       end,
+      --     }),
+      --     require("neotest-plenary"),
+    },
+  }
 
   show("neotest setup")
-  -- nt.setup(opts)
+  nt.setup(opts)
   -- nt.setup({
   --   adapters = {
   --     require("neotest-python")({
@@ -124,7 +133,11 @@ function M.new()
       end,
       --event = { "BufReadPost", "BufNew" },
     },
-    { "nvim-neotest/neotest-go", event = { "BufEnter *.go" }, ft = "go" },
+    {
+      "nvim-neotest/neotest-go",
+      event = { "BufEnter *.go" },
+      ft = "go"
+    },
     {
       "nvim-neotest/neotest-python",
       --event = { "BufEnter *.py" },
@@ -133,43 +146,43 @@ function M.new()
         "mfussenegger/nvim-dap",
         "mfussenegger/nvim-dap-python",
       },
-      config = function()
-        --   local status_ok, nt = pcall(require, "neotest")
-        --   if not status_ok then
-        --     return
-        --   end
+      -- config = function()
+      --   local status_ok, nt = pcall(require, "neotest")
+      --   if not status_ok then
+      --     return
+      --   end
 
-        --   show("neotest python setup")
+      --   show("neotest python setup")
 
-        --   local status_nt_p, _ = pcall(require, "neotest-python")
-        --   if not status_nt_p then
-        --     show("neotest python setup failed")
-        --     return
-        --   end
+      --   local status_nt_p, _ = pcall(require, "neotest-python")
+      --   if not status_nt_p then
+      --     show("neotest python setup failed")
+      --     return
+      --   end
 
-        --   nt.setup({
-        --     adapters = {
-        --       require("neotest-python")({
-        --         dap = {
-        --           justMyCode = false,
-        --           console = "integratedTerminal",
-        --         },
-        --         args = { "--log-level", "DEBUG" },
-        --         runner = "pytest",
-        --         is_test_file = function(file_path)
-        --           return file_path:match("test_.*%.py$") ~= nil
-        --         end,
-        --       }),
-        --       require("neotest-plenary"),
-        --       require("neotest-vim-test")({
-        --         ignore_file_types = { "python", "vim", "lua" },
-        --       }),
-        --     },
-        --   })
-      end
+      --   nt.setup({
+      --     adapters = {
+      --       require("neotest-python")({
+      --         dap = {
+      --           justMyCode = false,
+      --           console = "integratedTerminal",
+      --         },
+      --         args = { "--log-level", "DEBUG" },
+      --         runner = "pytest",
+      --         is_test_file = function(file_path)
+      --           return file_path:match("test_.*%.py$") ~= nil
+      --         end,
+      --       }),
+      --       require("neotest-plenary"),
+      --       require("neotest-vim-test")({
+      --         ignore_file_types = { "python", "vim", "lua" },
+      --       }),
+      --     },
+      --   })
+      -- end
     },
     -- { "rouge8/neotest-ruby",         event = { "BufEnter *.rb" }, ft = "ruby" },
-    { "rouge8/neotest-rust",     event = { "BufEnter *.rs" }, ft = "rust" },
+    { "rouge8/neotest-rust", event = { "BufEnter *.rs" }, ft = "rust" },
   }
 end
 

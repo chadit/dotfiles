@@ -41,13 +41,15 @@ reset_touchpad() {
   sudo modprobe psmouse
 }
 
-
 # ln -sf $HOME/Projects/src/github.com/maxgallup/tailscale-status/tailscale-status@maxgallup.github.com $HOME/.local/share/gnome-shell/extensions/tailscale-status@maxgallup.github.com
 
 fetch_protoc() {
   local CURRENTDIR=$(pwd)
-  export PROTOC_VERSION="3.17.3"
+  #export PROTOC_VERSION="25.3"
+  #export PROTOC_VERSION="3.6.1"
   export PROTOC_GITHUB_ROOT="https://github.com/protocolbuffers/protobuf/releases"
+
+  # https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip
 
   cd $HOME/Downloads
   curl -LO $PROTOC_GITHUB_ROOT/download/v$PROTOC_VERSION/protoc-$PROTOC_VERSION-linux-x86_64.zip

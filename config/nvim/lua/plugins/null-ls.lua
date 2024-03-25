@@ -33,28 +33,37 @@ function M.new()
             end
           end,
           sources = {
-            formatting.shfmt,                                                          -- (beautysh deprecated: use shfmt)                     -- bash
+            formatting.shfmt.with { args = { "-i", "2" }, },                           -- (beautysh deprecated: use shfmt)                     -- bash
             formatting.black.with({ extra_args = { "--fast", "--line-length=120" } }), -- python
             formatting.buf,                                                            -- protobuf
             formatting.cmake_format,                                                   -- cmake
             formatting.gofumpt,                                                        -- golang
             formatting.goimports,                                                      -- golang
             formatting.goimports_reviser,                                              -- golang
-            formatting.golines,                                                        -- golang, remove if you do not want it to auto wrap
-            formatting.isort,                                                          -- python
-            formatting.markdownlint,                                                   -- markdown
-            formatting.protolint,                                                      -- protobuf
-            formatting.stylua,                                                         -- lua
-            formatting.rubocop,                                                        -- ruby
-            formatting.yamlfmt,                                                        -- yaml
+            -- formatting.golines.with({                                                  -- golang, remove if you do not want it to auto wrap
+            --   extra_args = {
+            --     --"--max-len=180",
+            --     "--base-formatter=gofumpt",
+            --   },
+            -- }),
+            formatting.isort,        -- python
+            formatting.markdownlint, -- markdown
+            formatting.protolint,    -- protobuf
+            formatting.stylua,       -- lua
+            formatting.rubocop,      -- ruby
+            formatting.yamlfmt,      -- yaml
 
+            -- diagnostics.revive,              -- golang
             diagnostics.buf,
-            diagnostics.gitlint, -- git
-            diagnostics.golangci_lint.with({
-              extra_args = { "-v", "--enable-all", "--disable=forbidigo",
-                "--disable=gochecknoglobals", "--out-format=json" },
-              -- diagnostics_format = "#{m} [#{c}]",
-            }),                       -- golang
+            diagnostics.gitlint,             -- git
+            diagnostics.golangci_lint.with({ -- golang
+              extra_args = {
+                "-v",
+                "--enable-all",
+                "--disable=forbidigo",
+                "--disable=gochecknoglobals"
+              },
+            }),
 
             diagnostics.markdownlint, -- markdown
             -- diagnostics.perlimports,  -- perl
@@ -66,7 +75,16 @@ function M.new()
 
             completion.luasnip,
             completion.spell,
+
+            -- used for go
+            null_ls.builtins.code_actions.impl,
+
+            -- require("go.null_ls").gotest(),
+            -- require("go.null_ls").gotest_action(),
+            -- require("go.null_ls").golangci_lint(),
           },
+          debounce = 1000,
+          default_timeout = 5000,
         })
       end,
     },

@@ -87,7 +87,7 @@ function M.keymaps()
 
   local map = vim.keymap.set
   local opts = { noremap = true, silent = true }
-  map("n", "<leader>ta", function()
+  map("n", "<leader>tf", function()
     require("telescope.builtin").find_files({
       prompt_title = "All Files",
     })

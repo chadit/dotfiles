@@ -1,11 +1,10 @@
 # go.sh : commands to help with go operations.
 
-# Function to parse Go version number
-local function parse_version() {
-    echo "$1" | awk -F. '{ print $1 * 10000 + $2 * 100 + $3; }'
-}
+function go_update_linux() {
+    parse_version() {
+        echo "$1" | awk -F. '{ print $1 * 10000 + $2 * 100 + $3; }'
+    }
 
-function go_update_linux(){
     # Get the current Go version, if Go is installed
     if command -v go >/dev/null 2>&1; then
         local current_go_version=$(go version | awk '{print $3}' | cut -d "o" -f2)
@@ -61,13 +60,16 @@ function go_update_linux(){
             sudo chown -R ${logged_in_user} ${INSTALLPATH}/pkg/windows_amd64
         fi
 
-
     else
         echo "Go is up to date."
     fi
 }
- 
-function go_update_macos_arm(){
+
+function go_update_macos_arm() {
+    parse_version() {
+        echo "$1" | awk -F. '{ print $1 * 10000 + $2 * 100 + $3; }'
+    }
+
     # Get the current Go version, if Go is installed
     if command -v go >/dev/null 2>&1; then
         local current_go_version=$(go version | awk '{print $3}' | cut -d "o" -f2)
@@ -76,7 +78,7 @@ function go_update_macos_arm(){
         local current_version=0
         echo "Go is not currently installed."
     fi
-# https://go.dev/dl/go1.22.0.darwin-arm64.tar.gz
+    # https://go.dev/dl/go1.22.0.darwin-arm64.tar.gz
     # Fetch the latest Go version from the URL
     local latest_go_version=$(curl -s https://go.dev/VERSION\?m\=text | head -n 1 | cut -d " " -f1 | cut -d "o" -f2)
     local latest_version=$(parse_version "$latest_go_version")
@@ -122,7 +124,6 @@ function go_update_macos_arm(){
             sudo mkdir -p ${INSTALLPATH}/pkg/windows_amd64/runtime/internal/
             sudo chown -R ${logged_in_user} ${INSTALLPATH}/pkg/windows_amd64
         fi
-
 
     else
         echo "Go is up to date."
@@ -189,6 +190,13 @@ go_tools_install() {
         "mvdan.cc/gofumpt"
         "mvdan.cc/sh/v3/cmd/shfmt"
         "mvdan.cc/unparam"
+        "github.com/koron/iferr"
+        "gotest.tools/gotestsum"
+        "github.com/kyoh86/richgo"
+        "sigs.k8s.io/kind"
+        "github.com/jpillora/chisel"
+        "github.com/catenacyber/perfsprint"
+        "golang.org/dl/gotip"
     )
 
     for tool in "${tools[@]}"; do

@@ -6,7 +6,6 @@
 #   fi
 # fi
 
-
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # loading dependancies if not exist
@@ -37,34 +36,36 @@ echo "---- Welcome $(whoami) - Loading zsh ----"
 
 # Set GPG
 export GPG_TTY=$(tty)
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  alias gpg='gpg'
-else
+if command -v gpg2 >/dev/null 2>&1; then
   alias gpg='gpg2'
 fi
+
+# if [[ "$OSTYPE" == "darwin"* ]]; then
+#   alias gpg='gpg'
+# else
+#   alias gpg='gpg2'
+# fi
 
 ## set git cache to store password for ssh
 git config --global credential.helper 'cache --timeout=9999999999999999999'
 
-
 # Load Helpers
 # Function to load .sh files from given directories
-local function load_sh_files() {
-    for dir in "$@"; do
-        if [ -d "$dir" ]; then
-            for f in "$dir"/*.sh; do
-                . "$f"
-            done
-        fi
-    done
+function load_sh_files() {
+  for dir in "$@"; do
+    if [ -d "$dir" ]; then
+      for f in "$dir"/*.sh; do
+        . "$f"
+      done
+    fi
+  done
 }
 
 # Directories to load .sh files from
 directories=(
-    "$HELPER_DOTFILES_HOME/helpers"
-    "$HELPER_DOTFILES_HOME/bash/helpers"
-    "$HOME/Projects/helpers/mydotfiles/bash"
+  "$HELPER_DOTFILES_HOME/helpers"
+  "$HELPER_DOTFILES_HOME/bash/helpers"
+  "$HOME/Projects/helpers/mydotfiles/bash"
 )
 
 # Load .sh files from the specified directories
@@ -134,7 +135,6 @@ ssh_setup
 lua_setup
 kube_setup
 
-
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Locate the highest Python version in the Library and add it to the PATH
   highest_python_bin=$(find $HOME/Library/Python -type d -name 'bin' | sort -V | tail -1)
@@ -143,7 +143,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     pathmunge "$highest_python_bin"
   fi
 fi
-
 
 #dotnet core
 # installed via https://docs.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
@@ -195,10 +194,6 @@ fi
 
 # Ensure path arrays do not contain duplicates.
 typeset -gU cdpath fpath mailpath path
-
-# Ruby Gem
-mkdir -p $HOME/gems
-export GEM_HOME=$HOME/gems
 
 #dotnet core #opt-out of telemetry
 export DOTNET_CLI_TELEMETRY_OPTOUT=1

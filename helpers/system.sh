@@ -135,6 +135,7 @@ function system_update() {
         # Check for Snap
         if system_command_exists snap; then
             echo "Snap is installed."
+            sudo killall snap-store
             sudo snap refresh
             sudo snap refresh snap-store
         else

@@ -1,9 +1,8 @@
-
-local function ruby_install_rbenv() {
+function ruby_install_rbenv() {
   # Get the rbenv root directory
   if [ ! -d "$HOME/.rbenv/bin" ]; then
     #echo "rbenv found."
-  #else
+    #else
     local CURRENTDIR=$(pwd)
     echo "rbenv not found. Installing rbenv..."
     # Install rbenv (adjust the installation method if necessary)
@@ -13,7 +12,7 @@ local function ruby_install_rbenv() {
   fi
 }
 
-local function ruby_install_build(){
+function ruby_install_build() {
   if [ ! -d "$(rbenv root)"/plugins/ruby-build ]; then
     echo "Installing ruby-build plugin..."
     mkdir -p "$(rbenv root)"/plugins
@@ -21,14 +20,14 @@ local function ruby_install_build(){
   fi
 }
 
-local function ruby_update_build(){
+function ruby_update_build() {
   if [ -d "$(rbenv root)"/plugins/ruby-build ]; then
     echo "Updating ruby-build plugin..."
     cd "$(rbenv root)"/plugins/ruby-build && git pull
   fi
 }
 
-local function ruby_set_latest(){
+function ruby_set_latest() {
   if command -v rbenv >/dev/null 2>&1; then
     #latest_ruby=$(rbenv install -l | grep -v - | grep -E "^  [0-9]" | tail -1 | tr -d ' ')
     latest_ruby=$(rbenv install -l | grep -v - | tail -1)
@@ -46,7 +45,7 @@ local function ruby_set_latest(){
   fi
 }
 
-local function ruby_install_dependencies(){
+function ruby_install_dependencies() {
   # Install bundler
   if command -v gem >/dev/null 2>&1; then
     gem install bundler seeing_is_believing solargraph rufo htmlbeautifier rbeautify rubocop
@@ -66,8 +65,10 @@ function ruby_update() {
   cd $CURRENTDIR
 }
 
-
 function ruby_setup() {
+  mkdir -p $HOME/gems
+  export GEM_HOME=$HOME/gems
+
   ruby_install_rbenv
 
   if [ -d "$HOME/.rbenv/shims" ]; then

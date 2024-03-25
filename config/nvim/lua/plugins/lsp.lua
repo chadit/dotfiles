@@ -27,7 +27,7 @@ local ensure_language_servers = {
   "dockerls",
   "docker_compose_language_service",
   "eslint",
-  "golangci_lint_ls",
+  -- "golangci_lint_ls",
   "gopls",
   "html",
   "htmx",
@@ -62,7 +62,7 @@ local ensure_tools = {
   "ansible-lint",
   "buf",
   "eslint_d",
-  "golangci-lint",
+  -- "golangci-lint",
   "jsonlint",
   "luacheck",
   "markdownlint",
@@ -410,6 +410,10 @@ function M.new()
               -- show signs
               signs = {
                 active = signs,
+              },
+              virtual_lines = {
+                virtual_lines = false,
+                only_current_line = true
               },
               update_in_insert = true,
               underline = true,

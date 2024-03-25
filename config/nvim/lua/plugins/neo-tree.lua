@@ -67,6 +67,10 @@ function M.setup() end
 
 function M.keymaps()
   vim.keymap.set({ "n", "v" }, "<C-n>", ":Neotree toggle<CR>", {})
+
+  -- common keymaps
+  -- from neotree highligh the directory and press `m` to open the menu
+  -- then press `a` to add a file or directory
 end
 
 return M

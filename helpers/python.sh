@@ -8,6 +8,7 @@ python_tools_install() {
       local tools=(
         "cmakelang"
         "gitlint"
+        "pre-commit"
       )
 
       for tool in "${tools[@]}"; do
