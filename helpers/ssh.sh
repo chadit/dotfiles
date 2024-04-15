@@ -1,10 +1,10 @@
 #!/bin/zsh
 
-function ssh_fix_permissions(){
+function ssh_fix_permissions() {
   # Directory containing SSH keys
   SSH_DIR="$HOME/.ssh"
 
-  eval $(ssh-agent -s) > /dev/null 2>&1
+  eval $(ssh-agent -s) >/dev/null 2>&1
   #ssh-add
 
   if [ -d "$HOME/.ssh" ]; then
@@ -23,7 +23,7 @@ function ssh_fix_permissions(){
   find "$SSH_DIR" -type f -name 'id_*.pub' -exec chmod 644 {} \;
 }
 
-function ssh_setup(){
+function ssh_setup() {
   ssh_fix_permissions
 
   # Directory containing SSH keys
@@ -31,5 +31,6 @@ function ssh_setup(){
 
   # Add private keys to ssh-agent
   #echo "Adding private keys to ssh-agent..."
-  find "$SSH_DIR" -type f -name 'id_*' ! -name '*.pub' -exec ssh-add {} \; > /dev/null 2>&1
+  find "$SSH_DIR" -type f -name 'id_*' ! -name '*.pub' -exec ssh-add {} \; >/dev/null 2>&1
+  find "$SSH_DIR" -type f -name '*-rsa-*' ! -name '*.pub' -exec ssh-add {} \; >/dev/null 2>&1
 }

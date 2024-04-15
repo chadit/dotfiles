@@ -22,7 +22,6 @@ function M.new()
         "CmdlineEnter",
       },
       dependencies = {
-
         -- Useful completion sources:
         "hrsh7th/cmp-nvim-lua",
         "hrsh7th/cmp-buffer", -- source for text in buffer.
@@ -33,6 +32,11 @@ function M.new()
         "hrsh7th/vim-vsnip",
         "onsails/lspkind.nvim", -- vs-code like pictograms
       },
+      -- opts = function()
+      --   local cmp = require("plugins.config.cmp")
+      --   table.insert(cmp.sources, { name = "crates" })
+      --   return cmp
+      -- end,
     },
   }
 end
@@ -138,6 +142,7 @@ function M.setup()
       { name = "copilot",                group_index = 2 },
       -- Other Sources
       { name = "nvim_lsp",               keyword_length = 3, group_index = 2 }, -- from language server
+      { name = "crates" },                                                      -- rust/toml
       { name = "path",                   group_index = 2 },                     -- file paths
       { name = "nvim_lsp_signature_help" },                                     -- display function signatures with current parameter emphasized
       { name = "nvim_lua",               keyword_length = 2 },                  -- complete neovim's Lua runtime API such vim.lsp.*

@@ -134,6 +134,7 @@ rust_setup
 ssh_setup
 lua_setup
 kube_setup
+tmux_setup
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Locate the highest Python version in the Library and add it to the PATH
@@ -142,6 +143,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     # echo "Python $highest_python_bin bin found"
     pathmunge "$highest_python_bin"
   fi
+fi
+
+if [ -d "/opt/homebrew/bin" ]; then
+  pathmunge /opt/homebrew/bin
+
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 #dotnet core

@@ -1,5 +1,6 @@
 -- Desc: Main entry point for Neovim configuration
 require("settings")
+require("keymaps")
 
 local has_plugins, plugins = pcall(require, [[plugins]])
 if has_plugins then

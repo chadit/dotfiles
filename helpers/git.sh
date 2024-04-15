@@ -6,7 +6,7 @@ function git_cleanup() {
 function git_prune() {
 	local CURRENTDIR=$(pwd)
 	local BASEDIR="$HOME/Projects/src"
-	
+
 	cd $BASEDIR
 	for i in $(find . -name ".git" | cut -c 3-); do
 		cd "$i"
@@ -111,38 +111,39 @@ function git_update_folder() {
 }
 
 function git_update_dependancy_repos() {
-  # List of Git repositories to update
+	# List of Git repositories to update
 
-  # tries to get the logged in user, if multiple users are logged in, it will get the first one.
-  local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
+	# tries to get the logged in user, if multiple users are logged in, it will get the first one.
+	local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
 
-  REPOS=(
-    "/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
-    "/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-  )
-  
-  # Loop through all repositories and update them
-  for repo in "${REPOS[@]}"; do
-    if [ -d "$repo" ]; then
-      echo "Updating repository: $repo"
-      git -C "$repo" pull
+	REPOS=(
+		"/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+		"/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+		"/home/${logged_in_user}/.local/share/gnome-shell/extensions/tailscale-status@maxgallup.github.com"
+	)
+
+	# Loop through all repositories and update them
+	for repo in "${REPOS[@]}"; do
+		if [ -d "$repo" ]; then
+			echo "Updating repository: $repo"
+			git -C "$repo" pull
 		fi
-  done
+	done
 
 }
 
 # Function to remove all .git directories from a directory
 function git_remove_git_dirs() {
-    local dir="$1"
+	local dir="$1"
 
-    # Check if the directory exists
-    if [ ! -d "$dir" ]; then
-        echo "Directory does not exist: $dir"
-        return 1
-    fi
+	# Check if the directory exists
+	if [ ! -d "$dir" ]; then
+		echo "Directory does not exist: $dir"
+		return 1
+	fi
 
-    # Find and remove .git directories
-    find "$dir" -type d -name '.git' -exec echo "Removing {}" \; -exec rm -rf '{}' +
+	# Find and remove .git directories
+	find "$dir" -type d -name '.git' -exec echo "Removing {}" \; -exec rm -rf '{}' +
 
-    echo "All .git directories removed from $dir"
+	echo "All .git directories removed from $dir"
 }

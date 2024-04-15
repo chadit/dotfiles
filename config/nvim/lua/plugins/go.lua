@@ -56,7 +56,7 @@ function M.new()
 
         require("go").setup({
           go = "go",                  -- go, can be go[default] or go1.18beta1
-          goimport = "gopls",         -- goimport command, can be gopls[default] or goimport
+          goimports = "gopls",        -- goimport command, can be gopls[default] or goimport
           fillstruct = "gopls",       -- can be nil (use fillstruct, slower) and gopls
           gofmt = "gofumpt",          -- gofmt cmd,
           build_tags = "-v -cover -race -count=1 -test.failfast -benchtime=5s -timeout=3s",
@@ -110,8 +110,8 @@ function M.new()
           group = format_sync_grp
         })
 
-        vim.cmd("autocmd FileType go nmap <Leader><Leader>l GoLint")
-        vim.cmd("autocmd FileType go nmap <Leader>gc :lua require('go.comment').gen()")
+        --vim.cmd("autocmd FileType go nmap <Leader><Leader>l GoLint")
+        -- vim.cmd("autocmd FileType go nmap <Leader>gc :lua require('go.comment').gen()")
       end,
       event = { "CmdlineEnter" },
       ft = { "go", 'gomod' },
