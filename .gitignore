@@ -3,3 +3,4 @@ deprecated
 **/.vim/plugged
 tags
 lazy-lock.json
+.DS_Store

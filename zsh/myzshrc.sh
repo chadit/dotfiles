@@ -5,7 +5,7 @@
 #     tmux attach-session -t $HOST || tmux new-session -s $HOST
 #   fi
 # fi
-
+ 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # loading dependancies if not exist

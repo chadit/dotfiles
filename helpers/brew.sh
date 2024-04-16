@@ -9,22 +9,19 @@ _module_brew_install() {
 }
 
 _module_brew_source() {
-  pathmunge /opt/homebrew/bin
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-
   source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
   source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 }
 
 _module_brew_init() {
+  if [ -d "/opt/homebrew/bin" ]; then
+    PATH="$PATH:/opt/homebrew/bin"
 
-  if command -v brew >/dev/null 2>&1; then
-    echo "Homebrew is installed."
+    eval "$(/opt/homebrew/bin/brew shellenv)"
     brew --version
 
     _module_brew_source
   fi
-
 }
 
 _module_brew_init

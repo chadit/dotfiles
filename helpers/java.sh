@@ -15,6 +15,7 @@ function java_sdkman_upgrade_latest() {
   sdk upgrade
 }
 
+# TODO; still not loading correctly on new systems.
 function java_sdkman_init() {
   if test -f "$HOME/.sdkman/bin/sdkman-init.sh"; then
     # echo "sdkman found"
