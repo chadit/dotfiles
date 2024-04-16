@@ -145,11 +145,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   fi
 fi
 
-if [ -d "/opt/homebrew/bin" ]; then
-  pathmunge /opt/homebrew/bin
+# if [ -d "/opt/homebrew/bin" ]; then
+#   pathmunge /opt/homebrew/bin
 
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+#   eval "$(/opt/homebrew/bin/brew shellenv)"
+# fi
 
 #dotnet core
 # installed via https://docs.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install
@@ -212,13 +212,8 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 #    . $HELPER_DOTFILES_HOME/zsh/myzshrc.sh
 # fi
 
-#echo "---<"
 # Powerline configuration
 if [ -f /usr/share/powerline/bindings/zsh/powerline.zsh ]; then
-  # echo "powerline found"
-  # powerline-daemon -q
-  # POWERLINE_BASH_CONTINUATION=1
-  # POWERLINE_BASH_SELECT=1
   source /usr/share/powerline/bindings/zsh/powerline.zsh
 else
   powerline_paths=$(find $HOME/Library/Python/ -type f -path '*/zsh/powerline.zsh' 2>/dev/null)
@@ -231,10 +226,7 @@ else
 
     # Check if a powerline.sh was found
     if [ -n "$newest_powerline" ]; then
-      echo "Sourcing Powerline from: $newest_powerline"
-      # powerline-daemon -q
-      # POWERLINE_BASH_CONTINUATION=1
-      # POWERLINE_BASH_SELECT=1
+      #echo "Sourcing Powerline from: $newest_powerline"
       source "$newest_powerline"
     fi
     # source /usr/local/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
