@@ -61,7 +61,9 @@ function M.new()
                 "-v",
                 "--enable-all",
                 "--disable=forbidigo",
-                "--disable=gochecknoglobals"
+                "--disable=gochecknoglobals",
+                "--disable=exhaustruct", -- gives error if not all properties of a struct is used.
+                "--disable=exhaustive"   -- gives error if not all properties for a switch enum are used.
               },
             }),
 

@@ -167,7 +167,7 @@ function system_update() {
 
         echo "update kubernetes"
         __source_helper "kubernetes.sh"
-        kube_install_kubectl
+        kube_install_kubectl_linux
 
     else
         echo "Operating System: Unknown"
