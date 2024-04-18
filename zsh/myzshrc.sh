@@ -107,7 +107,7 @@ plugins=(
   git-prompt
   zsh-autosuggestions
   zsh-syntax-highlighting
-  docker
+  #docker
   docker-compose
   kubectl
 )
