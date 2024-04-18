@@ -13,7 +13,7 @@ function kube_setup() {
     if [[ "$OS" == "linux" ]]; then
       kube_install_kubectl_linux
     else
-      kube_install_kubectl_mac
+      # kube_install_kubectl_mac
     fi
   else
     #echo "kubectl is already installed"
