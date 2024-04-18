@@ -5,7 +5,7 @@
 #     tmux attach-session -t $HOST || tmux new-session -s $HOST
 #   fi
 # fi
- 
+
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # loading dependancies if not exist
@@ -80,6 +80,8 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
+
+export HISTCONTROL=ignoredups # don't put duplicate lines in the history.
 
 if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]]; then
 else
@@ -243,6 +245,69 @@ else
 
     RPROMPT=""
   fi
+fi
+
+# fzf TODO: move to a seperate file
+if command -v fzf >/dev/null 2>&1; then
+  eval "$(fzf --zsh)"
+
+  # --- setup fzf theme ---
+  fg="#CBE0F0"
+  bg="#011628"
+  bg_highlight="#143652"
+  purple="#B388FF"
+  blue="#06BCE4"
+  cyan="#2CF9ED"
+
+  export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
+
+  # play with first but maybe add --strip-cwd-prefix (exclude the current working directory from the search results)
+  #export FZF_DEFAULT_COMMAND='fd --files --no-ignore --hidden --follow --glob "!.git/*"'
+  export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND="fd --type=d --hidden --follow --exclude '.git'"
+
+  _fzf_compgen_path() {
+    fd --hidden --exclude .git . "$1"
+  }
+
+  _fzf_compgen_dir() {
+    fd --type=d --hidden --exclude .git . "$1"
+  }
+
+  source ~/Projects/src/github.com/junegunn/fzf-git.sh/fzf-git.sh
+  #source ~/Projects/src/github.com/junegunn/fzf/bin/fzf-tmux
+
+  export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
+  export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+  _fzf_comprun() {
+    local command=$1
+    shift
+
+    case "$command" in
+    cd) fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
+    export | unset) fzf --preview "eval 'echo \$'{}" "$@" ;;
+    ssh) fzf --preview 'dig {}' "$@" ;;
+    *) fzf --preview "bat -n --color=always --line-range :500 {}" "$@" ;;
+    esac
+  }
+
+  # ----- Bat (better cat) -----
+
+  export BAT_THEME=Dracula
+  # todo, create a loader that checks/updates https://github.com/catppuccin/bat
+
+  # ---- Eza (better ls) -----
+
+  #alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+  alias ls="eza --color=always --icons=always"
+
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+  alias cd="z"
 fi
 
 # reset the path hash to avoid issues with zsh

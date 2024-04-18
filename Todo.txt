@@ -3,3 +3,20 @@
 errors: 
 * ssh nvim, clipboard error fixed by using tmux as the wrapper. when in tmux, vim/nvim will use the tmux buffer.
 * if live_grep is not working, check that ripgrep is preinstalled.  if not, install it.
+
+
+enhancements
+-- the use case is where a company has a repo for addons that are used but they are older versions 
+-- and we want the new versions.
+-- goal is also to avoid package managers as much as possible.
+
+* add a repo updating that works like go and rust.
+* checks if the folder exist, if not create and clone the repo.
+* if there is a build command, run it.
+* if there is a post build command, run it. (example move the binary to /usr/local/bin)
+{
+  repo home: git@github.com:junegunn/fzf.git
+  folder location: ~/Projects/src/github.com/junegunn/fzf/
+  build command cd ~/Projects/src/github.com/junegunn/fzf/ && install
+  post build: sudo mv ~/Projects/src/github.com/junegunn/fzf/fzf/bin/fzf /usr/local/bin/fzf
+}

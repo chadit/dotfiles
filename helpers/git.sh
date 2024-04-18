@@ -116,6 +116,7 @@ function git_update_dependancy_repos() {
 	# tries to get the logged in user, if multiple users are logged in, it will get the first one.
 	local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
 
+	# TODO, fix this for mac.
 	REPOS=(
 		"/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 		"/home/${logged_in_user}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"

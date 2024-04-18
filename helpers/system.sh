@@ -198,3 +198,10 @@ function system_move_contents() {
 
     echo "Contents moved from $src to $dest"
 }
+
+__clean_histfile() {
+    # Clean up the history file
+    if [ -f "$HOME/.histfile" ]; then
+        sed ':start; /\\$/ { N; s/\\\n/\\\x00/; b start }' $HOME/.histfile | nl -nrz | tac | sort -t';' -u -k2 | sort | cut -d$'\t' -f2- | tr '\000' '\n' >.zsh_history_deduped
+    fi
+}

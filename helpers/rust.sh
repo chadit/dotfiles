@@ -24,11 +24,26 @@ rust_setup() {
 rust_tools_install() {
   local tools=(
     "--branch main --git https://github.com/Kampfkarren/selene selene"
+    "git-delta"
+    "eza"
+    "fd-find"
+    "bat"
+    "ripgrep"
+    "cargo-update" # cargo install-update -a, updates cargo packages that are installed via cargo install.
+    "cargo-cache"  # cargo cache -c, clears the cargo cache.
+    "tlrc"         # cargo tldr, a tldr client for Rust. example use tldr git
+    "zoxide"
   )
 
   for tool in "${tools[@]}"; do
+    # ensure that the tool is installed.
     eval cargo install $tool
   done
+
+  # update installed tools
+  cargo install-update -a
+  # clear the cache from cargo installs
+  cargo cache -a
 }
 
 rust_list_tools() {
