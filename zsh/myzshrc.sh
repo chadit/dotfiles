@@ -311,9 +311,9 @@ if command -v fzf >/dev/null 2>&1; then
 fi
 
 if command -v zoxide >/dev/null 2>&1; then
-  echo "zoxide found"
+  # echo "zoxide found"
   eval "$(zoxide init zsh)"
-  alias cd="z"
+  alias cd="zoxide"
 fi
 
 # reset the path hash to avoid issues with zsh

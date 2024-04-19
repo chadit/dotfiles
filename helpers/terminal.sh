@@ -6,7 +6,7 @@ terminal_alacritty_setup_linux_wayland() {
     cd $HOME/Projects/src/github.com/alacitty/alacritty
     git reset --hard && git pull -f && git prune && git gc --aggressive
 
-    # cargo build --release
+    # cargo build --release.
     # Force support for only Wayland
     cargo build --release --no-default-features --features=wayland
 
