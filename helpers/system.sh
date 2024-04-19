@@ -102,7 +102,12 @@ function system_update() {
 
         echo "update rust"
         __source_helper "rust.sh"
+        rust_tools_install
         rust_update
+
+        echo "update python"
+        __source_helper "python.sh"
+        python_tools_install
 
         echo "update special repos"
         update_repos

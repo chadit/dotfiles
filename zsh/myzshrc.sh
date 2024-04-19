@@ -32,6 +32,11 @@ SAVEHIST=100000
 
 fpath=(~/.zsh/completion $fpath)
 
+if [ ! -d "${ZDOTDIR:-~}/.zsh_functions" ]; then
+  mkdir -p ${ZDOTDIR:-~}/.zsh_functions
+fi
+fpath+=${ZDOTDIR:-~}/.zsh_functions
+
 echo "---- Welcome $(whoami) - Loading zsh ----"
 
 # Set GPG
@@ -306,6 +311,7 @@ if command -v fzf >/dev/null 2>&1; then
 fi
 
 if command -v zoxide >/dev/null 2>&1; then
+  echo "zoxide found"
   eval "$(zoxide init zsh)"
   alias cd="z"
 fi

@@ -14,9 +14,25 @@ enhancements
 * checks if the folder exist, if not create and clone the repo.
 * if there is a build command, run it.
 * if there is a post build command, run it. (example move the binary to /usr/local/bin)
-{
-  repo home: git@github.com:junegunn/fzf.git
-  folder location: ~/Projects/src/github.com/junegunn/fzf/
-  build command cd ~/Projects/src/github.com/junegunn/fzf/ && install
-  post build: sudo mv ~/Projects/src/github.com/junegunn/fzf/fzf/bin/fzf /usr/local/bin/fzf
-}
+[
+  {
+    repo: "git@github.com:junegunn/fzf.git"
+    folder: "$HOME/Projects/src/github.com/junegunn/fzf/"
+    prebuild: "cd $HOME/Projects/src/github.com/junegunn/fzf/"
+    build: {"git reset --hard && git pull && ./install"}
+    postbuild: "sudo mv $HOME/Projects/src/github.com/junegunn/fzf/fzf/bin/fzf /usr/local/bin/fzf"
+  },
+  {
+    repo: "git@https://github.com/eradman/entr.git"
+    folder: "$HOME/Projects/src/github.com/eradman/entr/"
+    prebuild: "cd $HOME/Projects/src/github.com/eradman/entr/"
+    build: {"./configure", "make test", "make install"}
+    postbuild: ""
+  }
+]
+
+* checks if the folder exist, 
+* if not create the folder structure and clone the repo.
+* if folder exist, execute prebuild step.
+* loop though and execute all build steps.
+* execute postbuild step.

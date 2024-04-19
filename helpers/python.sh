@@ -8,11 +8,16 @@ python_tools_install() {
       local tools=(
         "cmakelang"
         "gitlint"
+        "gitpython"
+        "powerline-status"
         "pre-commit"
+        "pylint"
+        "pytest"
+        "yq"
       )
 
       for tool in "${tools[@]}"; do
-        eval pip install $tool
+        eval pip install --upgrade $tool
       done
     fi
   fi
