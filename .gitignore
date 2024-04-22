@@ -5,3 +5,4 @@ tags
 lazy-lock.json
 .DS_Store
 __pycache__
+.vscode

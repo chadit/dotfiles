@@ -3,6 +3,7 @@ rust_update() {
     echo "Rust is already installed."
     # Update Rust
     # rustup update
+    rustup update
     rustup toolchain install nightly
   else
     echo "Installing Rust..."
@@ -22,6 +23,8 @@ rust_setup() {
 }
 
 rust_tools_install() {
+  rustup update
+  
   local tools=(
     "--branch main --git https://github.com/Kampfkarren/selene selene"
     "git-delta"
@@ -31,6 +34,7 @@ rust_tools_install() {
     "ripgrep"
     "cargo-update" # cargo install-update -a, updates cargo packages that are installed via cargo install.
     "cargo-cache"  # cargo cache -c, clears the cargo cache.
+    "stylua"       #lua formatter for rust
     "tlrc"         # cargo tldr, a tldr client for Rust. example use tldr git
     "zoxide"
   )

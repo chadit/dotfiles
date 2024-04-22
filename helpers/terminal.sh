@@ -1,9 +1,9 @@
 terminal_alacritty_setup_linux_wayland() {
   local CURRENTDIR=$(pwd)
 
-  if test -d "$HOME/Projects/src/github.com/alacitty/alacritty"; then
-    echo "github.com/alacitty/alacritty"
-    cd $HOME/Projects/src/github.com/alacitty/alacritty
+  if test -d "$HOME/Projects/src/github.com/alacritty/alacritty"; then
+    echo "github.com/alacritty/alacritty"
+    cd $HOME/Projects/src/github.com/alacritty/alacritty
     git reset --hard && git pull -f && git prune && git gc --aggressive
 
     # cargo build --release.
@@ -27,9 +27,9 @@ terminal_alacritty_setup_linux_wayland() {
 terminal_alacritty_setup_linux_x11() {
   local CURRENTDIR=$(pwd)
 
-  if test -d "$HOME/Projects/src/github.com/alacitty/alacritty"; then
-    echo "github.com/alacitty/alacritty"
-    cd $HOME/Projects/src/github.com/alacitty/alacritty
+  if test -d "$HOME/Projects/src/github.com/alacritty/alacritty"; then
+    echo "github.com/alacritty/alacritty"
+    cd $HOME/Projects/src/github.com/alacritty/alacritty
     git reset --hard && git pull -f && git prune && git gc --aggressive
 
     # cargo build --release
@@ -53,9 +53,9 @@ terminal_alacritty_setup_linux_x11() {
 terminal_alacritty_setup_macos() {
   local CURRENTDIR=$(pwd)
 
-  if test -d "$HOME/Projects/src/github.com/alacitty/alacritty"; then
-    echo "github.com/alacitty/alacritty"
-    cd $HOME/Projects/src/github.com/alacitty/alacritty
+  if test -d "$HOME/Projects/src/github.com/alacritty/alacritty"; then
+    echo "github.com/alacritty/alacritty"
+    cd $HOME/Projects/src/github.com/alacritty/alacritty
     git reset --hard && git pull -f && git prune && git gc --aggressive
 
     make app

@@ -301,6 +301,7 @@ if command -v fzf >/dev/null 2>&1; then
   # ----- Bat (better cat) -----
 
   export BAT_THEME=Dracula
+  alias cat="bat"
   # todo, create a loader that checks/updates https://github.com/catppuccin/bat
 
   # ---- Eza (better ls) -----
@@ -313,9 +314,9 @@ fi
 if command -v zoxide >/dev/null 2>&1; then
   # echo "zoxide found"
   eval "$(zoxide init zsh)"
-  alias cd="zoxide"
+  alias cd=z
 fi
 
 # reset the path hash to avoid issues with zsh
-hash -r
+# hash -r
 echo "-------------------------------------"
