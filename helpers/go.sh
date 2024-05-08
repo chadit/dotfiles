@@ -130,21 +130,28 @@ function go_update_macos_arm() {
     fi
 }
 
-function go_setup() {
+function __go_setup() {
     export GOPATH=$HOME/Projects
     if [ -d /usr/lib64/golang/ ]; then
+        # echo "Setting GOROOT to /usr/lib64/golang"
         export GOROOT="/usr/lib64/golang"
+        export PATH="$GOROOT:$PATH"
+        export PATH="$GOROOT/bin:$PATH"
     fi
 
     if [ -d /usr/local/go ]; then
+        # echo "Setting GOROOT to /usr/local/go"
         export GOROOT="/usr/local/go"
+        export PATH="$GOROOT:$PATH"
+        export PATH="$GOROOT/bin:$PATH"
     fi
 
     # if https://github.com/go-nv/goenv is installed, init it.
     # in go programming this is not really needed unless there is a really good reason to use a different version of go.
     # example: cloud go runner that is not the latest version of go.
     if [ -d "$HOME/.goenv/bin" ]; then
-        pathmunge $HOME/.goenv/bin
+        export PATH="$HOME/.goenv/bin:$PATH"
+
         export GOENV_ROOT="$HOME/.goenv"
         export PATH="$GOENV_ROOT/bin:$PATH"
         eval "$(goenv init -)"
@@ -157,10 +164,12 @@ function go_setup() {
         GOFLAGS="-count=1" # <-- suppose to prevent test from being cached
         export GO111MODULE=on
         export GOBIN=$GOPATH/bin
-        pathmunge $GOROOT
-        pathmunge $GOPATH
-        pathmunge $GOROOT/bin
-        pathmunge $GOPATH/bin
+        export PATH="$GOPATH/bin:$PATH"
+        export PATH="$GOPATH:$PATH"
+
+        # if command -v shadow >/dev/null 2>&1; then
+        #     go vet -vettool=$(which shadow)
+        # fi
 
         echo $(go version)
     fi
@@ -197,6 +206,12 @@ go_tools_install() {
         "github.com/jpillora/chisel"
         "github.com/catenacyber/perfsprint"
         "golang.org/dl/gotip"
+        "github.com/fzipp/gocyclo"                                # cyclomatic complexity
+        "github.com/twpayne/chezmoi"                              # dot file manager
+        "github.com/kisielk/errcheck"                             # check for unchecked errors
+        "github.com/jgautheron/goconst/cmd/goconst"               # find repeated strings
+        "github.com/vektra/mockery/v2"                            # mocking took for testify
+        "golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow" # go vet shadow
     )
 
     for tool in "${tools[@]}"; do
@@ -213,3 +228,5 @@ go_check_project() {
     govulncheck ./...
     gosec ./...
 }
+
+__go_setup

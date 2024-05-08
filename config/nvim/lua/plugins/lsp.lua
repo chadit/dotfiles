@@ -563,7 +563,7 @@ function M.setup()
         lspconfig[server_name].setup(opt)
 
         if server_name == "gopls" then
-          require("plugins.go").dap_config()
+          -- require("plugins.go").dap_config()
         elseif server_name == "bashls" then
           require("plugins.bash").dap_config()
         elseif server_name == "node2" then

@@ -27,7 +27,7 @@ function M.new()
       ft = { "rust" },
       event = { "BufReadPost *.rs" },
       dependencies = {
-        "rust-lang/rust.vim",    -- syntax highlighting
+        "rust-lang/rust.vim", -- syntax highlighting
         "neovim/nvim-lspconfig", -- lsp support
         "nvim-lua/plenary.nvim", -- debugging support
         "mfussenegger/nvim-dap", -- debugging support
@@ -83,13 +83,13 @@ function M.new()
       ft = { "rust" },
       init = function()
         vim.g.rustfmt_autosave = 1
-      end
+      end,
     },
     {
       "saecki/crates.nvim",
       ft = { "rust", "toml" },
       config = function(_, opts)
-        local pkg, has_pkg = pcall(require, "crates")
+        local has_pkg, pkg = pcall(require, "crates")
         if not has_pkg then
           return
         end
@@ -97,7 +97,7 @@ function M.new()
         pkg.setup(opts)
         pkg.show()
       end,
-    }
+    },
   }
 end
 
@@ -216,7 +216,12 @@ end
 
 function M.keymaps()
   -- update all crates
-  vim.keymap.set("n", "<leader>rcu", ":lua require('crates').upgrade_all_crates<CR>", { silent = true, noremap = true })
+  vim.keymap.set(
+    "n",
+    "<leader>rcu",
+    ":lua require('crates').upgrade_all_crates<CR>",
+    { silent = true, noremap = true }
+  )
 end
 
 return M

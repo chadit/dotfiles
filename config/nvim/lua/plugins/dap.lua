@@ -18,27 +18,31 @@ local M = {}
 
 function M.new()
   return {
-    { -- mfussenegger/nvim-dap
+    {
       "mfussenegger/nvim-dap",
       dependencies = {
-        {
-          "rcarriga/nvim-dap-ui",
-          config = function()
-            -- uses neodev to get type checking
-            require("neodev").setup({
-              library = { plugins = { "nvim-dap-ui" }, types = true },
-            })
-          end,
-        },
-        { "theHamsta/nvim-dap-virtual-text" },
-        { "mfussenegger/nvim-dap-python" },      -- for python
-        { "nvim-telescope/telescope-dap.nvim" }, -- for telescope integration
+        { "rcarriga/nvim-dap-ui",
+          "theHamsta/nvim-dap-virtual-text",
+          "mfussenegger/nvim-dap-python",        -- for python
+          "nvim-telescope/telescope-dap.nvim" }, -- for telescope integration
       },
       config = function()
         local path = require("mason-registry").get_package("debugpy"):get_install_path()
         require("dap-python").setup(path .. "/venv/bin/python")
       end,
     },
+    {
+      "rcarriga/nvim-dap-ui",
+      dependencies = {
+        { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+      },
+      config = function()
+        -- uses neodev to get type checking
+        require("neodev").setup({
+          library = { plugins = { "nvim-dap-ui" }, types = true },
+        })
+      end,
+    }
   }
 end
 
@@ -101,15 +105,28 @@ function M.setup()
     },
   })
 
-  dap.listeners.after.event_initialized["dapui_config"] = function()
+  -- dap.listeners.after.event_initialized["dapui_config"] = function()
+  --   dapui.open()
+  -- end
+
+  -- dap.listeners.before.event_terminated["dapui_config"] = function()
+  --   dapui.close()
+  -- end
+
+  -- dap.listeners.before.event_exited["dapui_config"] = function()
+  --   dapui.close()
+  -- end
+
+  dap.listeners.before.attach.dapui_config = function()
     dapui.open()
   end
-
-  dap.listeners.before.event_terminated["dapui_config"] = function()
+  dap.listeners.before.launch.dapui_config = function()
+    dapui.open()
+  end
+  dap.listeners.before.event_terminated.dapui_config = function()
     dapui.close()
   end
-
-  dap.listeners.before.event_exited["dapui_config"] = function()
+  dap.listeners.before.event_exited.dapui_config = function()
     dapui.close()
   end
 end
@@ -122,6 +139,7 @@ function M.keymaps()
 
   -- toggle a debug breakpoint
   map("n", "<leader>db", '<cmd>lua require "dap".toggle_breakpoint()<CR>', { silent = true, noremap = true })
+
 
   -- run the closes python run test
   vim.keymap.set(

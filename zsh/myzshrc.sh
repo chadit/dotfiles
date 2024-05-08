@@ -1,12 +1,9 @@
-# start tmux automatically
-# if which tmux >/dev/null 2>&1; then
-#   # if [[ $- =~ i ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_TTY" ]]; then
-#   if [[ $- =~ i ]] && [[ -z "$TMUX" ]]; then
-#     tmux attach-session -t $HOST || tmux new-session -s $HOST
-#   fi
-# fi
-
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=100000
+SAVEHIST=100000
 
 # loading dependancies if not exist
 if test -d "$HOME/.oh-my-zsh"; then
@@ -16,19 +13,13 @@ else
 fi
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+#export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-#ZSH_THEME="simple"
-
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=100000
-SAVEHIST=100000
+#ZSH_THEME="robbyrussell"
 
 fpath=(~/.zsh/completion $fpath)
 
@@ -52,7 +43,7 @@ fi
 # fi
 
 ## set git cache to store password for ssh
-git config --global credential.helper 'cache --timeout=9999999999999999999'
+# git config --global credential.helper 'cache --timeout=9999999999999999999'
 
 # Load Helpers
 # Function to load .sh files from given directories
@@ -85,10 +76,10 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
-
 export HISTCONTROL=ignoredups # don't put duplicate lines in the history.
 
 if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]]; then
+  source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
   # zsh-syntax-highlighting
   echo "zsh-syntax-highlighting not found, fetching"
@@ -96,10 +87,11 @@ else
 fi
 
 if [[ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]]; then
+  source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 else
   # zsh-autosuggestions
   echo "zsh-autosuggestions not found, fetching"
-  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
 # Which plugins would you like to load?
@@ -107,23 +99,22 @@ fi
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  git-prompt
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  #docker
-  docker-compose
-  kubectl
-)
+# plugins=(
+#   git
+#   git-prompt
+#   zsh-autosuggestions
+#   zsh-syntax-highlighting
+#   #docker
+#   docker-compose
+#   kubectl
+# )
 
 ZSH_DISABLE_COMPFIX=true
 
-source $ZSH/oh-my-zsh.sh
+#source $ZSH/oh-my-zsh.sh
 #source <(kubectl completion zsh)
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
-
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
@@ -132,7 +123,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}*"
 
 # initalize helpers and variables
 java_setup
-go_setup
+#go_setup
 ruby_setup
 node_setup
 flutter_setup
@@ -151,12 +142,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     pathmunge "$highest_python_bin"
   fi
 fi
-
-# if [ -d "/opt/homebrew/bin" ]; then
-#   pathmunge /opt/homebrew/bin
-
-#   eval "$(/opt/homebrew/bin/brew shellenv)"
-# fi
 
 #dotnet core
 # installed via https://docs.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install

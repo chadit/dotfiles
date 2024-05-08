@@ -4,7 +4,9 @@ rust_update() {
     # Update Rust
     # rustup update
     rustup update
-    rustup toolchain install nightly
+    rustup toolchain install stable
+    rustup component add rustfmt
+
   else
     echo "Installing Rust..."
     # Install Rust
@@ -24,7 +26,7 @@ rust_setup() {
 
 rust_tools_install() {
   rustup update
-  
+
   local tools=(
     "--branch main --git https://github.com/Kampfkarren/selene selene"
     "git-delta"
@@ -34,8 +36,10 @@ rust_tools_install() {
     "ripgrep"
     "cargo-update" # cargo install-update -a, updates cargo packages that are installed via cargo install.
     "cargo-cache"  # cargo cache -c, clears the cargo cache.
+    "starship"     # cross-shell prompt
     "stylua"       #lua formatter for rust
     "tlrc"         # cargo tldr, a tldr client for Rust. example use tldr git
+    "zellij"       # tmux written in rust
     "zoxide"
   )
 

@@ -84,3 +84,9 @@ terminal_alacritty_setup_macos() {
 
   cd $CURRENTDIR
 }
+
+__terminal_setup() {
+  # eval "$(starship init zsh)"
+}
+
+__terminal_setup

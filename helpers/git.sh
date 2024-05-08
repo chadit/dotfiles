@@ -148,3 +148,38 @@ function git_remove_git_dirs() {
 
 	echo "All .git directories removed from $dir"
 }
+
+# Fuzzy search Git branches in a repo
+# Looks for local and remote branches
+# https://github.com/exosyphon/dotfiles/blob/main/scripts/fsb.sh
+function fsb() {
+	local pattern=$*
+	local branches branch
+	branches=$(git branch --all | awk 'tolower($0) ~ /'"$pattern"'/') &&
+		branch=$(echo "$branches" |
+			fzf-tmux -p --reverse -1 -0 +m) &&
+		if [ "$branch" = "" ]; then
+			echo "[$0] No branch matches the provided pattern"
+			return
+		fi
+	git checkout "$(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")"
+}
+
+# Fuzzy search over Git commits
+# Enter will view the commit
+# Ctrl-o will checkout the selected commit
+# https://github.com/exosyphon/dotfiles/blob/main/scripts/fshow.sh
+function fshow() {
+	git log --graph --color=always \
+		--format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+		fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort --preview \
+			'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1 ; }; f {}' \
+			--header "enter to view, ctrl-o to checkout" \
+			--bind "q:abort,ctrl-f:preview-page-down,ctrl-b:preview-page-up" \
+			--bind "ctrl-o:become:(echo {} | grep -o '[a-f0-9]\{7\}' | head -1 | xargs git checkout)" \
+			--bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF" --preview-window=right:60%
+}

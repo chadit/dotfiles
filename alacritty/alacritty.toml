@@ -1,21 +1,24 @@
-import = ["~/Projects/src/github.com/chadit/dotfiles/alacritty/tomorrow_night_bright.toml"]
+import = [
+  "~/.config/alacritty/themes/catppuccin-latte.toml"
+]
 
 live_config_reload = true
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 10
+padding.y = 10
+option_as_alt = "Both"
 
 [window.dimensions]
 columns = 150
 lines = 35
 
-[window.padding]
-x = 5
-y = 5
-
 [font]
-size = 12.0
-
-[font.normal]
-family = "Hack Nerd Font"
-style = "Light"
+size = 14.0
+normal.family = "Hack Nerd Font"
 
 [selection]
 save_to_clipboard = true

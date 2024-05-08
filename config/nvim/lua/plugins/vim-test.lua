@@ -1,4 +1,4 @@
-local M = { ignore = false }
+local M = { ignore = true }
 
 local function DebugNearest()
   -- Temporarily set the Go test runner to 'delve'

@@ -6,6 +6,18 @@ function __system_command_exists() {
     command -v "$1" &>/dev/null
 }
 
+# function to execute git helper python script
+function __system_update_python() {
+    local script_path="${HELPER_DOTFILES_HOME}helpers/python_helper.py"
+    if [ -f "$script_path" ]; then
+        echo "Running python script: $script_path"
+        python3 "$script_path"
+    else
+        echo "Python script not found: $script_path"
+    fi
+}
+
+
 # Function to source a file from two directories up
 function __source_helper() {
     # Construct the path of the file to source
@@ -108,7 +120,8 @@ function system_update() {
         echo "update python"
         __source_helper "python.sh"
         python_tools_install
-
+        __system_update_python
+    
         echo "update special repos"
         update_repos
     }

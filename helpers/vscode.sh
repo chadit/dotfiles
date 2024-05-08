@@ -19,7 +19,7 @@ function vscode_stable() {
   if test -f "/usr/share/applications/code.desktop"; then
   else
 
-VSCODESHORTCUT="[Desktop Entry]
+    VSCODESHORTCUT="[Desktop Entry]
 Name=Visual Studio Code.
 Comment=Code Editing. Redefined.
 GenericName=Text Editor
@@ -35,7 +35,7 @@ Keywords=vscode;"
     local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
     sudo touch /usr/share/applications/code.desktop
     sudo chown ${logged_in_user} /usr/share/applications/code.desktop
-    sudo echo "${VSCODESHORTCUT}" > /usr/share/applications/code.desktop
+    sudo echo "${VSCODESHORTCUT}" >/usr/share/applications/code.desktop
 
     sudo update-desktop-database
     # Create a symbolic link (optional)
@@ -66,7 +66,7 @@ function vscode_insider() {
   if test -f "/usr/share/applications/vscode.desktop"; then
   else
 
-VSCODESHORTCUT="[Desktop Entry]
+    VSCODESHORTCUT="[Desktop Entry]
 Name=Visual Studio Code - Insiders.
 Comment=Code Editing. Redefined. Insiders.
 GenericName=Text Editor
@@ -75,12 +75,14 @@ Icon=/opt/vscode/resources/app/resources/linux/code.png
 Terminal=false
 Type=Application
 Categories=Utility;TextEditor;Development;IDE;
-Keywords=vscodeI;"
+Keywords=vscodeI;
+StartupWMClass=Code - Insiders"
 
     local logged_in_user=$(who | awk '{print $1}' | sort | uniq | grep -v root | head -n 1)
     sudo touch /usr/share/applications/vscode.desktop
     sudo chown ${logged_in_user} /usr/share/applications/vscode.desktop
-    sudo echo "${VSCODESHORTCUT}" > /usr/share/applications/vscode.desktop
+
+    echo "${VSCODESHORTCUT}" | sudo tee /usr/share/applications/vscode.desktop >/dev/null
 
     sudo update-desktop-database
     # Create a symbolic link (optional)
@@ -92,6 +94,19 @@ Keywords=vscodeI;"
 }
 
 function vscode_update() {
-    vscode_stable
-    vscode_insider
+  vscode_stable
+  vscode_insider
 }
+
+function __vscode_init() {
+  if [ -d "/opt/vscode/bin" ]; then
+    PATH="$PATH:/opt/vscode/bin"
+  fi
+
+  if [ -d "/opt/code/bin" ]; then
+    PATH="$PATH:/opt/code/bin"
+  fi
+
+}
+
+__vscode_init
